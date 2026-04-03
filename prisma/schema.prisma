@@ -1,13 +1,181 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
+  engineType = "library"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+// ─── Tenants ───────────────────────────────────────────────────────────────
+
+model Tenant {
+  id             String   @id @default(uuid())
+  slug           String   @unique @db.VarChar(100)
+  name           String   @db.VarChar(255)
+  logoUrl        String?
+  primaryColor   String?  @db.VarChar(7)
+  secondaryColor String?  @db.VarChar(7)
+  plan           Plan     @default(FREE)
+  customDomain   String?  @db.VarChar(255)
+  timezone       String   @default("America/Los_Angeles") @db.VarChar(50)
+  createdAt      DateTime @default(now())
+
+  // Relations
+  events     Event[]
+  categories Category[]
+  users      User[]
+  auditLogs  AuditLog[]
+
+  @@map("tenants")
+}
+
+enum Plan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+// ─── Categories ────────────────────────────────────────────────────────────
+
+model Category {
+  id        String  @id @default(uuid())
+  tenantId  String
+  name      String  @db.VarChar(100)
+  sortOrder Int     @default(0)
+  color     String? @db.VarChar(7)
+
+  tenant Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  events Event[]
+
+  @@index([tenantId])
+  @@map("categories")
+}
+
+// ─── Events ────────────────────────────────────────────────────────────────
+
+model Event {
+  id             String      @id @default(uuid())
+  tenantId       String
+  title          String      @db.VarChar(255)
+  description    String?
+  startAt        DateTime
+  endAt          DateTime?
+  locationName   String?     @db.VarChar(255)
+  address        String?
+  lat            Decimal?    @db.Decimal(10, 7)
+  lng            Decimal?    @db.Decimal(10, 7)
+  categoryId     String?
+  imageUrl       String?
+  ticketUrl      String?
+  cost           String?     @db.VarChar(100)
+  status         EventStatus @default(PENDING)
+  submitterName  String?     @db.VarChar(255)
+  submitterEmail String?     @db.VarChar(255)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  category  Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  auditLogs AuditLog[]
+
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@index([tenantId, startAt])
+  @@map("events")
+}
+
+enum EventStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// ─── Users ─────────────────────────────────────────────────────────────────
+
+model User {
+  id        String    @id @default(uuid())
+  tenantId  String
+  email     String    @db.VarChar(255)
+  name      String?   @db.VarChar(255)
+  role      Role      @default(ADMIN)
+  lastLogin DateTime?
+  createdAt DateTime  @default(now())
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sessions  Session[]
+  accounts  Account[]
+  auditLogs AuditLog[]
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@map("users")
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  EDITOR
+}
+
+// ─── NextAuth Tables ───────────────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ─── Audit Log ─────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  tenantId  String
+  userId    String?
+  action    String   @db.VarChar(100)
+  eventId   String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User?  @relation(fields: [userId], references: [id], onDelete: SetNull)
+  event  Event? @relation(fields: [eventId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([tenantId, createdAt])
+  @@map("audit_logs")
 }
