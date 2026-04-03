@@ -8,12 +8,12 @@ import { sendModerationNotice } from "@/lib/email";
 
 const moderateSchema = z.object({
   eventId: z.string().uuid(),
-  action: z.enum(["APPROVED", "REJECTED"]),
+  action: z.enum(["APPROVED", "REJECTED", "PENDING"]),
 });
 
 export async function moderateEvent(input: {
   eventId: string;
-  action: "APPROVED" | "REJECTED";
+  action: "APPROVED" | "REJECTED" | "PENDING";
 }) {
   const session = await auth();
   if (!session) return { success: false, error: "Unauthorized" };
@@ -51,7 +51,7 @@ export async function moderateEvent(input: {
     include: { tenant: true },
   });
 
-  if (updatedEvent?.submitterEmail) {
+  if (updatedEvent?.submitterEmail && action !== "PENDING") {
     const calendarUrl = `${process.env.NEXTAUTH_URL}/embed/${updatedEvent.tenant.slug}/calendar`;
 
     sendModerationNotice({
