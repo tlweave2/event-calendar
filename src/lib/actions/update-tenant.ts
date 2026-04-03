@@ -1,0 +1,77 @@
+"use server";
+
+import { prisma } from "@/lib/prisma";
+import { z } from "zod";
+import { revalidatePath } from "next/cache";
+
+const brandingSchema = z.object({
+  tenantId: z.string().uuid(),
+  name: z.string().min(2).max(255),
+  primaryColor: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+  secondaryColor: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+  timezone: z.string().min(1),
+  slug: z.string().min(2).max(60),
+});
+
+export async function updateTenantBranding(input: z.infer<typeof brandingSchema>) {
+  const parsed = brandingSchema.safeParse(input);
+  if (!parsed.success) {
+    return { success: false, errors: parsed.error.flatten().fieldErrors };
+  }
+
+  const { tenantId, slug, ...data } = parsed.data;
+
+  // Check slug is not taken by another tenant.
+  const conflict = await prisma.tenant.findFirst({
+    where: { slug, NOT: { id: tenantId } },
+  });
+  if (conflict) {
+    return { success: false, errors: { slug: ["That URL is already taken"] } };
+  }
+
+  await prisma.tenant.update({
+    where: { id: tenantId },
+    data: { ...data, slug },
+  });
+
+  revalidatePath(`/setup/${slug}`);
+  return { success: true, slug };
+}
+
+const categoriesSchema = z.object({
+  tenantId: z.string().uuid(),
+  categories: z.array(
+    z.object({
+      id: z.string().optional(),
+      name: z.string().min(1).max(100),
+      color: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
+      sortOrder: z.number(),
+    })
+  ),
+});
+
+export async function updateTenantCategories(
+  input: z.infer<typeof categoriesSchema>
+) {
+  const parsed = categoriesSchema.safeParse(input);
+  if (!parsed.success) {
+    return { success: false, errors: parsed.error.flatten().fieldErrors };
+  }
+
+  const { tenantId, categories } = parsed.data;
+
+  // Delete all existing, recreate - simplest for a wizard step.
+  await prisma.$transaction([
+    prisma.category.deleteMany({ where: { tenantId } }),
+    prisma.category.createMany({
+      data: categories.map((cat) => ({
+        tenantId,
+        name: cat.name,
+        color: cat.color ?? null,
+        sortOrder: cat.sortOrder,
+      })),
+    }),
+  ]);
+
+  return { success: true };
+}
