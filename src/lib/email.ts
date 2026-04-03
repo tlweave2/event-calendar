@@ -1,7 +1,9 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = process.env.EMAIL_FROM ?? "noreply@yourdomain.com";
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 type SubmissionConfirmationProps = {
   to: string;
@@ -18,6 +20,13 @@ type ModerationNoticeProps = {
   tenantName: string;
   action: "approved" | "rejected";
   calendarUrl?: string;
+};
+
+type InviteEmailProps = {
+  to: string;
+  tenantName: string;
+  role: string;
+  inviteUrl: string;
 };
 
 function submissionConfirmationHtml({
@@ -78,10 +87,23 @@ function moderationNoticeHtml({
   `;
 }
 
+function inviteEmailHtml({ tenantName, role, inviteUrl }: Omit<InviteEmailProps, "to">) {
+  return `
+    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111">
+      <h2 style="font-size:18px;margin-bottom:4px">You're invited</h2>
+      <p style="color:#555;margin-top:0">You have been invited to join <strong>${tenantName}</strong> as <strong>${role}</strong>.</p>
+      <p><a href="${inviteUrl}" style="color:#2563eb">Accept invitation -></a></p>
+      <p style="font-size:14px;color:#555">If you did not expect this invitation, you can ignore this email.</p>
+      <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
+      <p style="font-size:12px;color:#999">Sent by ${tenantName} via Event Calendar</p>
+    </div>
+  `;
+}
+
 export async function sendSubmissionConfirmation(
   props: SubmissionConfirmationProps
 ) {
-  if (!process.env.RESEND_API_KEY) {
+  if (!resend) {
     console.log("[email] RESEND_API_KEY not set - skipping submission confirmation");
     return;
   }
@@ -95,7 +117,7 @@ export async function sendSubmissionConfirmation(
 }
 
 export async function sendModerationNotice(props: ModerationNoticeProps) {
-  if (!process.env.RESEND_API_KEY) {
+  if (!resend) {
     console.log(`[email] RESEND_API_KEY not set - skipping ${props.action} notice`);
     return;
   }
@@ -110,5 +132,21 @@ export async function sendModerationNotice(props: ModerationNoticeProps) {
     to: props.to,
     subject,
     html: moderationNoticeHtml(props),
+  });
+}
+
+export async function sendInviteEmail(props: InviteEmailProps) {
+  console.log("[email] invite url:", props.inviteUrl);
+
+  if (!resend) {
+    console.log("[email] RESEND_API_KEY not set - skipping invite email");
+    return;
+  }
+
+  await resend.emails.send({
+    from: FROM,
+    to: props.to,
+    subject: `You're invited to ${props.tenantName}`,
+    html: inviteEmailHtml(props),
   });
 }
