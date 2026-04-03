@@ -12,10 +12,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
+import CalendarGrid from "./CalendarGrid";
+import EventModal from "./EventModal";
+
+type ViewMode = "list" | "grid";
 
 type Category = { id: string; name: string; color: string | null };
 
-type Event = {
+type CalendarEvent = {
   id: string;
   title: string;
   description: string | null;
@@ -35,14 +39,16 @@ export default function CalendarView({
   primaryColor,
   tenantSlug,
 }: {
-  events: Event[];
+  events: CalendarEvent[];
   categories: Category[];
   primaryColor: string | null;
   tenantSlug: string;
 }) {
+  const [view, setView] = useState<ViewMode>("list");
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [modalEvent, setModalEvent] = useState<CalendarEvent | null>(null);
 
   const filtered = useMemo(() => {
     return events.filter((e) => {
@@ -78,7 +84,7 @@ export default function CalendarView({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <Input
           placeholder="Search events..."
           value={search}
@@ -105,40 +111,79 @@ export default function CalendarView({
           </Select>
         )}
 
+        <div className="ml-auto flex overflow-hidden rounded-md border bg-white">
+          <button
+            type="button"
+            onClick={() => setView("list")}
+            className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+              view === "list" ? "text-white" : "text-gray-500 hover:text-gray-700"
+            }`}
+            style={view === "list" ? { backgroundColor: accent } : undefined}
+          >
+            List
+          </button>
+          <button
+            type="button"
+            onClick={() => setView("grid")}
+            className={`border-l px-3 py-1.5 text-sm font-medium transition-colors ${
+              view === "grid" ? "text-white" : "text-gray-500 hover:text-gray-700"
+            }`}
+            style={view === "grid" ? { backgroundColor: accent } : undefined}
+          >
+            Calendar
+          </button>
+        </div>
+
         <a
           href={`/embed/${tenantSlug}/submit`}
-          className="ml-auto self-center text-sm font-medium underline"
+          className="self-center text-sm font-medium underline"
           style={{ color: accent }}
         >
           + Submit an Event
         </a>
       </div>
 
-      {search || categoryFilter !== "all" ? (
+      {view === "list" && (search || categoryFilter !== "all") ? (
         <p className="text-sm text-gray-500">
           {filtered.length} event{filtered.length !== 1 ? "s" : ""} found
         </p>
       ) : null}
 
-      <div className="space-y-3">
-        {filtered.length === 0 ? (
-          <p className="py-12 text-center text-gray-400">
-            No events match your search.
-          </p>
-        ) : (
-          filtered.map((event) => (
-            <EventCard
-              key={event.id}
-              event={event}
-              expanded={expandedId === event.id}
-              onToggle={() =>
-                setExpandedId(expandedId === event.id ? null : event.id)
-              }
-              accent={accent}
-            />
-          ))
-        )}
-      </div>
+      {view === "grid" ? (
+        <CalendarGrid
+          events={filtered}
+          primaryColor={primaryColor}
+          onEventClick={(event) => setModalEvent(event)}
+        />
+      ) : (
+        <div className="space-y-3">
+          {filtered.length === 0 ? (
+            <p className="py-12 text-center text-gray-400">
+              No events match your search.
+            </p>
+          ) : (
+            filtered.map((event) => (
+              <EventCard
+                key={event.id}
+                event={event}
+                expanded={expandedId === event.id}
+                onToggle={() =>
+                  setExpandedId(expandedId === event.id ? null : event.id)
+                }
+                accent={accent}
+              />
+            ))
+          )}
+        </div>
+      )}
+
+      {modalEvent && (
+        <EventModal
+          event={modalEvent}
+          onClose={() => setModalEvent(null)}
+          primaryColor={primaryColor}
+        />
+      )}
     </div>
   );
 }
@@ -149,7 +194,7 @@ function EventCard({
   onToggle,
   accent,
 }: {
-  event: Event;
+  event: CalendarEvent;
   expanded: boolean;
   onToggle: () => void;
   accent: string;
