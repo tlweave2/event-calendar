@@ -1,6 +1,7 @@
 import { getTenantBySlug } from "@/lib/tenant";
 import { getApprovedEvents } from "@/lib/prisma-tenant";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import CalendarView from "./CalendarView";
 
 export default async function CalendarPage({
@@ -19,10 +20,12 @@ export default async function CalendarPage({
       <div className="mx-auto max-w-4xl">
         <div className="mb-8 text-center">
           {tenant.logoUrl && (
-            <img
+            <Image
               src={tenant.logoUrl}
               alt={tenant.name}
-              className="mx-auto mb-4 h-12 object-contain"
+              width={200}
+              height={48}
+              className="mx-auto mb-4 object-contain"
             />
           )}
           <h1 className="text-2xl font-semibold text-gray-900">{tenant.name}</h1>
