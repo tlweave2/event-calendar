@@ -51,7 +51,13 @@ type Tenant = {
 
 const STEPS = ["Branding", "Categories", "Timezone", "Go Live"];
 
-export default function SetupWizard({ tenant }: { tenant: Tenant }) {
+export default function SetupWizard({
+  tenant,
+  baseUrl,
+}: {
+  tenant: Tenant;
+  baseUrl: string;
+}) {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
@@ -162,7 +168,6 @@ export default function SetupWizard({ tenant }: { tenant: Tenant }) {
       prev.map((c, idx) => (idx === i ? { ...c, [field]: value } : c))
     );
 
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
   const calendarUrl = `${baseUrl}/embed/${currentSlug}/calendar`;
   const submitUrl = `${baseUrl}/embed/${currentSlug}/submit`;
 

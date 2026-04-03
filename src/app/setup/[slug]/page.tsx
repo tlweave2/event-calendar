@@ -1,4 +1,5 @@
 import { getTenantBySlug } from "@/lib/tenant";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import SetupWizard from "./SetupWizard";
 
@@ -11,6 +12,11 @@ export default async function SetupPage({
   const tenant = await getTenantBySlug(slug);
   if (!tenant) notFound();
 
+  const requestHeaders = await headers();
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "";
+  const baseUrl = host ? `${protocol}://${host}` : "";
+
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-12">
       <div className="mx-auto max-w-2xl">
@@ -20,7 +26,7 @@ export default async function SetupPage({
             You are a few steps away from going live.
           </p>
         </div>
-        <SetupWizard tenant={tenant} />
+        <SetupWizard tenant={tenant} baseUrl={baseUrl} />
       </div>
     </div>
   );
