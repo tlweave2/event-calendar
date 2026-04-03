@@ -145,7 +145,11 @@ export default function SubmitEventForm({
           {categories.length > 0 && (
             <div className="space-y-1">
               <Label>Category</Label>
-              <Select onValueChange={(val) => setValue("categoryId", val)}>
+              <Select
+                onValueChange={(val) =>
+                  setValue("categoryId", typeof val === "string" ? val : undefined)
+                }
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>

@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { sendModerationNotice } from "@/lib/email";
 
 const moderateSchema = z.object({
   eventId: z.string().uuid(),
@@ -43,6 +44,27 @@ export async function moderateEvent(input: {
       },
     }),
   ]);
+
+  // Fetch submitter details for notification
+  const updatedEvent = await prisma.event.findUnique({
+    where: { id: eventId },
+    include: { tenant: true },
+  });
+
+  if (updatedEvent?.submitterEmail) {
+    const calendarUrl = `${process.env.NEXTAUTH_URL}/embed/${updatedEvent.tenant.slug}/calendar`;
+
+    sendModerationNotice({
+      to: updatedEvent.submitterEmail,
+      submitterName: updatedEvent.submitterName ?? "there",
+      eventTitle: updatedEvent.title,
+      tenantName: updatedEvent.tenant.name,
+      action: action === "APPROVED" ? "approved" : "rejected",
+      calendarUrl,
+    }).catch((err) =>
+      console.error("[email] moderation notice failed:", err)
+    );
+  }
 
   revalidatePath("/admin");
   revalidatePath("/admin/events");

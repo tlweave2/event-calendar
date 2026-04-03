@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { sendSubmissionConfirmation } from "@/lib/email";
 
 const submitEventSchema = z.object({
   tenantSlug: z.string(),
@@ -60,6 +61,17 @@ export async function submitEvent(input: SubmitEventInput) {
       status: "PENDING",
     },
   });
+
+  // Fire confirmation email - non-blocking
+  sendSubmissionConfirmation({
+    to: data.submitterEmail,
+    submitterName: data.submitterName ?? "there",
+    eventTitle: data.title,
+    eventId: event.id,
+    tenantName: tenant.name,
+  }).catch((err) =>
+    console.error("[email] submission confirmation failed:", err)
+  );
 
   revalidatePath(`/embed/${tenantSlug}/calendar`);
 

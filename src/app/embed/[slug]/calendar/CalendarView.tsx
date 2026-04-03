@@ -87,7 +87,10 @@ export default function CalendarView({
         />
 
         {categories.length > 0 && (
-          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <Select
+            value={categoryFilter}
+            onValueChange={(value) => setCategoryFilter(value ?? "all")}
+          >
             <SelectTrigger className="w-44 bg-white">
               <SelectValue placeholder="All categories" />
             </SelectTrigger>

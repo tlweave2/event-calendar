@@ -3,8 +3,15 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import Resend from "next-auth/providers/resend";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
+import { Role } from "@prisma/client";
 
 const isDev = process.env.NODE_ENV === "development";
+
+function hasSessionFields(user: unknown): user is { tenantId: string; role: Role } {
+  if (!user || typeof user !== "object") return false;
+  const candidate = user as Record<string, unknown>;
+  return typeof candidate.tenantId === "string" && typeof candidate.role === "string";
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   // Adapter only used in production (database sessions)
@@ -68,17 +75,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // On sign-in, user object is present - persist to token
       if (user) {
         token.sub = user.id;
-        token.tenantId = (user as any).tenantId;
-        token.role = (user as any).role;
+        if (hasSessionFields(user)) {
+          token.tenantId = user.tenantId;
+          token.role = user.role;
+        }
       }
       return token;
     },
 
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.sub!;
-        session.user.tenantId = token.tenantId as string;
-        session.user.role = token.role as any;
+        if (token.sub) session.user.id = token.sub;
+        if (typeof token.tenantId === "string") {
+          session.user.tenantId = token.tenantId;
+        }
+        if (typeof token.role === "string") {
+          session.user.role = token.role as Role;
+        }
       }
       return session;
     },
