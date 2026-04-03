@@ -7,6 +7,7 @@ import { Role } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { checkAdminUserLimit } from "@/lib/plan-limits";
 
 const inviteSchema = z.object({
   email: z.string().email(),
@@ -40,6 +41,11 @@ export async function inviteUser(
     where: { id: session.user.tenantId },
   });
   if (!tenant) return;
+
+  const userLimit = await checkAdminUserLimit(tenant.id);
+  if (!userLimit.allowed) {
+    return;
+  }
 
   const email = parsed.data.email.toLowerCase();
   const role = parsed.data.role;

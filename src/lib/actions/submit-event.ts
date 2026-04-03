@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { sendSubmissionConfirmation } from "@/lib/email";
+import { checkEventLimit } from "@/lib/plan-limits";
 
 const submitEventSchema = z.object({
   tenantSlug: z.string(),
@@ -23,7 +24,11 @@ const submitEventSchema = z.object({
 
 export type SubmitEventInput = z.infer<typeof submitEventSchema>;
 
-export async function submitEvent(input: SubmitEventInput) {
+type SubmitResult =
+  | { success: true; eventId: string }
+  | { success: false; errors: Record<string, string[]>; limitReached?: boolean };
+
+export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult> {
   const parsed = submitEventSchema.safeParse(input);
 
   if (!parsed.success) {
@@ -41,6 +46,19 @@ export async function submitEvent(input: SubmitEventInput) {
 
   if (!tenant) {
     return { success: false, errors: { tenantSlug: ["Tenant not found"] } };
+  }
+
+  const limitCheck = await checkEventLimit(tenant.id);
+  if (!limitCheck.allowed) {
+    return {
+      success: false,
+      limitReached: true,
+      errors: {
+        _form: [
+          `This calendar has reached its monthly limit of ${limitCheck.limit} events. Please contact the calendar administrator.`,
+        ],
+      },
+    };
   }
 
   const event = await prisma.event.create({

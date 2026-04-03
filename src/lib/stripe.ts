@@ -1,23 +1,10 @@
 import Stripe from "stripe";
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY ?? "";
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || "sk_test_placeholder";
 
-function createUnavailableStripe(): Stripe {
-  return new Proxy(
-    {},
-    {
-      get() {
-        throw new Error("STRIPE_SECRET_KEY is not set");
-      },
-    }
-  ) as Stripe;
-}
-
-export const stripe = stripeSecretKey
-  ? new Stripe(stripeSecretKey, {
-      apiVersion: "2025-03-31.basil",
-    })
-  : createUnavailableStripe();
+export const stripe = new Stripe(stripeSecretKey, {
+  apiVersion: "2025-03-31.basil",
+});
 
 export const PLANS = {
   FREE: {

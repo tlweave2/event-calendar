@@ -76,7 +76,8 @@ export default function SubmitEventForm({
     if (result.success) {
       setSubmitted(true);
     } else {
-      setServerError("Something went wrong. Please try again.");
+      const formError = result.errors._form?.[0];
+      setServerError(formError ?? "Something went wrong. Please try again.");
     }
   };
 
