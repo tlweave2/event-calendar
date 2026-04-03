@@ -1,13 +1,18 @@
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { getTenantUsers } from "@/lib/prisma-tenant";
 import InviteForm from "./InviteForm";
+import BillingSection from "./BillingSection";
 
 export default async function SettingsPage() {
   const session = await auth();
   if (!session) redirect("/admin/login");
 
-  const users = await getTenantUsers(session.user.tenantId);
+  const [tenant, users] = await Promise.all([
+    prisma.tenant.findUnique({ where: { id: session.user.tenantId } }),
+    getTenantUsers(session.user.tenantId),
+  ]);
 
   return (
     <div className="max-w-5xl px-8 py-8">
@@ -33,6 +38,15 @@ export default async function SettingsPage() {
           </div>
         </div>
       </div>
+
+      {tenant && (
+        <div className="mt-6 max-w-2xl">
+          <BillingSection
+            plan={tenant.plan}
+            hasStripeCustomer={!!tenant.stripeCustomerId}
+          />
+        </div>
+      )}
     </div>
   );
 }

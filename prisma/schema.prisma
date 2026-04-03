@@ -19,6 +19,9 @@ model Tenant {
   plan           Plan     @default(FREE)
   customDomain   String?  @db.VarChar(255)
   timezone       String   @default("America/Los_Angeles") @db.VarChar(50)
+  stripeCustomerId     String?  @db.VarChar(255)
+  stripeSubscriptionId String?  @db.VarChar(255)
+  planExpiresAt        DateTime?
   createdAt      DateTime @default(now())
 
   // Relations
