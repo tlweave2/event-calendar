@@ -1,7 +1,26 @@
 import { prisma } from "@/lib/prisma";
-import { EventStatus, Prisma } from "@prisma/client";
+import { EventStatus } from "@prisma/client";
 
-export type EventWithCategory = Prisma.EventGetPayload<{ include: { category: true } }>;
+export type EventWithCategory = {
+  id: string;
+  title: string;
+  description: string | null;
+  startAt: Date;
+  endAt: Date | null;
+  locationName: string | null;
+  address: string | null;
+  imageUrl: string | null;
+  ticketUrl: string | null;
+  cost: string | null;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  submitterName: string | null;
+  submitterEmail: string | null;
+  categoryId: string | null;
+  tenantId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  category: { id: string; name: string; color: string | null } | null;
+};
 
 export function getEvents(tenantId: string, status?: EventStatus): Promise<EventWithCategory[]> {
   return prisma.event.findMany({

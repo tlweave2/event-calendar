@@ -5,9 +5,15 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { sendModerationNotice } from "@/lib/email";
-import { Prisma } from "@prisma/client";
 
-type EventWithTenant = Prisma.EventGetPayload<{ include: { tenant: true } }>;
+type EventWithTenant = {
+  id: string;
+  title: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  submitterEmail: string | null;
+  submitterName: string | null;
+  tenant: { name: string; slug: string };
+};
 
 const bulkModerateSchema = z.object({
   eventIds: z.array(z.string().uuid()).min(1),
