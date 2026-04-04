@@ -1,7 +1,28 @@
 import { prisma } from "@/lib/prisma";
 import { addMonths, format, startOfMonth, subMonths } from "date-fns";
 
-export async function getTenantAnalytics(tenantId: string) {
+export type AnalyticsTopCategory = {
+  name: string;
+  color: string;
+  count: number;
+};
+
+export type TenantAnalytics = {
+  submissionsByMonth: Array<{ label: string; count: number }>;
+  statusBreakdown: { pending: number; approved: number; rejected: number };
+  topCategories: AnalyticsTopCategory[];
+  thisMonthCount: number;
+  totalApproved: number;
+  recentActivity: Array<{
+    id: string;
+    action: string;
+    createdAt: Date;
+    user: { email: string | null; name: string | null } | null;
+    event: { title: string } | null;
+  }>;
+};
+
+export async function getTenantAnalytics(tenantId: string): Promise<TenantAnalytics> {
   const now = new Date();
 
   const months = Array.from({ length: 6 }, (_, index) => {
@@ -44,7 +65,7 @@ export async function getTenantAnalytics(tenantId: string) {
     where: { tenantId },
   });
 
-  const topCategories = categoryBreakdown.map((row) => {
+  const topCategories: AnalyticsTopCategory[] = categoryBreakdown.map((row) => {
     const category = categories.find((item) => item.id === row.categoryId);
 
     return {
@@ -81,5 +102,3 @@ export async function getTenantAnalytics(tenantId: string) {
     recentActivity,
   };
 }
-
-export type TenantAnalytics = Awaited<ReturnType<typeof getTenantAnalytics>>;
