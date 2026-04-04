@@ -8,12 +8,12 @@ export default async function AdminQueuePage() {
   const session = await auth();
   if (!session) redirect("/admin/login");
 
-  const [rawEvents, limitCheck] = await Promise.all([
+  const [pendingEvents, limitCheck] = await Promise.all([
     getPendingEvents(session.user.tenantId),
     checkEventLimit(session.user.tenantId),
   ]);
 
-  const events: Awaited<ReturnType<typeof getPendingEvents>> = rawEvents;
+  const events: Awaited<ReturnType<typeof getPendingEvents>> = pendingEvents;
 
   const nearLimit =
     limitCheck.plan === "FREE" &&
