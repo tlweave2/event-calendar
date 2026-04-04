@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { EventStatus } from "@prisma/client";
 
 export type EventWithCategory = {
   id: string;
@@ -22,32 +21,32 @@ export type EventWithCategory = {
   category: { id: string; name: string; color: string | null } | null;
 };
 
-export function getEvents(tenantId: string, status?: EventStatus): Promise<EventWithCategory[]> {
+export function getEvents(tenantId: string, status?: string): Promise<EventWithCategory[]> {
   return prisma.event.findMany({
-    where: { tenantId, ...(status ? { status } : {}) },
+    where: { tenantId, ...(status ? { status: status as never } : {}) },
     include: { category: true },
     orderBy: { startAt: "asc" },
-  });
+  }) as unknown as Promise<EventWithCategory[]>;
 }
 
 export function getEventById(tenantId: string, eventId: string): Promise<EventWithCategory | null> {
   return prisma.event.findFirst({
     where: { id: eventId, tenantId },
     include: { category: true },
-  });
+  }) as unknown as Promise<EventWithCategory | null>;
 }
 
 export function getPendingEvents(tenantId: string): Promise<EventWithCategory[]> {
-  return getEvents(tenantId, EventStatus.PENDING);
+  return getEvents(tenantId, "PENDING");
 }
 
 export function getApprovedEvents(tenantId: string): Promise<EventWithCategory[]> {
-  return getEvents(tenantId, EventStatus.APPROVED);
+  return getEvents(tenantId, "APPROVED");
 }
 
-export function updateEventStatus(tenantId: string, eventId: string, status: EventStatus, userId: string) {
+export function updateEventStatus(tenantId: string, eventId: string, status: string, userId: string) {
   return prisma.$transaction([
-    prisma.event.update({ where: { id: eventId, tenantId }, data: { status } }),
+    prisma.event.update({ where: { id: eventId, tenantId }, data: { status } as never }),
     prisma.auditLog.create({ data: { tenantId, userId, eventId, action: `event.${status.toLowerCase()}` } }),
   ]);
 }
