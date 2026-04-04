@@ -21,12 +21,14 @@ export default function LoginPage() {
   const handleCredentialsSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCredLoading(true);
-    const result = await signIn("credentials", {
-      email: credEmail,
-      redirect: true,
-      redirectTo: "/admin",
-    });
-    if (!result?.ok) {
+    try {
+      await signIn("credentials", {
+        email: credEmail,
+        redirect: true,
+        redirectTo: "/admin",
+      });
+      // If signIn succeeds with redirect: true, this code won't execute (browser redirects)
+    } catch {
       alert("Login failed");
       setCredLoading(false);
     }
