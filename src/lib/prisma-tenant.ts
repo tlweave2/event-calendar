@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { EventStatus } from "@generated/prisma/enums";
 
 export type EventWithCategory = {
   id: string;

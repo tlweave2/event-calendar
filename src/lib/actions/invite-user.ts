@@ -7,8 +7,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { checkAdminUserLimit } from "@/lib/plan-limits";
-
-type Role = "OWNER" | "ADMIN" | "EDITOR";
+import { Role } from "@generated/prisma/enums";
 
 const inviteSchema = z.object({
   email: z.string().email(),

@@ -3,8 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import Resend from "next-auth/providers/resend";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
-
-type Role = "OWNER" | "ADMIN" | "EDITOR";
+import { Role } from "@generated/prisma/enums";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -17,7 +16,7 @@ function hasSessionFields(user: unknown): user is { tenantId: string; role: Role
 export const { handlers, auth, signIn, signOut } = NextAuth({
   // Adapter only used in production (database sessions)
   // Credentials provider requires JWT - adapter and JWT are incompatible
-  ...(!isDev && { adapter: PrismaAdapter(prisma) }),
+  ...(!isDev && { adapter: PrismaAdapter(prisma as any) }),
 
   session: {
     strategy: isDev ? "jwt" : "database",

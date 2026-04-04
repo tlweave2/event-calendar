@@ -1,6 +1,5 @@
 import { DefaultSession } from "next-auth";
-
-type Role = "OWNER" | "ADMIN" | "EDITOR";
+import { Role } from "@generated/prisma/enums";
 
 declare module "next-auth" {
   interface Session {
