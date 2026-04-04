@@ -1,11 +1,11 @@
 import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import Resend from "next-auth/providers/resend";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@generated/prisma/enums";
 
 const isDev = process.env.NODE_ENV === "development";
+const adminLoginEmail = (process.env.ADMIN_LOGIN_EMAIL ?? "admin@test.com").toLowerCase();
+const adminLoginPassword = process.env.ADMIN_LOGIN_PASSWORD;
 
 function hasSessionFields(user: unknown): user is { tenantId: string; role: Role } {
   if (!user || typeof user !== "object") return false;
@@ -14,60 +14,58 @@ function hasSessionFields(user: unknown): user is { tenantId: string; role: Role
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  // Adapter only used in production (database sessions)
-  // Credentials provider requires JWT - adapter and JWT are incompatible
-  ...(!isDev && { adapter: PrismaAdapter(prisma as any) }),
-
   session: {
-    strategy: isDev ? "jwt" : "database",
+    strategy: "jwt",
   },
 
   providers: [
-    ...(isDev
-      ? [
-          Credentials({
-            name: "Dev Login",
-            credentials: {
-              email: { label: "Email", type: "email" },
-            },
-            async authorize(credentials) {
-              const email = credentials?.email as string | undefined;
-              if (!email) return null;
+    Credentials({
+      name: isDev ? "Dev Login" : "Admin Login",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const email = (credentials?.email as string | undefined)?.toLowerCase();
+        const password = credentials?.password as string | undefined;
+        if (!email) return null;
 
-              const user = await prisma.user.findFirst({
-                where: { email },
-                select: {
-                  id: true,
-                  email: true,
-                  name: true,
-                  tenantId: true,
-                  role: true,
-                },
-              });
+        if (!isDev) {
+          if (!adminLoginPassword) {
+            console.error("[auth] ADMIN_LOGIN_PASSWORD is not configured");
+            return null;
+          }
 
-              if (!user) {
-                console.log("[dev auth] no user found for:", email);
-                return null;
-              }
+          if (email !== adminLoginEmail || password !== adminLoginPassword) {
+            return null;
+          }
+        }
 
-              console.log("[dev auth] authorized:", user.email);
+        const user = await prisma.user.findFirst({
+          where: { email },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            tenantId: true,
+            role: true,
+          },
+        });
 
-              return {
-                id: user.id,
-                email: user.email,
-                name: user.name ?? undefined,
-                tenantId: user.tenantId,
-                role: user.role,
-              };
-            },
-          }),
-        ]
-      : [
-          Resend({
-            apiKey: process.env.RESEND_API_KEY,
-            from: "noreply@yourdomain.com",
-          }),
-        ]),
+        if (!user) {
+          console.log("[auth] no user found for:", email);
+          return null;
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name ?? undefined,
+          tenantId: user.tenantId,
+          role: user.role,
+        };
+      },
+    }),
   ],
 
   callbacks: {
