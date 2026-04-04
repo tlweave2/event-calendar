@@ -10,7 +10,7 @@ export default async function SettingsPage() {
   if (!session) redirect("/admin/login");
 
   const tenant = await prisma.tenant.findUnique({ where: { id: session.user.tenantId } });
-  const users = await getTenantUsers(session.user.tenantId);
+  const users: Array<{ id: string; email: string; role: string }> = await getTenantUsers(session.user.tenantId);
 
   return (
     <div className="max-w-5xl px-8 py-8">
