@@ -9,11 +9,8 @@ export default async function SettingsPage() {
   const session = await auth();
   if (!session) redirect("/admin/login");
 
-  const tenant = await prisma.tenant.findUnique({
-    where: { id: session.user.tenantId },
-  });
-
-  const users: Awaited<ReturnType<typeof getTenantUsers>> = await getTenantUsers(session.user.tenantId);
+  const tenant = await prisma.tenant.findUnique({ where: { id: session.user.tenantId } });
+  const users = await getTenantUsers(session.user.tenantId);
 
   return (
     <div className="max-w-5xl px-8 py-8">
@@ -24,7 +21,6 @@ export default async function SettingsPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <InviteForm />
-
         <div className="rounded-lg border bg-white p-5">
           <h2 className="font-semibold text-gray-900">Current users</h2>
           <div className="mt-4 space-y-3 text-sm">
@@ -42,10 +38,7 @@ export default async function SettingsPage() {
 
       {tenant && (
         <div className="mt-6 max-w-2xl">
-          <BillingSection
-            plan={tenant.plan}
-            hasStripeCustomer={!!tenant.stripeCustomerId}
-          />
+          <BillingSection plan={tenant.plan} hasStripeCustomer={!!tenant.stripeCustomerId} />
         </div>
       )}
     </div>

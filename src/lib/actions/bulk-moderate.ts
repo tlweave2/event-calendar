@@ -5,9 +5,9 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { sendModerationNotice } from "@/lib/email";
-import type { Event, Tenant } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
-type EventWithTenant = Event & { tenant: Tenant };
+type EventWithTenant = Prisma.EventGetPayload<{ include: { tenant: true } }>;
 
 const bulkModerateSchema = z.object({
   eventIds: z.array(z.string().uuid()).min(1),
@@ -32,25 +32,15 @@ export async function bulkModerateEvents(input: {
     include: { tenant: true },
   });
 
-  if (events.length === 0) {
-    return { success: false, error: "No matching events found" };
-  }
+  if (events.length === 0) return { success: false, error: "No matching events found" };
 
   await prisma.$transaction([
     ...events.map((event: EventWithTenant) =>
-      prisma.event.update({
-        where: { id: event.id },
-        data: { status: action },
-      })
+      prisma.event.update({ where: { id: event.id }, data: { status: action } })
     ),
     ...events.map((event: EventWithTenant) =>
       prisma.auditLog.create({
-        data: {
-          tenantId,
-          userId: session.user.id,
-          eventId: event.id,
-          action: `event.${action.toLowerCase()}`,
-        },
+        data: { tenantId, userId: session.user.id, eventId: event.id, action: `event.${action.toLowerCase()}` },
       })
     ),
   ]);
@@ -67,15 +57,12 @@ export async function bulkModerateEvents(input: {
             tenantName: event.tenant.name,
             action: action === "APPROVED" ? "approved" : "rejected",
             calendarUrl: `${process.env.NEXTAUTH_URL}/embed/${event.tenant.slug}/calendar`,
-          }).catch((err) =>
-            console.error("[email] bulk moderation notice failed:", err)
-          )
+          }).catch((err) => console.error("[email] bulk moderation notice failed:", err))
         )
     );
   }
 
   revalidatePath("/admin");
   revalidatePath("/admin/events");
-
   return { success: true, updatedCount: events.length };
 }

@@ -1,18 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { EventStatus, type Event, type Category, type User } from "@prisma/client";
+import { EventStatus, Prisma } from "@prisma/client";
 
-// ─── Types ─────────────────────────────────────────────────────────────────
-
-export type EventWithCategory = Event & { category: Category | null };
-
-// ─── Events ────────────────────────────────────────────────────────────────
+export type EventWithCategory = Prisma.EventGetPayload<{ include: { category: true } }>;
 
 export function getEvents(tenantId: string, status?: EventStatus): Promise<EventWithCategory[]> {
   return prisma.event.findMany({
-    where: {
-      tenantId,
-      ...(status ? { status } : {}),
-    },
+    where: { tenantId, ...(status ? { status } : {}) },
     include: { category: true },
     orderBy: { startAt: "asc" },
   });
@@ -33,42 +26,17 @@ export function getApprovedEvents(tenantId: string): Promise<EventWithCategory[]
   return getEvents(tenantId, EventStatus.APPROVED);
 }
 
-export function updateEventStatus(
-  tenantId: string,
-  eventId: string,
-  status: EventStatus,
-  userId: string
-) {
+export function updateEventStatus(tenantId: string, eventId: string, status: EventStatus, userId: string) {
   return prisma.$transaction([
-    prisma.event.update({
-      where: { id: eventId, tenantId },
-      data: { status },
-    }),
-    prisma.auditLog.create({
-      data: {
-        tenantId,
-        userId,
-        eventId,
-        action: `event.${status.toLowerCase()}`,
-      },
-    }),
+    prisma.event.update({ where: { id: eventId, tenantId }, data: { status } }),
+    prisma.auditLog.create({ data: { tenantId, userId, eventId, action: `event.${status.toLowerCase()}` } }),
   ]);
 }
 
-// ─── Categories ────────────────────────────────────────────────────────────
-
-export function getCategories(tenantId: string): Promise<Category[]> {
-  return prisma.category.findMany({
-    where: { tenantId },
-    orderBy: { sortOrder: "asc" },
-  });
+export function getCategories(tenantId: string) {
+  return prisma.category.findMany({ where: { tenantId }, orderBy: { sortOrder: "asc" } });
 }
 
-// ─── Tenant ─────────────────────────────────────────────────────────────────
-
-export function getTenantUsers(tenantId: string): Promise<User[]> {
-  return prisma.user.findMany({
-    where: { tenantId },
-    orderBy: { createdAt: "asc" },
-  });
+export function getTenantUsers(tenantId: string) {
+  return prisma.user.findMany({ where: { tenantId }, orderBy: { createdAt: "asc" } });
 }
