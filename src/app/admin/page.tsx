@@ -64,7 +64,7 @@ export default async function AdminQueuePage() {
       </div>
 
       <div className="space-y-3">
-        {events.map((event) => (
+        {events.map((event: Awaited<ReturnType<typeof getPendingEvents>>[number]) => (
           <QueueRow key={event.id} event={event} />
         ))}
       </div>

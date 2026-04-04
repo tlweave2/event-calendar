@@ -1,9 +1,16 @@
 import { prisma } from "@/lib/prisma";
-import { EventStatus } from "@prisma/client";
+import { EventStatus, Prisma } from "@prisma/client";
+
+type EventWithCategory = Prisma.EventGetPayload<{
+  include: { category: true };
+}>;
 
 // ─── Events ────────────────────────────────────────────────────────────────
 
-export function getEvents(tenantId: string, status?: EventStatus) {
+export function getEvents(
+  tenantId: string,
+  status?: EventStatus
+): Promise<EventWithCategory[]> {
   return prisma.event.findMany({
     where: {
       tenantId,
@@ -14,18 +21,21 @@ export function getEvents(tenantId: string, status?: EventStatus) {
   });
 }
 
-export function getEventById(tenantId: string, eventId: string) {
+export function getEventById(
+  tenantId: string,
+  eventId: string
+): Promise<EventWithCategory | null> {
   return prisma.event.findFirst({
     where: { id: eventId, tenantId },
     include: { category: true },
   });
 }
 
-export function getPendingEvents(tenantId: string) {
+export function getPendingEvents(tenantId: string): Promise<EventWithCategory[]> {
   return getEvents(tenantId, EventStatus.PENDING);
 }
 
-export function getApprovedEvents(tenantId: string) {
+export function getApprovedEvents(tenantId: string): Promise<EventWithCategory[]> {
   return getEvents(tenantId, EventStatus.APPROVED);
 }
 
