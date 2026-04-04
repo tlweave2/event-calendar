@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getTenantAnalytics } from "@/lib/analytics";
 import { prisma } from "@/lib/prisma";
+import { PLANS } from "@/lib/stripe";
 import AnalyticsDashboard from "./AnalyticsDashboard";
 
 export default async function AnalyticsPage() {
@@ -21,7 +22,11 @@ export default async function AnalyticsPage() {
           Activity overview for {tenant?.name}
         </p>
       </div>
-      <AnalyticsDashboard analytics={analytics} plan={tenant?.plan ?? "FREE"} />
+      <AnalyticsDashboard
+        analytics={analytics}
+        plan={tenant?.plan ?? "FREE"}
+        monthlyLimit={tenant?.plan === "FREE" ? PLANS.FREE.monthlyEvents : Infinity}
+      />
     </div>
   );
 }

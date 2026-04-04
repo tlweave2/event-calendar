@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
+import { PLANS } from "@/lib/stripe";
 
-export const FREE_MONTHLY_EVENT_LIMIT = 25;
-export const FREE_ADMIN_USER_LIMIT = 2;
+export const FREE_MONTHLY_EVENT_LIMIT = PLANS.FREE.monthlyEvents;
+export const FREE_ADMIN_USER_LIMIT = PLANS.FREE.adminUsers;
 
 export async function checkEventLimit(tenantId: string) {
   const tenant = await prisma.tenant.findUnique({

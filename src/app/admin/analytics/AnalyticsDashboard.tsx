@@ -6,9 +6,11 @@ import { format } from "date-fns";
 export default function AnalyticsDashboard({
   analytics,
   plan,
+  monthlyLimit,
 }: {
   analytics: TenantAnalytics;
   plan: string;
+  monthlyLimit: number;
 }) {
   const {
     submissionsByMonth,
@@ -21,7 +23,7 @@ export default function AnalyticsDashboard({
 
   const maxBar = Math.max(...submissionsByMonth.map((month) => month.count), 1);
   const isFreePlan = plan === "FREE";
-  const freeLimit = 25;
+  const freeLimit = monthlyLimit;
 
   return (
     <div className="space-y-6">
