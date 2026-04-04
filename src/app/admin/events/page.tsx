@@ -33,7 +33,7 @@ export default async function AllEventsPage() {
         <p className="py-12 text-center text-gray-400">No events yet.</p>
       ) : (
         <BulkActions
-          events={events.map((event) => ({
+          events={events.map((event: (typeof events)[number]) => ({
             id: event.id,
             title: event.title,
             startAt: event.startAt,
