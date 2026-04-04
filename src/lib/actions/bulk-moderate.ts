@@ -5,6 +5,9 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { sendModerationNotice } from "@/lib/email";
+import type { Event, Tenant } from "@prisma/client";
+
+type EventWithTenant = Event & { tenant: Tenant };
 
 const bulkModerateSchema = z.object({
   eventIds: z.array(z.string().uuid()).min(1),
@@ -24,7 +27,7 @@ export async function bulkModerateEvents(input: {
   const { eventIds, action } = parsed.data;
   const tenantId = session.user.tenantId;
 
-  const events = await prisma.event.findMany({
+  const events: EventWithTenant[] = await prisma.event.findMany({
     where: { id: { in: eventIds }, tenantId },
     include: { tenant: true },
   });
@@ -34,13 +37,13 @@ export async function bulkModerateEvents(input: {
   }
 
   await prisma.$transaction([
-    ...events.map((event) =>
+    ...events.map((event: EventWithTenant) =>
       prisma.event.update({
         where: { id: event.id },
         data: { status: action },
       })
     ),
-    ...events.map((event) =>
+    ...events.map((event: EventWithTenant) =>
       prisma.auditLog.create({
         data: {
           tenantId,
@@ -55,8 +58,8 @@ export async function bulkModerateEvents(input: {
   if (action !== "PENDING") {
     await Promise.all(
       events
-        .filter((event) => event.submitterEmail)
-        .map((event) =>
+        .filter((event: EventWithTenant) => event.submitterEmail)
+        .map((event: EventWithTenant) =>
           sendModerationNotice({
             to: event.submitterEmail!,
             submitterName: event.submitterName ?? "there",
