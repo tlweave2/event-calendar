@@ -5,5 +5,9 @@ export const authConfig: NextAuthConfig = {
     signIn: "/admin/login",
     verifyRequest: "/admin/login?verify=1",
   },
+  callbacks: {
+    // Let src/proxy.ts be the single source of route protection logic.
+    authorized: () => true,
+  },
   providers: [],
 };
