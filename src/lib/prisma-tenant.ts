@@ -1,16 +1,13 @@
 import { prisma } from "@/lib/prisma";
-import { EventStatus, Prisma } from "@prisma/client";
+import { EventStatus, type Event, type Category, type User } from "@prisma/client";
 
-type EventWithCategory = Prisma.EventGetPayload<{
-  include: { category: true };
-}>;
+// ─── Types ─────────────────────────────────────────────────────────────────
+
+export type EventWithCategory = Event & { category: Category | null };
 
 // ─── Events ────────────────────────────────────────────────────────────────
 
-export function getEvents(
-  tenantId: string,
-  status?: EventStatus
-): Promise<EventWithCategory[]> {
+export function getEvents(tenantId: string, status?: EventStatus): Promise<EventWithCategory[]> {
   return prisma.event.findMany({
     where: {
       tenantId,
@@ -21,10 +18,7 @@ export function getEvents(
   });
 }
 
-export function getEventById(
-  tenantId: string,
-  eventId: string
-): Promise<EventWithCategory | null> {
+export function getEventById(tenantId: string, eventId: string): Promise<EventWithCategory | null> {
   return prisma.event.findFirst({
     where: { id: eventId, tenantId },
     include: { category: true },
@@ -63,7 +57,7 @@ export function updateEventStatus(
 
 // ─── Categories ────────────────────────────────────────────────────────────
 
-export function getCategories(tenantId: string) {
+export function getCategories(tenantId: string): Promise<Category[]> {
   return prisma.category.findMany({
     where: { tenantId },
     orderBy: { sortOrder: "asc" },
@@ -72,7 +66,7 @@ export function getCategories(tenantId: string) {
 
 // ─── Tenant ─────────────────────────────────────────────────────────────────
 
-export function getTenantUsers(tenantId: string) {
+export function getTenantUsers(tenantId: string): Promise<User[]> {
   return prisma.user.findMany({
     where: { tenantId },
     orderBy: { createdAt: "asc" },

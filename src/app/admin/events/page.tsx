@@ -8,9 +8,7 @@ export default async function AllEventsPage() {
   const session = await auth();
   if (!session) redirect("/admin/login");
 
-  const events: Awaited<ReturnType<typeof getEvents>> = await getEvents(
-    session.user.tenantId
-  );
+  const events = await getEvents(session.user.tenantId);
 
   return (
     <div className="max-w-5xl px-8 py-8">
@@ -33,7 +31,7 @@ export default async function AllEventsPage() {
         <p className="py-12 text-center text-gray-400">No events yet.</p>
       ) : (
         <BulkActions
-          events={events.map((event: (typeof events)[number]) => ({
+          events={events.map((event) => ({
             id: event.id,
             title: event.title,
             startAt: event.startAt,

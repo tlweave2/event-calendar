@@ -103,7 +103,7 @@ export default function AnalyticsDashboard({
             <p className="text-sm text-gray-400">No approved events yet.</p>
           ) : (
             <div className="space-y-3">
-              {topCategories.map((category: { name: string; color: string; count: number }) => (
+              {topCategories.map((category) => (
                 <div key={category.name} className="space-y-1">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-700">{category.name}</span>

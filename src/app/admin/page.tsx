@@ -8,12 +8,10 @@ export default async function AdminQueuePage() {
   const session = await auth();
   if (!session) redirect("/admin/login");
 
-  const [pendingEvents, limitCheck] = await Promise.all([
+  const [events, limitCheck] = await Promise.all([
     getPendingEvents(session.user.tenantId),
     checkEventLimit(session.user.tenantId),
   ]);
-
-  const events: Awaited<ReturnType<typeof getPendingEvents>> = pendingEvents;
 
   const nearLimit =
     limitCheck.plan === "FREE" &&
@@ -64,7 +62,7 @@ export default async function AdminQueuePage() {
       </div>
 
       <div className="space-y-3">
-        {events.map((event: Awaited<ReturnType<typeof getPendingEvents>>[number]) => (
+        {events.map((event) => (
           <QueueRow key={event.id} event={event} />
         ))}
       </div>
