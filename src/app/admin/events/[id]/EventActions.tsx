@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { moderateEvent } from "@/lib/actions/moderate-event";
 import { Button } from "@/components/ui/button";
-import { EventStatus } from "@prisma/client";
+
+type EventStatus = "PENDING" | "APPROVED" | "REJECTED";
 
 export default function EventActions({
   eventId,
