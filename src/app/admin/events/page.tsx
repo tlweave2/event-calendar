@@ -8,7 +8,9 @@ export default async function AllEventsPage() {
   const session = await auth();
   if (!session) redirect("/admin/login");
 
-  const events = await getEvents(session.user.tenantId);
+  const events: Awaited<ReturnType<typeof getEvents>> = await getEvents(
+    session.user.tenantId
+  );
 
   return (
     <div className="max-w-5xl px-8 py-8">
