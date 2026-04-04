@@ -53,7 +53,7 @@ export async function getTenantAnalytics(tenantId: string): Promise<TenantAnalyt
     prisma.event.count({ where: { tenantId, status: "REJECTED" } }),
   ]);
 
-  const categoryBreakdown = (await prisma.event.groupBy({
+  const categoryBreakdown = (await (prisma.event.groupBy as any)({
     by: ["categoryId"],
     where: { tenantId, status: "APPROVED" },
     _count: { id: true },
