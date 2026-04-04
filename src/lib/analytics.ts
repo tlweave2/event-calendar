@@ -61,12 +61,12 @@ export async function getTenantAnalytics(tenantId: string): Promise<TenantAnalyt
     take: 5,
   })) as Array<{ categoryId: string | null; _count: { id: number } }>;
 
-  const categories = await prisma.category.findMany({
+  const categories: Array<{ id: string; name: string; color: string | null }> = await prisma.category.findMany({
     where: { tenantId },
   });
 
   const topCategories: AnalyticsTopCategory[] = categoryBreakdown.map((row) => {
-    const category = categories.find((item) => item.id === row.categoryId);
+    const category = categories.find((item: { id: string; name: string; color: string | null }) => item.id === row.categoryId);
 
     return {
       name: category?.name ?? "Uncategorized",
