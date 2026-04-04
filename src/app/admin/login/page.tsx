@@ -1,6 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,25 +21,13 @@ export default function LoginPage() {
   const handleCredentialsSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCredLoading(true);
-
-    const formData = new FormData();
-    formData.append("email", credEmail);
-
-    try {
-      const response = await fetch("/api/auth/signin/credentials", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        window.location.href = "/admin";
-      } else {
-        alert("Login failed");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("An error occurred");
-    } finally {
+    const result = await signIn("credentials", {
+      email: credEmail,
+      redirect: true,
+      redirectTo: "/admin",
+    });
+    if (!result?.ok) {
+      alert("Login failed");
       setCredLoading(false);
     }
   };
@@ -46,23 +35,17 @@ export default function LoginPage() {
   const handleResendSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setResendLoading(true);
-
     const formData = new FormData(e.currentTarget);
-
-    try {
-      const response = await fetch("/api/auth/signin/resend", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        // Resend will show a verify page
-        window.location.href = "/admin/login?verify=1";
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setResendLoading(false);
+    const email = formData.get("email") as string;
+    const result = await signIn("resend", {
+      email,
+      redirect: false,
+    });
+    setResendLoading(false);
+    if (result?.ok) {
+      window.location.href = "/admin/login?verify=1";
+    } else {
+      alert("Failed to send magic link");
     }
   };
 
