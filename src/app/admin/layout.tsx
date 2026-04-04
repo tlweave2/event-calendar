@@ -1,5 +1,4 @@
 import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
@@ -9,7 +8,12 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  if (!session) redirect("/admin/login");
+
+  // /admin/login also uses this layout. Returning children for anonymous users
+  // prevents a self-redirect loop while middleware guards protected admin routes.
+  if (!session) {
+    return <>{children}</>;
+  }
 
   const pendingCount = await prisma.event.count({
     where: { tenantId: session.user.tenantId, status: "PENDING" },
