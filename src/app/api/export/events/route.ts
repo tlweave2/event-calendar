@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getEvents } from "@/lib/prisma-tenant";
+import type { EventWithCategory } from "@/lib/prisma-tenant";
 
 function escapeCsv(value: string | null | undefined) {
   const text = value ?? "";
@@ -15,11 +16,7 @@ export async function GET() {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const events = await prisma.event.findMany({
-    where: { tenantId: session.user.tenantId },
-    include: { category: true },
-    orderBy: [{ startAt: "desc" }, { createdAt: "desc" }],
-  });
+  const events: EventWithCategory[] = await getEvents(session.user.tenantId);
 
   const rows = [
     [
@@ -34,7 +31,7 @@ export async function GET() {
       "Cost",
       "Ticket URL",
     ].join(","),
-    ...events.map((event) =>
+    ...events.map((event: EventWithCategory) =>
       [
         escapeCsv(event.title),
         escapeCsv(event.startAt.toISOString()),
