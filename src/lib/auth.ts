@@ -3,7 +3,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import Resend from "next-auth/providers/resend";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
-import { Role } from "@prisma/client";
+
+type Role = "OWNER" | "ADMIN" | "EDITOR";
 
 const isDev = process.env.NODE_ENV === "development";
 

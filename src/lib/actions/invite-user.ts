@@ -3,11 +3,12 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sendInviteEmail } from "@/lib/email";
-import { Role } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { checkAdminUserLimit } from "@/lib/plan-limits";
+
+type Role = "OWNER" | "ADMIN" | "EDITOR";
 
 const inviteSchema = z.object({
   email: z.string().email(),
