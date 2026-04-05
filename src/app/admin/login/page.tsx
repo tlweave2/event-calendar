@@ -8,8 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const isDev = process.env.NODE_ENV === "development";
-
 export default function LoginPage() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
@@ -62,25 +60,23 @@ export default function LoginPage() {
               />
             </div>
 
-            {!isDev && (
-              <div className="space-y-1">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={credPassword}
-                  onChange={(e) => setCredPassword(e.target.value)}
-                  required
-                />
-              </div>
-            )}
+            <div className="space-y-1">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={credPassword}
+                onChange={(e) => setCredPassword(e.target.value)}
+                required
+              />
+            </div>
 
             <Button
               type="submit"
               className="w-full"
               disabled={credLoading}
             >
-              {credLoading ? "Signing in..." : isDev ? "Sign in (dev)" : "Sign in"}
+              {credLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
         </CardContent>

@@ -49,16 +49,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         if (user.password) {
-          const passwordMatches = await bcrypt.compare(password, user.password);
-          if (!passwordMatches) return null;
+          // Tenant owner with a stored password - verify it with bcrypt.
+          const valid = await bcrypt.compare(password, user.password);
+          if (!valid) return null;
         } else {
-          if (!adminLoginPassword) {
-            console.error("[auth] ADMIN_LOGIN_PASSWORD is not configured");
-            return null;
-          }
-
-          if (email !== adminLoginEmail || password !== adminLoginPassword) {
-            return null;
+          // Legacy/seeded user with no stored password - fall back to env-based check.
+          // In dev, skip the env check so seeded users can still log in without env vars.
+          if (!isDev) {
+            if (!adminLoginPassword) {
+              console.error("[auth] ADMIN_LOGIN_PASSWORD is not configured");
+              return null;
+            }
+            if (email !== adminLoginEmail || password !== adminLoginPassword) return null;
           }
         }
 
