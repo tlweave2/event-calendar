@@ -1,0 +1,181 @@
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { updateTenantBranding } from "@/lib/actions/update-tenant";
+
+const TIMEZONES = [
+  "America/New_York",
+  "America/Chicago",
+  "America/Denver",
+  "America/Los_Angeles",
+  "America/Phoenix",
+  "America/Anchorage",
+  "Pacific/Honolulu",
+  "Europe/London",
+  "Europe/Paris",
+  "Asia/Tokyo",
+  "Australia/Sydney",
+];
+
+export default function BrandingForm({ tenant }: {
+  tenant: {
+    id: string; slug: string; name: string;
+    primaryColor: string | null; secondaryColor: string | null;
+    timezone: string; logoUrl: string | null;
+  };
+}) {
+  const [name, setName] = useState(tenant.name);
+  const [slug, setSlug] = useState(tenant.slug);
+  const [primaryColor, setPrimaryColor] = useState(tenant.primaryColor ?? "#2563eb");
+  const [secondaryColor, setSecondaryColor] = useState(tenant.secondaryColor ?? "#dbeafe");
+  const [timezone, setTimezone] = useState(tenant.timezone);
+  const [logoUrl, setLogoUrl] = useState(tenant.logoUrl ?? "");
+  const [logoUploading, setLogoUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setLogoUploading(true);
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+      });
+      const { uploadUrl, publicUrl } = await res.json();
+      await fetch(uploadUrl, { method: "PUT", body: file, headers: { "Content-Type": file.type } });
+      setLogoUrl(publicUrl);
+    } catch {
+      setError("Logo upload failed.");
+    } finally {
+      setLogoUploading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError(null);
+    const result = await updateTenantBranding({
+      tenantId: tenant.id,
+      name,
+      slug,
+      primaryColor,
+      secondaryColor,
+      timezone,
+    });
+
+    if (result.success) {
+      await fetch("/api/tenant/logo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ logoUrl }),
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } else {
+      setError("Failed to save. Check that your calendar URL is unique.");
+    }
+    setSaving(false);
+  };
+
+  return (
+    <div className="space-y-6 rounded-lg border bg-white p-6">
+      <div className="space-y-2">
+        <Label>Logo</Label>
+        {logoUrl && (
+          <div className="mb-2">
+            <img src={logoUrl} alt="Logo" className="h-12 object-contain" />
+          </div>
+        )}
+        <label className="cursor-pointer">
+          <div className="inline-flex items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">
+            {logoUploading ? "Uploading..." : logoUrl ? "Replace logo" : "Upload logo"}
+          </div>
+          <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+        </label>
+        <p className="text-xs text-gray-400">PNG or SVG recommended. Max 2MB.</p>
+      </div>
+
+      <div className="space-y-1">
+        <Label>Organization name</Label>
+        <Input value={name} onChange={(e) => setName(e.target.value)} />
+      </div>
+
+      <div className="space-y-1">
+        <Label>Calendar URL</Label>
+        <div className="flex items-center gap-1">
+          <span className="shrink-0 text-sm text-gray-400">/embed/</span>
+          <Input
+            value={slug}
+            onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+            className="max-w-48"
+          />
+        </div>
+        <p className="text-xs text-gray-400">Changing this will break existing embed links.</p>
+      </div>
+
+      <div className="flex gap-6">
+        <div className="space-y-1">
+          <Label>Primary color</Label>
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              value={primaryColor}
+              onChange={(e) => setPrimaryColor(e.target.value)}
+              className="h-9 w-9 cursor-pointer rounded border"
+            />
+            <span className="font-mono text-sm text-gray-500">{primaryColor}</span>
+          </div>
+        </div>
+        <div className="space-y-1">
+          <Label>Secondary color</Label>
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              value={secondaryColor}
+              onChange={(e) => setSecondaryColor(e.target.value)}
+              className="h-9 w-9 cursor-pointer rounded border"
+            />
+            <span className="font-mono text-sm text-gray-500">{secondaryColor}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-1">
+        <Label>Timezone</Label>
+        <Select value={timezone} onValueChange={(value) => setTimezone(value ?? timezone)}>
+          <SelectTrigger className="max-w-xs">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {TIMEZONES.map((tz) => (
+              <SelectItem key={tz} value={tz}>{tz}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {error && <p className="text-sm text-red-500">{error}</p>}
+
+      <div className="flex items-center gap-3">
+        <Button onClick={handleSave} disabled={saving || logoUploading}>
+          {saving ? "Saving..." : "Save changes"}
+        </Button>
+        {saved && <p className="text-sm text-green-600">✓ Saved</p>}
+      </div>
+    </div>
+  );
+}

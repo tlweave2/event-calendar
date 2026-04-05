@@ -47,6 +47,12 @@ export default async function AdminLayout({
             All Events
           </Link>
           <Link
+            href="/admin/branding"
+            className="flex items-center rounded-md px-3 py-2 text-gray-700 hover:bg-gray-100"
+          >
+            Branding
+          </Link>
+          <Link
             href="/admin/categories"
             className="flex items-center rounded-md px-3 py-2 text-gray-700 hover:bg-gray-100"
           >

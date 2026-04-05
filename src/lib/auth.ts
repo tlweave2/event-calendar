@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@generated/prisma/enums";
 
@@ -28,18 +29,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         const email = (credentials?.email as string | undefined)?.toLowerCase();
         const password = credentials?.password as string | undefined;
-        if (!email) return null;
-
-        if (!isDev) {
-          if (!adminLoginPassword) {
-            console.error("[auth] ADMIN_LOGIN_PASSWORD is not configured");
-            return null;
-          }
-
-          if (email !== adminLoginEmail || password !== adminLoginPassword) {
-            return null;
-          }
-        }
+        if (!email || !password) return null;
 
         const user = await prisma.user.findFirst({
           where: { email },
@@ -49,12 +39,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             name: true,
             tenantId: true,
             role: true,
+            password: true,
           },
         });
 
         if (!user) {
           console.log("[auth] no user found for:", email);
           return null;
+        }
+
+        if (user.password) {
+          const passwordMatches = await bcrypt.compare(password, user.password);
+          if (!passwordMatches) return null;
+        } else {
+          if (!adminLoginPassword) {
+            console.error("[auth] ADMIN_LOGIN_PASSWORD is not configured");
+            return null;
+          }
+
+          if (email !== adminLoginEmail || password !== adminLoginPassword) {
+            return null;
+          }
         }
 
         return {

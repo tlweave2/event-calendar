@@ -31,6 +31,7 @@ export type UserMinAggregateOutputType = {
   name: string | null
   role: $Enums.Role | null
   lastLogin: Date | null
+  password: string | null
   createdAt: Date | null
 }
 
@@ -41,6 +42,7 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   role: $Enums.Role | null
   lastLogin: Date | null
+  password: string | null
   createdAt: Date | null
 }
 
@@ -51,6 +53,7 @@ export type UserCountAggregateOutputType = {
   name: number
   role: number
   lastLogin: number
+  password: number
   createdAt: number
   _all: number
 }
@@ -63,6 +66,7 @@ export type UserMinAggregateInputType = {
   name?: true
   role?: true
   lastLogin?: true
+  password?: true
   createdAt?: true
 }
 
@@ -73,6 +77,7 @@ export type UserMaxAggregateInputType = {
   name?: true
   role?: true
   lastLogin?: true
+  password?: true
   createdAt?: true
 }
 
@@ -83,6 +88,7 @@ export type UserCountAggregateInputType = {
   name?: true
   role?: true
   lastLogin?: true
+  password?: true
   createdAt?: true
   _all?: true
 }
@@ -166,6 +172,7 @@ export type UserGroupByOutputType = {
   name: string | null
   role: $Enums.Role
   lastLogin: Date | null
+  password: string | null
   createdAt: Date
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
@@ -197,6 +204,7 @@ export type UserWhereInput = {
   name?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  password?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   sessions?: Prisma.SessionListRelationFilter
@@ -211,6 +219,7 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrderInput | Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
@@ -229,6 +238,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  password?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   sessions?: Prisma.SessionListRelationFilter
@@ -243,6 +253,7 @@ export type UserOrderByWithAggregationInput = {
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrderInput | Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -259,6 +270,7 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   lastLogin?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  password?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
@@ -268,6 +280,7 @@ export type UserCreateInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -282,6 +295,7 @@ export type UserUncheckedCreateInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -294,6 +308,7 @@ export type UserUpdateInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -308,6 +323,7 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -321,6 +337,7 @@ export type UserCreateManyInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
 }
 
@@ -330,6 +347,7 @@ export type UserUpdateManyMutationInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -340,6 +358,7 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -365,6 +384,7 @@ export type UserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   role?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -375,6 +395,7 @@ export type UserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   role?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -385,6 +406,7 @@ export type UserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   role?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
+  password?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -494,6 +516,7 @@ export type UserCreateWithoutTenantInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -506,6 +529,7 @@ export type UserUncheckedCreateWithoutTenantInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -548,6 +572,7 @@ export type UserScalarWhereInput = {
   name?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  password?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
 
@@ -557,6 +582,7 @@ export type UserCreateWithoutAccountsInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -570,6 +596,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -597,6 +624,7 @@ export type UserUpdateWithoutAccountsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -610,6 +638,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -621,6 +650,7 @@ export type UserCreateWithoutSessionsInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -634,6 +664,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -661,6 +692,7 @@ export type UserUpdateWithoutSessionsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -674,6 +706,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -685,6 +718,7 @@ export type UserCreateWithoutAuditLogsInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -698,6 +732,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -725,6 +760,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -738,6 +774,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -749,6 +786,7 @@ export type UserCreateManyTenantInput = {
   name?: string | null
   role?: $Enums.Role
   lastLogin?: Date | string | null
+  password?: string | null
   createdAt?: Date | string
 }
 
@@ -758,6 +796,7 @@ export type UserUpdateWithoutTenantInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -770,6 +809,7 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -782,6 +822,7 @@ export type UserUncheckedUpdateManyWithoutTenantInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -841,6 +882,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   role?: boolean
   lastLogin?: boolean
+  password?: boolean
   createdAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -856,6 +898,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   role?: boolean
   lastLogin?: boolean
+  password?: boolean
   createdAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -867,6 +910,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   role?: boolean
   lastLogin?: boolean
+  password?: boolean
   createdAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -878,10 +922,11 @@ export type UserSelectScalar = {
   name?: boolean
   role?: boolean
   lastLogin?: boolean
+  password?: boolean
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "name" | "role" | "lastLogin" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "name" | "role" | "lastLogin" | "password" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -911,6 +956,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string | null
     role: $Enums.Role
     lastLogin: Date | null
+    password: string | null
     createdAt: Date
   }, ExtArgs["result"]["user"]>
   composites: {}
@@ -1345,6 +1391,7 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly lastLogin: Prisma.FieldRef<"User", 'DateTime'>
+  readonly password: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     

@@ -14,6 +14,11 @@ import { Card, CardContent } from "@/components/ui/card";
 const schema = z.object({
   orgName: z.string().min(2, "Organization name must be at least 2 characters"),
   email: z.string().email("Valid email required"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -30,10 +35,15 @@ export default function SignupPage() {
 
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
-    const result = await createTenant(values);
+    const result = await createTenant({
+      orgName: values.orgName,
+      email: values.email,
+      password: values.password,
+    });
 
     if (!result.success) {
-      setServerError("Something went wrong. Please try again.");
+      const firstError = Object.values(result.errors ?? {}).flat()[0];
+      setServerError(firstError ?? "Something went wrong. Please try again.");
       return;
     }
 
@@ -76,6 +86,31 @@ export default function SignupPage() {
                 />
                 {errors.email && (
                   <p className="text-xs text-red-500">{errors.email.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="At least 8 characters"
+                  {...register("password")}
+                />
+                {errors.password && (
+                  <p className="text-xs text-red-500">{errors.password.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="confirmPassword">Confirm password</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  {...register("confirmPassword")}
+                />
+                {errors.confirmPassword && (
+                  <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
                 )}
               </div>
 

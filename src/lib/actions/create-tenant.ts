@@ -1,5 +1,6 @@
 "use server";
 
+import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { slugify } from "@/lib/slugify";
@@ -7,15 +8,16 @@ import { slugify } from "@/lib/slugify";
 const createTenantSchema = z.object({
   orgName: z.string().min(2).max(255),
   email: z.string().email(),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-export async function createTenant(input: { orgName: string; email: string }) {
+export async function createTenant(input: { orgName: string; email: string; password: string }) {
   const parsed = createTenantSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, errors: parsed.error.flatten().fieldErrors };
   }
 
-  const { orgName, email } = parsed.data;
+  const { orgName, email, password } = parsed.data;
 
   // Generate a unique slug from org name.
   const baseSlug = slugify(orgName);
@@ -45,11 +47,14 @@ export async function createTenant(input: { orgName: string; email: string }) {
     },
   });
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   await prisma.user.create({
     data: {
       tenantId: tenant.id,
-      email,
+      email: email.toLowerCase(),
       role: "OWNER",
+      password: hashedPassword,
     },
   });
 
