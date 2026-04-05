@@ -14,6 +14,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import CalendarGrid from "./CalendarGrid";
 import EventModal from "./EventModal";
+import ImageLightbox from "./ImageLightbox";
 
 type ViewMode = "list" | "grid";
 
@@ -200,6 +201,7 @@ function EventCard({
   accent: string;
 }) {
   const isHappeningToday = isToday(new Date(event.startAt));
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   return (
     <Card
@@ -268,11 +270,23 @@ function EventCard({
                 onClick={(e) => e.stopPropagation()}
               >
                 {event.imageUrl && (
-                  <img
-                    src={event.imageUrl}
-                    alt={event.title}
-                    className="w-full rounded-md object-cover max-h-64"
-                  />
+                  <div
+                    className="cursor-zoom-in overflow-hidden rounded-md border"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLightboxOpen(true);
+                    }}
+                  >
+                    <img
+                      src={event.imageUrl}
+                      alt={event.title}
+                      className="w-full object-cover transition-transform hover:scale-105"
+                      style={{ maxHeight: "160px" }}
+                    />
+                    <p className="bg-gray-50 py-1 text-center text-xs text-gray-400">
+                      Click to view full flyer
+                    </p>
+                  </div>
                 )}
                 {event.description && (
                   <p className="text-sm text-gray-600">{event.description}</p>
@@ -296,6 +310,14 @@ function EventCard({
           </div>
         </div>
       </CardContent>
+
+      {lightboxOpen && event.imageUrl && (
+        <ImageLightbox
+          src={event.imageUrl}
+          alt={event.title}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </Card>
   );
 }

@@ -1,7 +1,9 @@
 "use client";
 
 import { format } from "date-fns";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import ImageLightbox from "./ImageLightbox";
 
 type CalendarEvent = {
   id: string;
@@ -27,6 +29,7 @@ export default function EventModal({
   primaryColor: string | null;
 }) {
   const accent = primaryColor ?? "#2563eb";
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   return (
     <>
@@ -40,11 +43,20 @@ export default function EventModal({
           />
 
           {event.imageUrl && (
-            <img
-              src={event.imageUrl}
-              alt={event.title}
-              className="max-h-56 w-full object-cover"
-            />
+            <div
+              className="cursor-zoom-in overflow-hidden"
+              onClick={() => setLightboxOpen(true)}
+            >
+              <img
+                src={event.imageUrl}
+                alt={event.title}
+                className="w-full object-cover transition-transform hover:scale-105"
+                style={{ maxHeight: "180px" }}
+              />
+              <p className="bg-gray-50 py-1 text-center text-xs text-gray-400">
+                Click to view full flyer
+              </p>
+            </div>
           )}
 
           <div className="space-y-4 p-6">
@@ -118,6 +130,14 @@ export default function EventModal({
           </div>
         </div>
       </div>
+
+      {lightboxOpen && event.imageUrl && (
+        <ImageLightbox
+          src={event.imageUrl}
+          alt={event.title}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </>
   );
 }
