@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { format, isToday } from "date-fns";
 import { Badge } from "@/components/ui/badge";
@@ -172,6 +173,7 @@ export default function CalendarView({
                   setExpandedId(expandedId === event.id ? null : event.id)
                 }
                 accent={accent}
+                tenantSlug={tenantSlug}
               />
             ))
           )}
@@ -183,6 +185,7 @@ export default function CalendarView({
           event={modalEvent}
           onClose={() => setModalEvent(null)}
           primaryColor={primaryColor}
+          tenantSlug={tenantSlug}
         />
       )}
     </div>
@@ -194,11 +197,13 @@ function EventCard({
   expanded,
   onToggle,
   accent,
+  tenantSlug,
 }: {
   event: CalendarEvent;
   expanded: boolean;
   onToggle: () => void;
   accent: string;
+  tenantSlug: string;
 }) {
   const isHappeningToday = isToday(new Date(event.startAt));
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -305,6 +310,14 @@ function EventCard({
                     Tickets / Register {">"}
                   </a>
                 )}
+                <Link
+                  href={`/embed/${tenantSlug}/event/${event.id}`}
+                  className="mt-2 inline-block text-sm font-medium underline"
+                  style={{ color: accent }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  View full details & share →
+                </Link>
               </div>
             )}
           </div>

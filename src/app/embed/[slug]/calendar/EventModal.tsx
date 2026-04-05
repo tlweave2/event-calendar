@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { format } from "date-fns";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -23,10 +24,12 @@ export default function EventModal({
   event,
   onClose,
   primaryColor,
+  tenantSlug,
 }: {
   event: CalendarEvent;
   onClose: () => void;
   primaryColor: string | null;
+  tenantSlug: string;
 }) {
   const accent = primaryColor ?? "#2563eb";
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -130,6 +133,14 @@ export default function EventModal({
                 </Button>
               </a>
             )}
+
+            <Link
+              href={`/embed/${tenantSlug}/event/${event.id}`}
+              className="block text-center text-sm underline"
+              style={{ color: accent }}
+            >
+              View full details & share →
+            </Link>
           </div>
         </div>
       </div>
