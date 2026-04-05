@@ -52,6 +52,7 @@ export default function SubmitEventForm({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [extracting, setExtracting] = useState(false);
   const [extractedFields, setExtractedFields] = useState<string[]>([]);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const {
     register,
@@ -263,13 +264,40 @@ export default function SubmitEventForm({
             )}
 
             {imagePreview && (
-              <div className="mt-2 overflow-hidden rounded-md border">
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="max-h-48 w-full object-cover"
-                />
-              </div>
+              <>
+                <div
+                  className="mt-2 inline-block cursor-zoom-in overflow-hidden rounded-md border"
+                  onClick={() => setLightboxOpen(true)}
+                >
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="h-24 w-24 object-cover transition-transform hover:scale-105"
+                  />
+                  <p className="bg-gray-50 py-1 text-center text-xs text-gray-400">
+                    Click to enlarge
+                  </p>
+                </div>
+                {lightboxOpen && (
+                  <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+                    onClick={() => setLightboxOpen(false)}
+                  >
+                    <button
+                      className="absolute right-4 top-4 text-3xl text-white opacity-80 hover:opacity-100"
+                      onClick={() => setLightboxOpen(false)}
+                    >
+                      ×
+                    </button>
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="max-h-[90vh] max-w-[90vw] rounded-lg object-contain shadow-2xl"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </div>
+                )}
+              </>
             )}
             <p className="text-xs text-gray-400">
               JPG, PNG, WebP, GIF up to 5MB - AI will auto-fill event details

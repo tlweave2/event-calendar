@@ -34,10 +34,10 @@ export async function POST(req: NextRequest) {
             },
             {
               type: "text",
-              text: `Extract event details from this flyer. Return ONLY a JSON object with these fields (omit any you cannot confidently find):
+              text: `Extract event details from this flyer and return ONLY a JSON object. For the description, write 2-3 sentences describing the event based on everything visible on the flyer - even if there is no explicit description text, infer from the event name, imagery, and context. Omit any fields you cannot find or reasonably infer.
 {
   "title": "event name",
-  "description": "event description or details",
+  "description": "2-3 sentence description written from the flyer context",
   "startAt": "YYYY-MM-DDTHH:MM",
   "endAt": "YYYY-MM-DDTHH:MM",
   "locationName": "venue name",
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
   "cost": "price or Free",
   "ticketUrl": "registration or ticket URL"
 }
-Use current year if year is not shown. Return only valid JSON, no explanation, no markdown.`,
+Use ${new Date().getFullYear()} if no year is shown. Return only valid JSON, no explanation, no markdown.`,
             },
           ],
         },
