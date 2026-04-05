@@ -39,6 +39,14 @@ export default function EventModal({
             style={{ backgroundColor: event.category?.color ?? accent }}
           />
 
+          {event.imageUrl && (
+            <img
+              src={event.imageUrl}
+              alt={event.title}
+              className="max-h-56 w-full object-cover"
+            />
+          )}
+
           <div className="space-y-4 p-6">
             <div className="flex items-start justify-between gap-3">
               <h2 className="text-lg font-semibold leading-snug text-gray-900">
