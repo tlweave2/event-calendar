@@ -33,7 +33,10 @@ export default function EventModal({
 
   return (
     <>
-      <div className="fixed inset-0 z-40 bg-black/40" onClick={onClose} />
+      <div
+        className="fixed inset-0 z-40 bg-black/40"
+        onClick={lightboxOpen ? undefined : onClose}
+      />
 
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div className="w-full max-w-md overflow-hidden rounded-xl bg-white shadow-xl">
@@ -42,9 +45,22 @@ export default function EventModal({
             style={{ backgroundColor: event.category?.color ?? accent }}
           />
 
+          <div className="flex items-start justify-between gap-3 p-6 pb-0">
+            <h2 className="text-lg font-semibold leading-snug text-gray-900">
+              {event.title}
+            </h2>
+            <button
+              onClick={onClose}
+              className="shrink-0 text-xl leading-none text-gray-400 hover:text-gray-600"
+              aria-label="Close event details"
+            >
+              ×
+            </button>
+          </div>
+
           {event.imageUrl && (
             <div
-              className="cursor-zoom-in overflow-hidden"
+              className="cursor-zoom-in overflow-hidden pt-4"
               onClick={() => setLightboxOpen(true)}
             >
               <img
@@ -60,19 +76,6 @@ export default function EventModal({
           )}
 
           <div className="space-y-4 p-6">
-            <div className="flex items-start justify-between gap-3">
-              <h2 className="text-lg font-semibold leading-snug text-gray-900">
-                {event.title}
-              </h2>
-              <button
-                onClick={onClose}
-                className="shrink-0 text-xl leading-none text-gray-400 hover:text-gray-600"
-                aria-label="Close event details"
-              >
-                ×
-              </button>
-            </div>
-
             <div className="space-y-2 text-sm">
               <div className="flex gap-2 text-gray-600">
                 <span>🗓</span>
