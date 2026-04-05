@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { moderateEvent } from "@/lib/actions/moderate-event";
+import { deleteEvent } from "@/lib/actions/delete-event";
 import { Button } from "@/components/ui/button";
 
 type EventStatus = "PENDING" | "APPROVED" | "REJECTED";
@@ -15,7 +16,8 @@ export default function EventActions({
   currentStatus: EventStatus;
 }) {
   const router = useRouter();
-  const [loading, setLoading] = useState<EventStatus | null>(null);
+  const [loading, setLoading] = useState<EventStatus | "DELETING" | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const handle = async (action: "APPROVED" | "REJECTED" | "PENDING") => {
     setLoading(action);
@@ -24,8 +26,13 @@ export default function EventActions({
     setLoading(null);
   };
 
+  const handleDelete = async () => {
+    setLoading("DELETING");
+    await deleteEvent(eventId);
+  };
+
   return (
-    <div className="flex gap-2 pt-2">
+    <div className="flex flex-wrap items-center gap-2 pt-2">
       {currentStatus !== "APPROVED" && (
         <Button
           className="bg-green-600 text-white hover:bg-green-700"
@@ -57,6 +64,36 @@ export default function EventActions({
           {loading === "PENDING" ? "Resetting..." : "Reset to Pending"}
         </Button>
       )}
+
+      <div className="ml-auto">
+        {!confirmDelete ? (
+          <Button
+            variant="ghost"
+            className="text-red-400 hover:text-red-600"
+            disabled={!!loading}
+            onClick={() => setConfirmDelete(true)}
+          >
+            Delete event
+          </Button>
+        ) : (
+          <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-1.5">
+            <span className="text-xs text-red-600">Are you sure?</span>
+            <button
+              className="text-xs font-medium text-red-600 underline hover:text-red-800"
+              disabled={!!loading}
+              onClick={handleDelete}
+            >
+              {loading === "DELETING" ? "Deleting..." : "Yes, delete"}
+            </button>
+            <button
+              className="text-xs text-gray-400 hover:text-gray-600"
+              onClick={() => setConfirmDelete(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
