@@ -271,7 +271,7 @@ function EventCard({
                   <img
                     src={event.imageUrl}
                     alt={event.title}
-                    className="max-h-64 w-full rounded-md object-cover"
+                    className="w-full rounded-md object-cover max-h-64"
                   />
                 )}
                 {event.description && (
