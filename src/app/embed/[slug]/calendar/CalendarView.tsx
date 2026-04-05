@@ -267,6 +267,13 @@ function EventCard({
                 className="mt-3 space-y-2 border-t pt-3"
                 onClick={(e) => e.stopPropagation()}
               >
+                {event.imageUrl && (
+                  <img
+                    src={event.imageUrl}
+                    alt={event.title}
+                    className="max-h-64 w-full rounded-md object-cover"
+                  />
+                )}
                 {event.description && (
                   <p className="text-sm text-gray-600">{event.description}</p>
                 )}

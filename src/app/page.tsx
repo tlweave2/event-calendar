@@ -159,6 +159,14 @@ export default async function Home() {
                     {event.category.name}
                   </span>
                 )}
+                {event.imageUrl && (
+                  <img
+                    src={event.imageUrl}
+                    alt={event.title}
+                    className="w-full rounded-md object-cover"
+                    style={{ maxHeight: "120px" }}
+                  />
+                )}
               </div>
             ))}
           </div>
