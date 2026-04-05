@@ -63,6 +63,9 @@ export default async function Home() {
           <Link href={`/embed/${TENANT_SLUG}/submit`} style={{ fontSize: "0.875rem", color: "#5a5a55" }}>
             Submit event
           </Link>
+          <Link href="/signup" style={{ fontSize: "0.875rem", color: "#5a5a55" }}>
+            Get started
+          </Link>
           <Link href="/admin" className="btn-primary">
             Admin
           </Link>
@@ -103,6 +106,9 @@ export default async function Home() {
           </Link>
           <Link href={`/embed/${TENANT_SLUG}/submit`} className="btn-outline">
             Submit an event
+          </Link>
+          <Link href="/signup" className="btn-outline">
+            Get started
           </Link>
         </div>
       </div>

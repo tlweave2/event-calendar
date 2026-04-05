@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { sendSubmissionConfirmation } from "@/lib/email";
+import { sendAdminNotification, sendSubmissionConfirmation } from "@/lib/email";
 import { checkEventLimit } from "@/lib/plan-limits";
 
 const submitEventSchema = z.object({
@@ -90,6 +90,25 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
   }).catch((err) =>
     console.error("[email] submission confirmation failed:", err)
   );
+
+  const admins = await prisma.user.findMany({
+    where: { tenantId: tenant.id },
+    select: { email: true },
+  });
+
+  const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app"}/admin`;
+
+  admins.forEach(({ email }) => {
+    sendAdminNotification({
+      to: email,
+      eventTitle: data.title,
+      submitterName: data.submitterName,
+      tenantName: tenant.name,
+      adminUrl,
+    }).catch((err) =>
+      console.error("[email] admin notification failed:", err)
+    );
+  });
 
   revalidatePath(`/embed/${tenantSlug}/calendar`);
 

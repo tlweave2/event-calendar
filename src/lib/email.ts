@@ -29,6 +29,14 @@ type InviteEmailProps = {
   inviteUrl: string;
 };
 
+type AdminNotificationProps = {
+  to: string;
+  eventTitle: string;
+  submitterName: string;
+  tenantName: string;
+  adminUrl: string;
+};
+
 function submissionConfirmationHtml({
   submitterName,
   eventTitle,
@@ -100,6 +108,33 @@ function inviteEmailHtml({ tenantName, role, inviteUrl }: Omit<InviteEmailProps,
   `;
 }
 
+function adminNotificationHtml({
+  eventTitle,
+  submitterName,
+  tenantName,
+  adminUrl,
+}: Omit<AdminNotificationProps, "to">) {
+  return `
+    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111">
+      <h2 style="font-size:18px;margin-bottom:4px">New Event Submission</h2>
+      <p style="color:#555">A new event has been submitted to <strong>${tenantName}</strong> and needs your review.</p>
+      <table style="border-collapse:collapse;width:100%;margin:20px 0;font-size:14px">
+        <tr>
+          <td style="padding:8px 12px;background:#f5f5f5;font-weight:600;width:140px">Event</td>
+          <td style="padding:8px 12px;background:#f5f5f5">${eventTitle}</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px;font-weight:600">Submitted by</td>
+          <td style="padding:8px 12px">${submitterName}</td>
+        </tr>
+      </table>
+      <p><a href="${adminUrl}" style="background:#1a1a18;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px">Review in dashboard -&gt;</a></p>
+      <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
+      <p style="font-size:12px;color:#999">Sent by ${tenantName} via Event Calendar</p>
+    </div>
+  `;
+}
+
 export async function sendSubmissionConfirmation(
   props: SubmissionConfirmationProps
 ) {
@@ -148,5 +183,19 @@ export async function sendInviteEmail(props: InviteEmailProps) {
     to: props.to,
     subject: `You're invited to ${props.tenantName}`,
     html: inviteEmailHtml(props),
+  });
+}
+
+export async function sendAdminNotification(props: AdminNotificationProps) {
+  if (!resend) {
+    console.log("[email] RESEND_API_KEY not set - skipping admin notification");
+    return;
+  }
+
+  await resend.emails.send({
+    from: FROM,
+    to: props.to,
+    subject: `New event submission: ${props.eventTitle}`,
+    html: adminNotificationHtml(props),
   });
 }
