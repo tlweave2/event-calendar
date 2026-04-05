@@ -47,6 +47,9 @@ export default function SubmitEventForm({
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+  const [uploading, setUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const {
     register,
@@ -54,6 +57,54 @@ export default function SubmitEventForm({
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      setServerError("Image must be 5MB or smaller.");
+      return;
+    }
+
+    setServerError(null);
+    setImagePreview(URL.createObjectURL(file));
+    setUploading(true);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to get upload URL");
+      }
+
+      const { uploadUrl, publicUrl } = (await res.json()) as {
+        uploadUrl: string;
+        publicUrl: string;
+      };
+
+      const uploadResult = await fetch(uploadUrl, {
+        method: "PUT",
+        body: file,
+        headers: { "Content-Type": file.type },
+      });
+
+      if (!uploadResult.ok) {
+        throw new Error("Upload failed");
+      }
+
+      setImageUrl(publicUrl);
+    } catch {
+      setServerError("Image upload failed. Please try again.");
+      setImageUrl(undefined);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
@@ -70,7 +121,7 @@ export default function SubmitEventForm({
       submitterEmail: values.submitterEmail,
       ticketUrl: values.ticketUrl,
       cost: values.cost,
-      imageUrl: undefined,
+      imageUrl,
     });
 
     if (result.success) {
@@ -143,6 +194,28 @@ export default function SubmitEventForm({
             <Input id="address" {...register("address")} />
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="image">Event Flyer / Image</Label>
+            <Input
+              id="image"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              onChange={handleImageChange}
+              className="cursor-pointer"
+            />
+            {uploading && <p className="text-xs text-gray-500">Uploading image...</p>}
+            {imagePreview && !uploading && (
+              <div className="mt-2 overflow-hidden rounded-md border">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="max-h-48 w-full object-cover"
+                />
+              </div>
+            )}
+            <p className="text-xs text-gray-400">JPG, PNG, WebP, GIF up to 5MB</p>
+          </div>
+
           {categories.length > 0 && (
             <div className="space-y-1">
               <Label>Category</Label>
@@ -207,7 +280,7 @@ export default function SubmitEventForm({
 
           <Button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || uploading}
             className="w-full"
             style={primaryColor ? { backgroundColor: primaryColor } : {}}
           >
