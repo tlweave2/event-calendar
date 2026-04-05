@@ -234,40 +234,6 @@ export default function SubmitEventForm({
             )}
           </div>
 
-          <div className="space-y-1">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              rows={4}
-              placeholder="Tell people what your event is about..."
-              {...register("description")}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <Label htmlFor="startAt">Start Date & Time *</Label>
-              <Input id="startAt" type="datetime-local" {...register("startAt")} />
-              {errors.startAt && (
-                <p className="text-xs text-red-500">{errors.startAt.message}</p>
-              )}
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="endAt">End Date & Time</Label>
-              <Input id="endAt" type="datetime-local" {...register("endAt")} />
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <Label htmlFor="locationName">Venue / Location Name</Label>
-            <Input id="locationName" {...register("locationName")} />
-          </div>
-
-          <div className="space-y-1">
-            <Label htmlFor="address">Address</Label>
-            <Input id="address" {...register("address")} />
-          </div>
-
           <div className="space-y-2">
             <Label htmlFor="image">Event Flyer / Image</Label>
             <Input
@@ -308,6 +274,40 @@ export default function SubmitEventForm({
             <p className="text-xs text-gray-400">
               JPG, PNG, WebP, GIF up to 5MB - AI will auto-fill event details
             </p>
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              rows={4}
+              placeholder="Tell people what your event is about..."
+              {...register("description")}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <Label htmlFor="startAt">Start Date & Time *</Label>
+              <Input id="startAt" type="datetime-local" {...register("startAt")} />
+              {errors.startAt && (
+                <p className="text-xs text-red-500">{errors.startAt.message}</p>
+              )}
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="endAt">End Date & Time</Label>
+              <Input id="endAt" type="datetime-local" {...register("endAt")} />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="locationName">Venue / Location Name</Label>
+            <Input id="locationName" {...register("locationName")} />
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="address">Address</Label>
+            <Input id="address" {...register("address")} />
           </div>
 
           {categories.length > 0 && (
