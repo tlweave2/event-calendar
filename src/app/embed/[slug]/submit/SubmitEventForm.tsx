@@ -50,6 +50,8 @@ export default function SubmitEventForm({
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [extracting, setExtracting] = useState(false);
+  const [extractedFields, setExtractedFields] = useState<string[]>([]);
 
   const {
     register,
@@ -70,40 +72,112 @@ export default function SubmitEventForm({
     setServerError(null);
     setImagePreview(URL.createObjectURL(file));
     setUploading(true);
+    setExtracting(true);
+    setExtractedFields([]);
 
-    try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: file.name, contentType: file.type }),
-      });
+    await Promise.allSettled([
+      (async () => {
+        try {
+          const res = await fetch("/api/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename: file.name, contentType: file.type }),
+          });
 
-      if (!res.ok) {
-        throw new Error("Failed to get upload URL");
-      }
+          if (!res.ok) {
+            throw new Error("Failed to get upload URL");
+          }
 
-      const { uploadUrl, publicUrl } = (await res.json()) as {
-        uploadUrl: string;
-        publicUrl: string;
-      };
+          const { uploadUrl, publicUrl } = (await res.json()) as {
+            uploadUrl: string;
+            publicUrl: string;
+          };
 
-      const uploadResult = await fetch(uploadUrl, {
-        method: "PUT",
-        body: file,
-        headers: { "Content-Type": file.type },
-      });
+          const uploadResult = await fetch(uploadUrl, {
+            method: "PUT",
+            body: file,
+            headers: { "Content-Type": file.type },
+          });
 
-      if (!uploadResult.ok) {
-        throw new Error("Upload failed");
-      }
+          if (!uploadResult.ok) {
+            throw new Error("Upload failed");
+          }
 
-      setImageUrl(publicUrl);
-    } catch {
-      setServerError("Image upload failed. Please try again.");
-      setImageUrl(undefined);
-    } finally {
-      setUploading(false);
-    }
+          setImageUrl(publicUrl);
+        } catch {
+          setServerError("Image upload failed. Please try again.");
+          setImageUrl(undefined);
+        } finally {
+          setUploading(false);
+        }
+      })(),
+
+      (async () => {
+        try {
+          const base64 = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+              const result = reader.result as string;
+              resolve(result.split(",")[1] ?? "");
+            };
+            reader.onerror = () => reject(new Error("Failed to read image"));
+            reader.readAsDataURL(file);
+          });
+
+          if (!base64) return;
+
+          const res = await fetch("/api/extract-flyer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ image: base64, mediaType: file.type }),
+          });
+
+          if (!res.ok) return;
+
+          const data = (await res.json()) as Record<string, string | undefined>;
+          const filled: string[] = [];
+
+          if (data.title) {
+            setValue("title", data.title);
+            filled.push("title");
+          }
+          if (data.description) {
+            setValue("description", data.description);
+            filled.push("description");
+          }
+          if (data.locationName) {
+            setValue("locationName", data.locationName);
+            filled.push("location");
+          }
+          if (data.address) {
+            setValue("address", data.address);
+            filled.push("address");
+          }
+          if (data.cost) {
+            setValue("cost", data.cost);
+            filled.push("cost");
+          }
+          if (data.startAt) {
+            setValue("startAt", data.startAt);
+            filled.push("date & time");
+          }
+          if (data.endAt) {
+            setValue("endAt", data.endAt);
+            filled.push("end time");
+          }
+          if (data.ticketUrl) {
+            setValue("ticketUrl", data.ticketUrl);
+            filled.push("ticket URL");
+          }
+
+          setExtractedFields(filled);
+        } catch {
+          // Silent failure: users can still fill form manually.
+        } finally {
+          setExtracting(false);
+        }
+      })(),
+    ]);
   };
 
   const onSubmit = async (values: FormValues) => {
@@ -203,8 +277,26 @@ export default function SubmitEventForm({
               onChange={handleImageChange}
               className="cursor-pointer"
             />
-            {uploading && <p className="text-xs text-gray-500">Uploading image...</p>}
-            {imagePreview && !uploading && (
+            {uploading && (
+              <p className="text-xs text-gray-500">Uploading image...</p>
+            )}
+
+            {extracting && !uploading && (
+              <div className="flex items-center gap-2 rounded-md bg-blue-50 px-3 py-2">
+                <div className="h-3 w-3 animate-spin rounded-full border-2 border-blue-400 border-t-transparent" />
+                <p className="text-xs text-blue-600">Reading flyer with AI...</p>
+              </div>
+            )}
+
+            {extractedFields.length > 0 && !extracting && (
+              <div className="rounded-md bg-green-50 px-3 py-2">
+                <p className="text-xs text-green-700">
+                  {`✓ Auto-filled from flyer: ${extractedFields.join(", ")}. Please review and correct if needed.`}
+                </p>
+              </div>
+            )}
+
+            {imagePreview && (
               <div className="mt-2 overflow-hidden rounded-md border">
                 <img
                   src={imagePreview}
@@ -213,7 +305,9 @@ export default function SubmitEventForm({
                 />
               </div>
             )}
-            <p className="text-xs text-gray-400">JPG, PNG, WebP, GIF up to 5MB</p>
+            <p className="text-xs text-gray-400">
+              JPG, PNG, WebP, GIF up to 5MB - AI will auto-fill event details
+            </p>
           </div>
 
           {categories.length > 0 && (
@@ -280,7 +374,7 @@ export default function SubmitEventForm({
 
           <Button
             type="submit"
-            disabled={isSubmitting || uploading}
+            disabled={isSubmitting || uploading || extracting}
             className="w-full"
             style={primaryColor ? { backgroundColor: primaryColor } : {}}
           >
