@@ -65,6 +65,8 @@ export default function EditEventForm({
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [preview, setPreview] = useState<string | null>(event.imageUrl ?? null);
 
   const {
     register,
@@ -181,15 +183,90 @@ export default function EditEventForm({
         )}
       </div>
 
-      <div className="space-y-1">
-        <Label htmlFor="imageUrl">Image URL</Label>
-        <Input id="imageUrl" {...register("imageUrl")} placeholder="https://..." />
+      <div className="space-y-2">
+        <Label>Flyer / Image</Label>
+
+        {/* Current image thumbnail */}
+        {preview && (
+          <div className="relative inline-block">
+            <img
+              src={preview}
+              alt="Current flyer"
+              className="h-32 w-32 rounded-md border object-cover"
+            />
+            <button
+              type="button"
+              className="absolute -right-2 -top-2 rounded-full border border-gray-200 bg-white p-0.5 text-gray-400 shadow-sm hover:text-red-500"
+              onClick={() => {
+                setPreview(null);
+                setValue("imageUrl", "");
+              }}
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        {/* Upload button */}
+        <div>
+          <label className="cursor-pointer">
+            <div className="inline-flex items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">
+              {uploading ? (
+                <>
+                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+                  Uploading...
+                </>
+              ) : preview ? (
+                "Replace image"
+              ) : (
+                "Upload image"
+              )}
+            </div>
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              className="hidden"
+              disabled={uploading}
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024) {
+                  setServerError("Image must be 5MB or smaller.");
+                  return;
+                }
+                setUploading(true);
+                setServerError(null);
+                try {
+                  const res = await fetch("/api/upload", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ filename: file.name, contentType: file.type }),
+                  });
+                  if (!res.ok) throw new Error("upload-url-failed");
+                  const { uploadUrl, publicUrl } = await res.json();
+                  await fetch(uploadUrl, {
+                    method: "PUT",
+                    body: file,
+                    headers: { "Content-Type": file.type },
+                  });
+                  setPreview(publicUrl);
+                  setValue("imageUrl", publicUrl);
+                } catch {
+                  setServerError("Image upload failed.");
+                } finally {
+                  setUploading(false);
+                }
+              }}
+            />
+          </label>
+          <p className="mt-1 text-xs text-gray-400">JPG, PNG, WebP up to 5MB</p>
+        </div>
       </div>
 
       {serverError && <p className="text-sm text-red-500">{serverError}</p>}
 
       <div className="flex items-center gap-3 pt-2">
-        <Button type="submit" disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting || uploading}>
           {isSubmitting ? "Saving..." : "Save changes"}
         </Button>
         {saved && <p className="text-sm text-green-600">✓ Saved</p>}
