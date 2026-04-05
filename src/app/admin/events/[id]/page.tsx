@@ -1,10 +1,11 @@
 import { auth } from "@/lib/auth";
 import { redirect, notFound } from "next/navigation";
-import { getEventById } from "@/lib/prisma-tenant";
+import { getEventById, getCategories } from "@/lib/prisma-tenant";
 import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
 import EventActions from "./EventActions";
+import EditEventForm from "./EditEventForm";
 
 export default async function EventDetailPage({
   params,
@@ -15,14 +16,17 @@ export default async function EventDetailPage({
   if (!session) redirect("/admin/login");
 
   const { id } = await params;
-  const event = await getEventById(session.user.tenantId, id);
+  const [event, categories] = await Promise.all([
+    getEventById(session.user.tenantId, id),
+    getCategories(session.user.tenantId),
+  ]);
   if (!event) notFound();
 
   return (
-    <div className="max-w-3xl px-8 py-8">
+    <div className="max-w-3xl space-y-6 px-8 py-8">
       <div className="mb-6">
         <Link href="/admin/events" className="text-sm text-gray-400 hover:text-gray-600">
-          &lt;- All Events
+          ← All Events
         </Link>
       </div>
 
@@ -131,6 +135,14 @@ export default async function EventDetailPage({
 
           <EventActions eventId={event.id} currentStatus={event.status} />
         </div>
+      </div>
+
+      <div className="rounded-lg border bg-white p-6">
+        <h2 className="mb-4 text-base font-semibold text-gray-900">Edit event</h2>
+        <EditEventForm
+          event={event}
+          categories={categories.map((c) => ({ id: c.id, name: c.name }))}
+        />
       </div>
     </div>
   );
