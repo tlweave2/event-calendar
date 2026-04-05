@@ -34,10 +34,20 @@ export async function POST(req: NextRequest) {
             },
             {
               type: "text",
-              text: `Extract event details from this flyer and return ONLY a JSON object. For the description, write 2-3 sentences describing the event based on everything visible on the flyer - even if there is no explicit description text, infer from the event name, imagery, and context. Omit any fields you cannot find or reasonably infer.
+              text: `You are helping someone submit a community event to a public calendar. Analyze this event flyer carefully and extract all visible information.
+
+For the description, write 3-4 sentences that would make someone want to attend. Include:
+- What specifically happens at the event (activities, entertainment, performers if named)
+- Who it is for (families, car enthusiasts, music lovers, etc.)
+- Any special details visible on the flyer (food, vendors, contests, prizes, free admission, sponsors)
+- The overall vibe/atmosphere
+
+Do NOT just restate the event title. Do NOT use generic filler phrases like "community event" or "enthusiasts and families to enjoy." Be specific to what is actually on this flyer.
+
+Return ONLY a JSON object, no explanation, no markdown:
 {
   "title": "event name",
-  "description": "2-3 sentence description written from the flyer context",
+  "description": "specific 3-4 sentence description as described above",
   "startAt": "YYYY-MM-DDTHH:MM",
   "endAt": "YYYY-MM-DDTHH:MM",
   "locationName": "venue name",
@@ -45,7 +55,7 @@ export async function POST(req: NextRequest) {
   "cost": "price or Free",
   "ticketUrl": "registration or ticket URL"
 }
-Use ${new Date().getFullYear()} if no year is shown. Return only valid JSON, no explanation, no markdown.`,
+Use ${new Date().getFullYear()} if no year is shown. Return only valid JSON.`,
             },
           ],
         },
