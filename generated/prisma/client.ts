@@ -81,3 +81,13 @@ export type VerificationToken = Prisma.VerificationTokenModel
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model PageView
+ * 
+ */
+export type PageView = Prisma.PageViewModel
+/**
+ * Model EventSeries
+ * 
+ */
+export type EventSeries = Prisma.EventSeriesModel

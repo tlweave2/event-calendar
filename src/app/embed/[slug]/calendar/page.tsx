@@ -1,5 +1,6 @@
 import { getTenantBySlug } from "@/lib/tenant";
 import { getApprovedEvents } from "@/lib/prisma-tenant";
+import { recordPageView } from "@/lib/page-views";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import CalendarView from "./CalendarView";
@@ -12,6 +13,8 @@ export default async function CalendarPage({
   const { slug } = await params;
   const tenant = await getTenantBySlug(slug);
   if (!tenant) notFound();
+
+  void recordPageView(tenant.id, "calendar");
 
   const events = await getApprovedEvents(tenant.id);
 

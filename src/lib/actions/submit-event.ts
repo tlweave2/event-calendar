@@ -5,6 +5,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { sendAdminNotification, sendSubmissionConfirmation } from "@/lib/email";
 import { checkEventLimit } from "@/lib/plan-limits";
+import { createEventSeries } from "./create-event-series";
 
 const submitEventSchema = z.object({
   tenantSlug: z.string(),
@@ -20,6 +21,8 @@ const submitEventSchema = z.object({
   ticketUrl: z.string().url().optional().or(z.literal("")),
   cost: z.string().max(100).optional(),
   imageUrl: z.string().optional(),
+  recurrence: z.enum(["weekly", "biweekly", "monthly"]).optional(),
+  occurrences: z.number().int().min(1).max(52).optional(),
 });
 
 export type SubmitEventInput = z.infer<typeof submitEventSchema>;
@@ -59,6 +62,69 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
         ],
       },
     };
+  }
+
+  if (data.recurrence && data.occurrences && data.occurrences > 1) {
+    const seriesResult = await createEventSeries({
+      tenantId: tenant.id,
+      title: data.title,
+      description: data.description,
+      startAt: new Date(data.startAt),
+      endAt: data.endAt ? new Date(data.endAt) : null,
+      locationName: data.locationName,
+      address: data.address,
+      categoryId: data.categoryId || undefined,
+      submitterName: data.submitterName,
+      submitterEmail: data.submitterEmail,
+      ticketUrl: data.ticketUrl || undefined,
+      cost: data.cost,
+      imageUrl: data.imageUrl,
+      rule: data.recurrence,
+      occurrences: data.occurrences,
+      status: "PENDING",
+    });
+
+    if (!seriesResult.success) {
+      return { success: false, errors: { _form: ["Failed to create recurring series."] } };
+    }
+
+    const firstEvent = await prisma.event.findFirst({
+      where: { seriesId: seriesResult.seriesId },
+      orderBy: { seriesIndex: "asc" },
+      select: { id: true },
+    });
+
+    sendSubmissionConfirmation({
+      to: data.submitterEmail,
+      submitterName: data.submitterName ?? "there",
+      eventTitle: `${data.title} (${data.occurrences} occurrences)`,
+      eventId: firstEvent?.id ?? seriesResult.seriesId,
+      tenantName: tenant.name,
+    }).catch((err) =>
+      console.error("[email] submission confirmation failed:", err)
+    );
+
+    const admins = await prisma.user.findMany({
+      where: { tenantId: tenant.id },
+      select: { email: true },
+    });
+
+    const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app"}/admin`;
+
+    admins.forEach(({ email }) => {
+      sendAdminNotification({
+        to: email,
+        eventTitle: `${data.title} (recurring ${data.recurrence})`,
+        submitterName: data.submitterName,
+        tenantName: tenant.name,
+        adminUrl,
+      }).catch((err) =>
+        console.error("[email] admin notification failed:", err)
+      );
+    });
+
+    revalidatePath(`/embed/${tenantSlug}/calendar`);
+    return { success: true, eventId: firstEvent?.id ?? "" };
   }
 
   const event = await prisma.event.create({

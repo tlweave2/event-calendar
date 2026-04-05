@@ -26,8 +26,10 @@ model Tenant {
 
   // Relations
   events     Event[]
+  eventSeries EventSeries[]
   categories Category[]
   users      User[]
+  pageViews  PageView[]
   auditLogs  AuditLog[]
 
   @@map("tenants")
@@ -75,16 +77,21 @@ model Event {
   status         EventStatus @default(PENDING)
   submitterName  String?     @db.VarChar(255)
   submitterEmail String?     @db.VarChar(255)
+  seriesId       String?
+  seriesIndex    Int?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
   tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   category  Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  series    EventSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
   auditLogs AuditLog[]
+  pageViews PageView[]
 
   @@index([tenantId])
   @@index([tenantId, status])
   @@index([tenantId, startAt])
+  @@index([seriesId])
   @@map("events")
 }
 
@@ -182,4 +189,36 @@ model AuditLog {
   @@index([tenantId])
   @@index([tenantId, createdAt])
   @@map("audit_logs")
+}
+
+// ─── Page Views ───────────────────────────────────────────────────────────
+
+model PageView {
+  id       String   @id @default(uuid())
+  tenantId String
+  page     String   @db.VarChar(50)
+  eventId  String?
+  viewedAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  event  Event? @relation(fields: [eventId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([tenantId, viewedAt])
+  @@map("page_views")
+}
+
+// ─── Event Series ────────────────────────────────────────────────────────
+
+model EventSeries {
+  id        String   @id @default(uuid())
+  tenantId  String
+  rule      String   @db.VarChar(20)
+  createdAt DateTime @default(now())
+
+  tenant Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  events Event[]
+
+  @@index([tenantId])
+  @@map("event_series")
 }

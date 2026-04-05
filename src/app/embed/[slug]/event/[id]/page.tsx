@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import { getTenantBySlug } from "@/lib/tenant";
 import { getEventById } from "@/lib/prisma-tenant";
+import { recordPageView } from "@/lib/page-views";
 
 type Props = {
   params: Promise<{ slug: string; id: string }>;
@@ -49,6 +50,8 @@ export default async function EventPage({ params }: Props) {
 
   const event = await getEventById(tenant.id, id);
   if (!event) notFound();
+
+  void recordPageView(tenant.id, "event", event.id);
 
   const accent = tenant.primaryColor ?? "#2563eb";
   const calendarUrl = `/embed/${slug}/calendar`;

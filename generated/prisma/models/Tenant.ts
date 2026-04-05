@@ -247,8 +247,10 @@ export type TenantWhereInput = {
   planExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   events?: Prisma.EventListRelationFilter
+  eventSeries?: Prisma.EventSeriesListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   users?: Prisma.UserListRelationFilter
+  pageViews?: Prisma.PageViewListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
 }
 
@@ -267,8 +269,10 @@ export type TenantOrderByWithRelationInput = {
   planExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   events?: Prisma.EventOrderByRelationAggregateInput
+  eventSeries?: Prisma.EventSeriesOrderByRelationAggregateInput
   categories?: Prisma.CategoryOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
+  pageViews?: Prisma.PageViewOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
 }
 
@@ -290,8 +294,10 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   planExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   events?: Prisma.EventListRelationFilter
+  eventSeries?: Prisma.EventSeriesListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   users?: Prisma.UserListRelationFilter
+  pageViews?: Prisma.PageViewListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
 }, "id" | "slug">
 
@@ -348,8 +354,10 @@ export type TenantCreateInput = {
   planExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
 }
 
@@ -368,8 +376,10 @@ export type TenantUncheckedCreateInput = {
   planExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -388,8 +398,10 @@ export type TenantUpdateInput = {
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -408,8 +420,10 @@ export type TenantUncheckedUpdateInput = {
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -590,6 +604,34 @@ export type TenantUpdateOneRequiredWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.TenantUpdateWithoutAuditLogsInput>, Prisma.TenantUncheckedUpdateWithoutAuditLogsInput>
 }
 
+export type TenantCreateNestedOneWithoutPageViewsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutPageViewsInput, Prisma.TenantUncheckedCreateWithoutPageViewsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPageViewsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutPageViewsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutPageViewsInput, Prisma.TenantUncheckedCreateWithoutPageViewsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPageViewsInput
+  upsert?: Prisma.TenantUpsertWithoutPageViewsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutPageViewsInput, Prisma.TenantUpdateWithoutPageViewsInput>, Prisma.TenantUncheckedUpdateWithoutPageViewsInput>
+}
+
+export type TenantCreateNestedOneWithoutEventSeriesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutEventSeriesInput, Prisma.TenantUncheckedCreateWithoutEventSeriesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutEventSeriesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutEventSeriesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutEventSeriesInput, Prisma.TenantUncheckedCreateWithoutEventSeriesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutEventSeriesInput
+  upsert?: Prisma.TenantUpsertWithoutEventSeriesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutEventSeriesInput, Prisma.TenantUpdateWithoutEventSeriesInput>, Prisma.TenantUncheckedUpdateWithoutEventSeriesInput>
+}
+
 export type TenantCreateWithoutCategoriesInput = {
   id?: string
   slug: string
@@ -605,7 +647,9 @@ export type TenantCreateWithoutCategoriesInput = {
   planExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
 }
 
@@ -624,7 +668,9 @@ export type TenantUncheckedCreateWithoutCategoriesInput = {
   planExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -659,7 +705,9 @@ export type TenantUpdateWithoutCategoriesInput = {
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -678,7 +726,9 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -696,8 +746,10 @@ export type TenantCreateWithoutEventsInput = {
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
   createdAt?: Date | string
+  eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
 }
 
@@ -715,8 +767,10 @@ export type TenantUncheckedCreateWithoutEventsInput = {
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
   createdAt?: Date | string
+  eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -750,8 +804,10 @@ export type TenantUpdateWithoutEventsInput = {
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -769,8 +825,10 @@ export type TenantUncheckedUpdateWithoutEventsInput = {
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -789,7 +847,9 @@ export type TenantCreateWithoutUsersInput = {
   planExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
 }
 
@@ -808,7 +868,9 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   planExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -843,7 +905,9 @@ export type TenantUpdateWithoutUsersInput = {
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -862,7 +926,9 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -881,8 +947,10 @@ export type TenantCreateWithoutAuditLogsInput = {
   planExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAuditLogsInput = {
@@ -900,8 +968,10 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   planExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAuditLogsInput = {
@@ -935,8 +1005,10 @@ export type TenantUpdateWithoutAuditLogsInput = {
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAuditLogsInput = {
@@ -954,8 +1026,210 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutPageViewsInput = {
+  id?: string
+  slug: string
+  name: string
+  logoUrl?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  plan?: $Enums.Plan
+  customDomain?: string | null
+  timezone?: string
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  planExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  events?: Prisma.EventCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutPageViewsInput = {
+  id?: string
+  slug: string
+  name: string
+  logoUrl?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  plan?: $Enums.Plan
+  customDomain?: string | null
+  timezone?: string
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  planExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutPageViewsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutPageViewsInput, Prisma.TenantUncheckedCreateWithoutPageViewsInput>
+}
+
+export type TenantUpsertWithoutPageViewsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutPageViewsInput, Prisma.TenantUncheckedUpdateWithoutPageViewsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutPageViewsInput, Prisma.TenantUncheckedCreateWithoutPageViewsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutPageViewsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutPageViewsInput, Prisma.TenantUncheckedUpdateWithoutPageViewsInput>
+}
+
+export type TenantUpdateWithoutPageViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutPageViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutEventSeriesInput = {
+  id?: string
+  slug: string
+  name: string
+  logoUrl?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  plan?: $Enums.Plan
+  customDomain?: string | null
+  timezone?: string
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  planExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  events?: Prisma.EventCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutEventSeriesInput = {
+  id?: string
+  slug: string
+  name: string
+  logoUrl?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  plan?: $Enums.Plan
+  customDomain?: string | null
+  timezone?: string
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  planExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutEventSeriesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutEventSeriesInput, Prisma.TenantUncheckedCreateWithoutEventSeriesInput>
+}
+
+export type TenantUpsertWithoutEventSeriesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutEventSeriesInput, Prisma.TenantUncheckedUpdateWithoutEventSeriesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutEventSeriesInput, Prisma.TenantUncheckedCreateWithoutEventSeriesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutEventSeriesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutEventSeriesInput, Prisma.TenantUncheckedUpdateWithoutEventSeriesInput>
+}
+
+export type TenantUpdateWithoutEventSeriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutEventSeriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -965,15 +1239,19 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
 
 export type TenantCountOutputType = {
   events: number
+  eventSeries: number
   categories: number
   users: number
+  pageViews: number
   auditLogs: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   events?: boolean | TenantCountOutputTypeCountEventsArgs
+  eventSeries?: boolean | TenantCountOutputTypeCountEventSeriesArgs
   categories?: boolean | TenantCountOutputTypeCountCategoriesArgs
   users?: boolean | TenantCountOutputTypeCountUsersArgs
+  pageViews?: boolean | TenantCountOutputTypeCountPageViewsArgs
   auditLogs?: boolean | TenantCountOutputTypeCountAuditLogsArgs
 }
 
@@ -997,6 +1275,13 @@ export type TenantCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.E
 /**
  * TenantCountOutputType without action
  */
+export type TenantCountOutputTypeCountEventSeriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventSeriesWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
 export type TenantCountOutputTypeCountCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CategoryWhereInput
 }
@@ -1006,6 +1291,13 @@ export type TenantCountOutputTypeCountCategoriesArgs<ExtArgs extends runtime.Typ
  */
 export type TenantCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountPageViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PageViewWhereInput
 }
 
 /**
@@ -1031,8 +1323,10 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   planExpiresAt?: boolean
   createdAt?: boolean
   events?: boolean | Prisma.Tenant$eventsArgs<ExtArgs>
+  eventSeries?: boolean | Prisma.Tenant$eventSeriesArgs<ExtArgs>
   categories?: boolean | Prisma.Tenant$categoriesArgs<ExtArgs>
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
+  pageViews?: boolean | Prisma.Tenant$pageViewsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Tenant$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
@@ -1088,8 +1382,10 @@ export type TenantSelectScalar = {
 export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "logoUrl" | "primaryColor" | "secondaryColor" | "plan" | "customDomain" | "timezone" | "stripeCustomerId" | "stripeSubscriptionId" | "planExpiresAt" | "createdAt", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   events?: boolean | Prisma.Tenant$eventsArgs<ExtArgs>
+  eventSeries?: boolean | Prisma.Tenant$eventSeriesArgs<ExtArgs>
   categories?: boolean | Prisma.Tenant$categoriesArgs<ExtArgs>
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
+  pageViews?: boolean | Prisma.Tenant$pageViewsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Tenant$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1100,8 +1396,10 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name: "Tenant"
   objects: {
     events: Prisma.$EventPayload<ExtArgs>[]
+    eventSeries: Prisma.$EventSeriesPayload<ExtArgs>[]
     categories: Prisma.$CategoryPayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
+    pageViews: Prisma.$PageViewPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1513,8 +1811,10 @@ readonly fields: TenantFieldRefs;
 export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   events<T extends Prisma.Tenant$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  eventSeries<T extends Prisma.Tenant$eventSeriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$eventSeriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventSeriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   categories<T extends Prisma.Tenant$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Tenant$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pageViews<T extends Prisma.Tenant$pageViewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$pageViewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PageViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.Tenant$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1975,6 +2275,30 @@ export type Tenant$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
+ * Tenant.eventSeries
+ */
+export type Tenant$eventSeriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EventSeries
+   */
+  select?: Prisma.EventSeriesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EventSeries
+   */
+  omit?: Prisma.EventSeriesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventSeriesInclude<ExtArgs> | null
+  where?: Prisma.EventSeriesWhereInput
+  orderBy?: Prisma.EventSeriesOrderByWithRelationInput | Prisma.EventSeriesOrderByWithRelationInput[]
+  cursor?: Prisma.EventSeriesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventSeriesScalarFieldEnum | Prisma.EventSeriesScalarFieldEnum[]
+}
+
+/**
  * Tenant.categories
  */
 export type Tenant$categoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2020,6 +2344,30 @@ export type Tenant$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * Tenant.pageViews
+ */
+export type Tenant$pageViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PageView
+   */
+  select?: Prisma.PageViewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PageView
+   */
+  omit?: Prisma.PageViewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PageViewInclude<ExtArgs> | null
+  where?: Prisma.PageViewWhereInput
+  orderBy?: Prisma.PageViewOrderByWithRelationInput | Prisma.PageViewOrderByWithRelationInput[]
+  cursor?: Prisma.PageViewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PageViewScalarFieldEnum | Prisma.PageViewScalarFieldEnum[]
 }
 
 /**

@@ -29,11 +29,13 @@ export type AggregateEvent = {
 export type EventAvgAggregateOutputType = {
   lat: runtime.Decimal | null
   lng: runtime.Decimal | null
+  seriesIndex: number | null
 }
 
 export type EventSumAggregateOutputType = {
   lat: runtime.Decimal | null
   lng: runtime.Decimal | null
+  seriesIndex: number | null
 }
 
 export type EventMinAggregateOutputType = {
@@ -54,6 +56,8 @@ export type EventMinAggregateOutputType = {
   status: $Enums.EventStatus | null
   submitterName: string | null
   submitterEmail: string | null
+  seriesId: string | null
+  seriesIndex: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -76,6 +80,8 @@ export type EventMaxAggregateOutputType = {
   status: $Enums.EventStatus | null
   submitterName: string | null
   submitterEmail: string | null
+  seriesId: string | null
+  seriesIndex: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -98,6 +104,8 @@ export type EventCountAggregateOutputType = {
   status: number
   submitterName: number
   submitterEmail: number
+  seriesId: number
+  seriesIndex: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -107,11 +115,13 @@ export type EventCountAggregateOutputType = {
 export type EventAvgAggregateInputType = {
   lat?: true
   lng?: true
+  seriesIndex?: true
 }
 
 export type EventSumAggregateInputType = {
   lat?: true
   lng?: true
+  seriesIndex?: true
 }
 
 export type EventMinAggregateInputType = {
@@ -132,6 +142,8 @@ export type EventMinAggregateInputType = {
   status?: true
   submitterName?: true
   submitterEmail?: true
+  seriesId?: true
+  seriesIndex?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -154,6 +166,8 @@ export type EventMaxAggregateInputType = {
   status?: true
   submitterName?: true
   submitterEmail?: true
+  seriesId?: true
+  seriesIndex?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -176,6 +190,8 @@ export type EventCountAggregateInputType = {
   status?: true
   submitterName?: true
   submitterEmail?: true
+  seriesId?: true
+  seriesIndex?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -285,6 +301,8 @@ export type EventGroupByOutputType = {
   status: $Enums.EventStatus
   submitterName: string | null
   submitterEmail: string | null
+  seriesId: string | null
+  seriesIndex: number | null
   createdAt: Date
   updatedAt: Date
   _count: EventCountAggregateOutputType | null
@@ -330,11 +348,15 @@ export type EventWhereInput = {
   status?: Prisma.EnumEventStatusFilter<"Event"> | $Enums.EventStatus
   submitterName?: Prisma.StringNullableFilter<"Event"> | string | null
   submitterEmail?: Prisma.StringNullableFilter<"Event"> | string | null
+  seriesId?: Prisma.StringNullableFilter<"Event"> | string | null
+  seriesIndex?: Prisma.IntNullableFilter<"Event"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
+  series?: Prisma.XOR<Prisma.EventSeriesNullableScalarRelationFilter, Prisma.EventSeriesWhereInput> | null
   auditLogs?: Prisma.AuditLogListRelationFilter
+  pageViews?: Prisma.PageViewListRelationFilter
 }
 
 export type EventOrderByWithRelationInput = {
@@ -355,11 +377,15 @@ export type EventOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   submitterName?: Prisma.SortOrderInput | Prisma.SortOrder
   submitterEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  seriesId?: Prisma.SortOrderInput | Prisma.SortOrder
+  seriesIndex?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   category?: Prisma.CategoryOrderByWithRelationInput
+  series?: Prisma.EventSeriesOrderByWithRelationInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
+  pageViews?: Prisma.PageViewOrderByRelationAggregateInput
 }
 
 export type EventWhereUniqueInput = Prisma.AtLeast<{
@@ -383,11 +409,15 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumEventStatusFilter<"Event"> | $Enums.EventStatus
   submitterName?: Prisma.StringNullableFilter<"Event"> | string | null
   submitterEmail?: Prisma.StringNullableFilter<"Event"> | string | null
+  seriesId?: Prisma.StringNullableFilter<"Event"> | string | null
+  seriesIndex?: Prisma.IntNullableFilter<"Event"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
+  series?: Prisma.XOR<Prisma.EventSeriesNullableScalarRelationFilter, Prisma.EventSeriesWhereInput> | null
   auditLogs?: Prisma.AuditLogListRelationFilter
+  pageViews?: Prisma.PageViewListRelationFilter
 }, "id">
 
 export type EventOrderByWithAggregationInput = {
@@ -408,6 +438,8 @@ export type EventOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   submitterName?: Prisma.SortOrderInput | Prisma.SortOrder
   submitterEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  seriesId?: Prisma.SortOrderInput | Prisma.SortOrder
+  seriesIndex?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EventCountOrderByAggregateInput
@@ -438,6 +470,8 @@ export type EventScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumEventStatusWithAggregatesFilter<"Event"> | $Enums.EventStatus
   submitterName?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   submitterEmail?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  seriesId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  seriesIndex?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
 }
@@ -458,11 +492,14 @@ export type EventCreateInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  seriesIndex?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutEventsInput
   category?: Prisma.CategoryCreateNestedOneWithoutEventsInput
+  series?: Prisma.EventSeriesCreateNestedOneWithoutEventsInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutEventInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateInput = {
@@ -483,9 +520,12 @@ export type EventUncheckedCreateInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  seriesId?: string | null
+  seriesIndex?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutEventInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventUpdateInput = {
@@ -504,11 +544,14 @@ export type EventUpdateInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutEventsNestedInput
   category?: Prisma.CategoryUpdateOneWithoutEventsNestedInput
+  series?: Prisma.EventSeriesUpdateOneWithoutEventsNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutEventNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateInput = {
@@ -529,9 +572,12 @@ export type EventUncheckedUpdateInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutEventNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type EventCreateManyInput = {
@@ -552,6 +598,8 @@ export type EventCreateManyInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  seriesId?: string | null
+  seriesIndex?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -572,6 +620,7 @@ export type EventUpdateManyMutationInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -594,6 +643,8 @@ export type EventUncheckedUpdateManyInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -626,6 +677,8 @@ export type EventCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   submitterName?: Prisma.SortOrder
   submitterEmail?: Prisma.SortOrder
+  seriesId?: Prisma.SortOrder
+  seriesIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -633,6 +686,7 @@ export type EventCountOrderByAggregateInput = {
 export type EventAvgOrderByAggregateInput = {
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
+  seriesIndex?: Prisma.SortOrder
 }
 
 export type EventMaxOrderByAggregateInput = {
@@ -653,6 +707,8 @@ export type EventMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   submitterName?: Prisma.SortOrder
   submitterEmail?: Prisma.SortOrder
+  seriesId?: Prisma.SortOrder
+  seriesIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -675,6 +731,8 @@ export type EventMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   submitterName?: Prisma.SortOrder
   submitterEmail?: Prisma.SortOrder
+  seriesId?: Prisma.SortOrder
+  seriesIndex?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -682,6 +740,7 @@ export type EventMinOrderByAggregateInput = {
 export type EventSumOrderByAggregateInput = {
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
+  seriesIndex?: Prisma.SortOrder
 }
 
 export type EventNullableScalarRelationFilter = {
@@ -785,6 +844,14 @@ export type EnumEventStatusFieldUpdateOperationsInput = {
   set?: $Enums.EventStatus
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type EventCreateNestedOneWithoutAuditLogsInput = {
   create?: Prisma.XOR<Prisma.EventCreateWithoutAuditLogsInput, Prisma.EventUncheckedCreateWithoutAuditLogsInput>
   connectOrCreate?: Prisma.EventCreateOrConnectWithoutAuditLogsInput
@@ -799,6 +866,64 @@ export type EventUpdateOneWithoutAuditLogsNestedInput = {
   delete?: Prisma.EventWhereInput | boolean
   connect?: Prisma.EventWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.EventUpdateWithoutAuditLogsInput>, Prisma.EventUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type EventCreateNestedOneWithoutPageViewsInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutPageViewsInput, Prisma.EventUncheckedCreateWithoutPageViewsInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutPageViewsInput
+  connect?: Prisma.EventWhereUniqueInput
+}
+
+export type EventUpdateOneWithoutPageViewsNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutPageViewsInput, Prisma.EventUncheckedCreateWithoutPageViewsInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutPageViewsInput
+  upsert?: Prisma.EventUpsertWithoutPageViewsInput
+  disconnect?: Prisma.EventWhereInput | boolean
+  delete?: Prisma.EventWhereInput | boolean
+  connect?: Prisma.EventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutPageViewsInput, Prisma.EventUpdateWithoutPageViewsInput>, Prisma.EventUncheckedUpdateWithoutPageViewsInput>
+}
+
+export type EventCreateNestedManyWithoutSeriesInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutSeriesInput, Prisma.EventUncheckedCreateWithoutSeriesInput> | Prisma.EventCreateWithoutSeriesInput[] | Prisma.EventUncheckedCreateWithoutSeriesInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutSeriesInput | Prisma.EventCreateOrConnectWithoutSeriesInput[]
+  createMany?: Prisma.EventCreateManySeriesInputEnvelope
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+}
+
+export type EventUncheckedCreateNestedManyWithoutSeriesInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutSeriesInput, Prisma.EventUncheckedCreateWithoutSeriesInput> | Prisma.EventCreateWithoutSeriesInput[] | Prisma.EventUncheckedCreateWithoutSeriesInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutSeriesInput | Prisma.EventCreateOrConnectWithoutSeriesInput[]
+  createMany?: Prisma.EventCreateManySeriesInputEnvelope
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+}
+
+export type EventUpdateManyWithoutSeriesNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutSeriesInput, Prisma.EventUncheckedCreateWithoutSeriesInput> | Prisma.EventCreateWithoutSeriesInput[] | Prisma.EventUncheckedCreateWithoutSeriesInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutSeriesInput | Prisma.EventCreateOrConnectWithoutSeriesInput[]
+  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutSeriesInput | Prisma.EventUpsertWithWhereUniqueWithoutSeriesInput[]
+  createMany?: Prisma.EventCreateManySeriesInputEnvelope
+  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  update?: Prisma.EventUpdateWithWhereUniqueWithoutSeriesInput | Prisma.EventUpdateWithWhereUniqueWithoutSeriesInput[]
+  updateMany?: Prisma.EventUpdateManyWithWhereWithoutSeriesInput | Prisma.EventUpdateManyWithWhereWithoutSeriesInput[]
+  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
+}
+
+export type EventUncheckedUpdateManyWithoutSeriesNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutSeriesInput, Prisma.EventUncheckedCreateWithoutSeriesInput> | Prisma.EventCreateWithoutSeriesInput[] | Prisma.EventUncheckedCreateWithoutSeriesInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutSeriesInput | Prisma.EventCreateOrConnectWithoutSeriesInput[]
+  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutSeriesInput | Prisma.EventUpsertWithWhereUniqueWithoutSeriesInput[]
+  createMany?: Prisma.EventCreateManySeriesInputEnvelope
+  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  update?: Prisma.EventUpdateWithWhereUniqueWithoutSeriesInput | Prisma.EventUpdateWithWhereUniqueWithoutSeriesInput[]
+  updateMany?: Prisma.EventUpdateManyWithWhereWithoutSeriesInput | Prisma.EventUpdateManyWithWhereWithoutSeriesInput[]
+  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
 }
 
 export type EventCreateWithoutTenantInput = {
@@ -817,10 +942,13 @@ export type EventCreateWithoutTenantInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  seriesIndex?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category?: Prisma.CategoryCreateNestedOneWithoutEventsInput
+  series?: Prisma.EventSeriesCreateNestedOneWithoutEventsInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutEventInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutTenantInput = {
@@ -840,9 +968,12 @@ export type EventUncheckedCreateWithoutTenantInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  seriesId?: string | null
+  seriesIndex?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutEventInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventCreateOrConnectWithoutTenantInput = {
@@ -892,6 +1023,8 @@ export type EventScalarWhereInput = {
   status?: Prisma.EnumEventStatusFilter<"Event"> | $Enums.EventStatus
   submitterName?: Prisma.StringNullableFilter<"Event"> | string | null
   submitterEmail?: Prisma.StringNullableFilter<"Event"> | string | null
+  seriesId?: Prisma.StringNullableFilter<"Event"> | string | null
+  seriesIndex?: Prisma.IntNullableFilter<"Event"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
 }
@@ -912,10 +1045,13 @@ export type EventCreateWithoutCategoryInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  seriesIndex?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutEventsInput
+  series?: Prisma.EventSeriesCreateNestedOneWithoutEventsInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutEventInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutCategoryInput = {
@@ -935,9 +1071,12 @@ export type EventUncheckedCreateWithoutCategoryInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  seriesId?: string | null
+  seriesIndex?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutEventInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventCreateOrConnectWithoutCategoryInput = {
@@ -982,10 +1121,13 @@ export type EventCreateWithoutAuditLogsInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  seriesIndex?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutEventsInput
   category?: Prisma.CategoryCreateNestedOneWithoutEventsInput
+  series?: Prisma.EventSeriesCreateNestedOneWithoutEventsInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutAuditLogsInput = {
@@ -1006,8 +1148,11 @@ export type EventUncheckedCreateWithoutAuditLogsInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  seriesId?: string | null
+  seriesIndex?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventCreateOrConnectWithoutAuditLogsInput = {
@@ -1042,10 +1187,13 @@ export type EventUpdateWithoutAuditLogsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutEventsNestedInput
   category?: Prisma.CategoryUpdateOneWithoutEventsNestedInput
+  series?: Prisma.EventSeriesUpdateOneWithoutEventsNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutAuditLogsInput = {
@@ -1066,8 +1214,203 @@ export type EventUncheckedUpdateWithoutAuditLogsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type EventCreateWithoutPageViewsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  startAt: Date | string
+  endAt?: Date | string | null
+  locationName?: string | null
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  imageUrl?: string | null
+  ticketUrl?: string | null
+  cost?: string | null
+  status?: $Enums.EventStatus
+  submitterName?: string | null
+  submitterEmail?: string | null
+  seriesIndex?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutEventsInput
+  category?: Prisma.CategoryCreateNestedOneWithoutEventsInput
+  series?: Prisma.EventSeriesCreateNestedOneWithoutEventsInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutEventInput
+}
+
+export type EventUncheckedCreateWithoutPageViewsInput = {
+  id?: string
+  tenantId: string
+  title: string
+  description?: string | null
+  startAt: Date | string
+  endAt?: Date | string | null
+  locationName?: string | null
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: string | null
+  imageUrl?: string | null
+  ticketUrl?: string | null
+  cost?: string | null
+  status?: $Enums.EventStatus
+  submitterName?: string | null
+  submitterEmail?: string | null
+  seriesId?: string | null
+  seriesIndex?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutEventInput
+}
+
+export type EventCreateOrConnectWithoutPageViewsInput = {
+  where: Prisma.EventWhereUniqueInput
+  create: Prisma.XOR<Prisma.EventCreateWithoutPageViewsInput, Prisma.EventUncheckedCreateWithoutPageViewsInput>
+}
+
+export type EventUpsertWithoutPageViewsInput = {
+  update: Prisma.XOR<Prisma.EventUpdateWithoutPageViewsInput, Prisma.EventUncheckedUpdateWithoutPageViewsInput>
+  create: Prisma.XOR<Prisma.EventCreateWithoutPageViewsInput, Prisma.EventUncheckedCreateWithoutPageViewsInput>
+  where?: Prisma.EventWhereInput
+}
+
+export type EventUpdateToOneWithWhereWithoutPageViewsInput = {
+  where?: Prisma.EventWhereInput
+  data: Prisma.XOR<Prisma.EventUpdateWithoutPageViewsInput, Prisma.EventUncheckedUpdateWithoutPageViewsInput>
+}
+
+export type EventUpdateWithoutPageViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  locationName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+  submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutEventsNestedInput
+  category?: Prisma.CategoryUpdateOneWithoutEventsNestedInput
+  series?: Prisma.EventSeriesUpdateOneWithoutEventsNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateWithoutPageViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  locationName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+  submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type EventCreateWithoutSeriesInput = {
+  id?: string
+  title: string
+  description?: string | null
+  startAt: Date | string
+  endAt?: Date | string | null
+  locationName?: string | null
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  imageUrl?: string | null
+  ticketUrl?: string | null
+  cost?: string | null
+  status?: $Enums.EventStatus
+  submitterName?: string | null
+  submitterEmail?: string | null
+  seriesIndex?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutEventsInput
+  category?: Prisma.CategoryCreateNestedOneWithoutEventsInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutEventInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutEventInput
+}
+
+export type EventUncheckedCreateWithoutSeriesInput = {
+  id?: string
+  tenantId: string
+  title: string
+  description?: string | null
+  startAt: Date | string
+  endAt?: Date | string | null
+  locationName?: string | null
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: string | null
+  imageUrl?: string | null
+  ticketUrl?: string | null
+  cost?: string | null
+  status?: $Enums.EventStatus
+  submitterName?: string | null
+  submitterEmail?: string | null
+  seriesIndex?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutEventInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutEventInput
+}
+
+export type EventCreateOrConnectWithoutSeriesInput = {
+  where: Prisma.EventWhereUniqueInput
+  create: Prisma.XOR<Prisma.EventCreateWithoutSeriesInput, Prisma.EventUncheckedCreateWithoutSeriesInput>
+}
+
+export type EventCreateManySeriesInputEnvelope = {
+  data: Prisma.EventCreateManySeriesInput | Prisma.EventCreateManySeriesInput[]
+  skipDuplicates?: boolean
+}
+
+export type EventUpsertWithWhereUniqueWithoutSeriesInput = {
+  where: Prisma.EventWhereUniqueInput
+  update: Prisma.XOR<Prisma.EventUpdateWithoutSeriesInput, Prisma.EventUncheckedUpdateWithoutSeriesInput>
+  create: Prisma.XOR<Prisma.EventCreateWithoutSeriesInput, Prisma.EventUncheckedCreateWithoutSeriesInput>
+}
+
+export type EventUpdateWithWhereUniqueWithoutSeriesInput = {
+  where: Prisma.EventWhereUniqueInput
+  data: Prisma.XOR<Prisma.EventUpdateWithoutSeriesInput, Prisma.EventUncheckedUpdateWithoutSeriesInput>
+}
+
+export type EventUpdateManyWithWhereWithoutSeriesInput = {
+  where: Prisma.EventScalarWhereInput
+  data: Prisma.XOR<Prisma.EventUpdateManyMutationInput, Prisma.EventUncheckedUpdateManyWithoutSeriesInput>
 }
 
 export type EventCreateManyTenantInput = {
@@ -1087,6 +1430,8 @@ export type EventCreateManyTenantInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  seriesId?: string | null
+  seriesIndex?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1107,10 +1452,13 @@ export type EventUpdateWithoutTenantInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.CategoryUpdateOneWithoutEventsNestedInput
+  series?: Prisma.EventSeriesUpdateOneWithoutEventsNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutEventNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutTenantInput = {
@@ -1130,9 +1478,12 @@ export type EventUncheckedUpdateWithoutTenantInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutEventNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateManyWithoutTenantInput = {
@@ -1152,6 +1503,8 @@ export type EventUncheckedUpdateManyWithoutTenantInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1173,6 +1526,8 @@ export type EventCreateManyCategoryInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  seriesId?: string | null
+  seriesIndex?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1193,10 +1548,13 @@ export type EventUpdateWithoutCategoryInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutEventsNestedInput
+  series?: Prisma.EventSeriesUpdateOneWithoutEventsNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutEventNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutCategoryInput = {
@@ -1216,9 +1574,12 @@ export type EventUncheckedUpdateWithoutCategoryInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutEventNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateManyWithoutCategoryInput = {
@@ -1238,6 +1599,104 @@ export type EventUncheckedUpdateManyWithoutCategoryInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type EventCreateManySeriesInput = {
+  id?: string
+  tenantId: string
+  title: string
+  description?: string | null
+  startAt: Date | string
+  endAt?: Date | string | null
+  locationName?: string | null
+  address?: string | null
+  lat?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: string | null
+  imageUrl?: string | null
+  ticketUrl?: string | null
+  cost?: string | null
+  status?: $Enums.EventStatus
+  submitterName?: string | null
+  submitterEmail?: string | null
+  seriesIndex?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type EventUpdateWithoutSeriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  locationName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+  submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutEventsNestedInput
+  category?: Prisma.CategoryUpdateOneWithoutEventsNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutEventNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateWithoutSeriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  locationName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+  submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutEventNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateManyWithoutSeriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  locationName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lat?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lng?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cost?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+  submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1249,10 +1708,12 @@ export type EventUncheckedUpdateManyWithoutCategoryInput = {
 
 export type EventCountOutputType = {
   auditLogs: number
+  pageViews: number
 }
 
 export type EventCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   auditLogs?: boolean | EventCountOutputTypeCountAuditLogsArgs
+  pageViews?: boolean | EventCountOutputTypeCountPageViewsArgs
 }
 
 /**
@@ -1270,6 +1731,13 @@ export type EventCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
  */
 export type EventCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuditLogWhereInput
+}
+
+/**
+ * EventCountOutputType without action
+ */
+export type EventCountOutputTypeCountPageViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PageViewWhereInput
 }
 
 
@@ -1291,11 +1759,15 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   status?: boolean
   submitterName?: boolean
   submitterEmail?: boolean
+  seriesId?: boolean
+  seriesIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Event$categoryArgs<ExtArgs>
+  series?: boolean | Prisma.Event$seriesArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Event$auditLogsArgs<ExtArgs>
+  pageViews?: boolean | Prisma.Event$pageViewsArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
@@ -1317,10 +1789,13 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   submitterName?: boolean
   submitterEmail?: boolean
+  seriesId?: boolean
+  seriesIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Event$categoryArgs<ExtArgs>
+  series?: boolean | Prisma.Event$seriesArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1341,10 +1816,13 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   submitterName?: boolean
   submitterEmail?: boolean
+  seriesId?: boolean
+  seriesIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Event$categoryArgs<ExtArgs>
+  series?: boolean | Prisma.Event$seriesArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectScalar = {
@@ -1365,24 +1843,30 @@ export type EventSelectScalar = {
   status?: boolean
   submitterName?: boolean
   submitterEmail?: boolean
+  seriesId?: boolean
+  seriesIndex?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "title" | "description" | "startAt" | "endAt" | "locationName" | "address" | "lat" | "lng" | "categoryId" | "imageUrl" | "ticketUrl" | "cost" | "status" | "submitterName" | "submitterEmail" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "title" | "description" | "startAt" | "endAt" | "locationName" | "address" | "lat" | "lng" | "categoryId" | "imageUrl" | "ticketUrl" | "cost" | "status" | "submitterName" | "submitterEmail" | "seriesId" | "seriesIndex" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Event$categoryArgs<ExtArgs>
+  series?: boolean | Prisma.Event$seriesArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Event$auditLogsArgs<ExtArgs>
+  pageViews?: boolean | Prisma.Event$pageViewsArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Event$categoryArgs<ExtArgs>
+  series?: boolean | Prisma.Event$seriesArgs<ExtArgs>
 }
 export type EventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Event$categoryArgs<ExtArgs>
+  series?: boolean | Prisma.Event$seriesArgs<ExtArgs>
 }
 
 export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1390,7 +1874,9 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     tenant: Prisma.$TenantPayload<ExtArgs>
     category: Prisma.$CategoryPayload<ExtArgs> | null
+    series: Prisma.$EventSeriesPayload<ExtArgs> | null
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    pageViews: Prisma.$PageViewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1410,6 +1896,8 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     status: $Enums.EventStatus
     submitterName: string | null
     submitterEmail: string | null
+    seriesId: string | null
+    seriesIndex: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["event"]>
@@ -1808,7 +2296,9 @@ export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.Event$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$categoryArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  series<T extends Prisma.Event$seriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$seriesArgs<ExtArgs>>): Prisma.Prisma__EventSeriesClient<runtime.Types.Result.GetResult<Prisma.$EventSeriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   auditLogs<T extends Prisma.Event$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pageViews<T extends Prisma.Event$pageViewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$pageViewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PageViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1855,6 +2345,8 @@ export interface EventFieldRefs {
   readonly status: Prisma.FieldRef<"Event", 'EventStatus'>
   readonly submitterName: Prisma.FieldRef<"Event", 'String'>
   readonly submitterEmail: Prisma.FieldRef<"Event", 'String'>
+  readonly seriesId: Prisma.FieldRef<"Event", 'String'>
+  readonly seriesIndex: Prisma.FieldRef<"Event", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Event", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Event", 'DateTime'>
 }
@@ -2277,6 +2769,25 @@ export type Event$categoryArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * Event.series
+ */
+export type Event$seriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EventSeries
+   */
+  select?: Prisma.EventSeriesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EventSeries
+   */
+  omit?: Prisma.EventSeriesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventSeriesInclude<ExtArgs> | null
+  where?: Prisma.EventSeriesWhereInput
+}
+
+/**
  * Event.auditLogs
  */
 export type Event$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2298,6 +2809,30 @@ export type Event$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * Event.pageViews
+ */
+export type Event$pageViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PageView
+   */
+  select?: Prisma.PageViewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PageView
+   */
+  omit?: Prisma.PageViewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PageViewInclude<ExtArgs> | null
+  where?: Prisma.PageViewWhereInput
+  orderBy?: Prisma.PageViewOrderByWithRelationInput | Prisma.PageViewOrderByWithRelationInput[]
+  cursor?: Prisma.PageViewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PageViewScalarFieldEnum | Prisma.PageViewScalarFieldEnum[]
 }
 
 /**

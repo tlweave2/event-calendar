@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { updateEvent } from "@/lib/actions/update-event";
+import { updateEventSeries } from "@/lib/actions/update-event-series";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -46,6 +47,8 @@ function toDatetimeLocal(date: Date | string | null): string {
 export default function EditEventForm({
   event,
   categories,
+  seriesId,
+  seriesIndex,
 }: {
   event: {
     id: string;
@@ -61,12 +64,16 @@ export default function EditEventForm({
     imageUrl: string | null;
   };
   categories: Category[];
+  seriesId: string | null;
+  seriesIndex: number | null;
 }) {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(event.imageUrl ?? null);
+  const [scope, setScope] = useState<"one" | "following" | null>(seriesId ? null : "one");
+  const [showScopeModal, setShowScopeModal] = useState(!!seriesId);
 
   const {
     register,
@@ -91,12 +98,20 @@ export default function EditEventForm({
 
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
-    const result = await updateEvent({
-      eventId: event.id,
-      ...values,
-      categoryId: values.categoryId || undefined,
-      ticketUrl: values.ticketUrl || undefined,
-    });
+    const result = seriesId
+      ? await updateEventSeries({
+          eventId: event.id,
+          scope: scope ?? "one",
+          ...values,
+          categoryId: values.categoryId || undefined,
+          ticketUrl: values.ticketUrl || undefined,
+        })
+      : await updateEvent({
+          eventId: event.id,
+          ...values,
+          categoryId: values.categoryId || undefined,
+          ticketUrl: values.ticketUrl || undefined,
+        });
 
     if (result.success) {
       setSaved(true);
@@ -106,6 +121,53 @@ export default function EditEventForm({
       setServerError(result.error ?? "Something went wrong.");
     }
   };
+
+  if (showScopeModal) {
+    return (
+      <div className="space-y-4 rounded-lg border bg-white p-6">
+        <h3 className="font-semibold text-gray-900">Edit recurring event</h3>
+        <p className="text-sm text-gray-500">
+          This event is part of a recurring series{seriesIndex ? ` (occurrence #${seriesIndex})` : ""}.
+        </p>
+        <div className="space-y-2">
+          <label className="flex cursor-pointer items-center gap-3">
+            <input
+              type="radio"
+              name="scope"
+              value="one"
+              onChange={() => setScope("one")}
+              checked={scope === "one"}
+            />
+            <span className="text-sm text-gray-700">Just this event</span>
+          </label>
+          <label className="flex cursor-pointer items-center gap-3">
+            <input
+              type="radio"
+              name="scope"
+              value="following"
+              onChange={() => setScope("following")}
+              checked={scope === "following"}
+            />
+            <span className="text-sm text-gray-700">This and following events</span>
+          </label>
+        </div>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => router.back()}
+          >
+            Cancel
+          </Button>
+          <Button
+            disabled={!scope}
+            onClick={() => setShowScopeModal(false)}
+          >
+            Continue
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

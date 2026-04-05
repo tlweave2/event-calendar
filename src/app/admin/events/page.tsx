@@ -34,6 +34,7 @@ export default async function AllEventsPage() {
           events={events.map((event) => ({
             id: event.id,
             title: event.title,
+            seriesId: event.seriesId,
             startAt: event.startAt,
             category: event.category ? { name: event.category.name } : null,
             submitterName: event.submitterName,

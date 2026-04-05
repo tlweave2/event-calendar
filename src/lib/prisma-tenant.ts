@@ -15,6 +15,8 @@ export type EventWithCategory = {
   status: "PENDING" | "APPROVED" | "REJECTED";
   submitterName: string | null;
   submitterEmail: string | null;
+  seriesId: string | null;
+  seriesIndex: number | null;
   categoryId: string | null;
   tenantId: string;
   createdAt: Date;

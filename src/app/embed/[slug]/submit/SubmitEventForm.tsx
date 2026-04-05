@@ -23,6 +23,8 @@ const schema = z.object({
   description: z.string().optional(),
   startAt: z.string().min(1, "Start date is required"),
   endAt: z.string().optional(),
+  recurrence: z.enum(["weekly", "biweekly", "monthly"]).optional(),
+  occurrences: z.number().int().min(1).max(52).optional(),
   locationName: z.string().optional(),
   address: z.string().optional(),
   categoryId: z.string().optional(),
@@ -53,6 +55,7 @@ export default function SubmitEventForm({
   const [extracting, setExtracting] = useState(false);
   const [extractedFields, setExtractedFields] = useState<string[]>([]);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [recurrence, setRecurrence] = useState<"" | "weekly" | "biweekly" | "monthly">("");
 
   const {
     register,
@@ -197,6 +200,8 @@ export default function SubmitEventForm({
       ticketUrl: values.ticketUrl,
       cost: values.cost,
       imageUrl,
+      recurrence: recurrence || undefined,
+      occurrences: recurrence ? Number(values.occurrences ?? 8) : undefined,
     });
 
     if (result.success) {
@@ -326,6 +331,38 @@ export default function SubmitEventForm({
               <Label htmlFor="endAt">End Date & Time</Label>
               <Input id="endAt" type="datetime-local" {...register("endAt")} />
             </div>
+          </div>
+
+          <div className="space-y-3 rounded-lg border p-4">
+            <Label>Repeats</Label>
+            <select
+              className="h-10 w-full rounded-md border border-gray-200 bg-white px-3 text-sm"
+              value={recurrence}
+              onChange={(e) => setRecurrence(e.target.value as typeof recurrence)}
+            >
+              <option value="">Does not repeat</option>
+              <option value="weekly">Weekly</option>
+              <option value="biweekly">Every 2 weeks</option>
+              <option value="monthly">Monthly</option>
+            </select>
+
+            {recurrence && (
+              <div className="space-y-1">
+                <Label htmlFor="occurrences">Number of occurrences (max 52)</Label>
+                <Input
+                  id="occurrences"
+                  type="number"
+                  min={2}
+                  max={52}
+                  defaultValue={8}
+                  {...register("occurrences", { valueAsNumber: true })}
+                  className="w-32"
+                />
+                <p className="text-xs text-gray-400">
+                  Including the first date you selected above.
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="space-y-1">

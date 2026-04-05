@@ -18,6 +18,7 @@ import {
 type EventRow = {
   id: string;
   title: string;
+  seriesId: string | null;
   startAt: string | Date;
   category: { name: string } | null;
   submitterName: string | null;
@@ -106,10 +107,17 @@ export default function BulkActions({ events }: { events: EventRow[] }) {
               <TableCell className="align-top">
                 <input type="checkbox" checked={selectedSet.has(event.id)} onChange={() => toggleOne(event.id)} />
               </TableCell>
-              <TableCell className="max-w-xs truncate font-medium text-gray-900">
-                <Link href={`/admin/events/${event.id}`} className="hover:underline">
-                  {event.title}
-                </Link>
+              <TableCell className="max-w-xs font-medium text-gray-900">
+                <div className="flex items-center gap-2">
+                  <Link href={`/admin/events/${event.id}`} className="truncate hover:underline">
+                    {event.title}
+                  </Link>
+                  {event.seriesId && (
+                    <span className="shrink-0 rounded-full bg-purple-100 px-1.5 py-0.5 text-xs font-medium text-purple-600">
+                      Series
+                    </span>
+                  )}
+                </div>
               </TableCell>
               <TableCell className="whitespace-nowrap text-gray-500">
                 {format(new Date(event.startAt), "MMM d, yyyy")}

@@ -58,7 +58,9 @@ export const ModelName = {
   Account: 'Account',
   Session: 'Session',
   VerificationToken: 'VerificationToken',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  PageView: 'PageView',
+  EventSeries: 'EventSeries'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -125,6 +127,8 @@ export const EventScalarFieldEnum = {
   status: 'status',
   submitterName: 'submitterName',
   submitterEmail: 'submitterEmail',
+  seriesId: 'seriesId',
+  seriesIndex: 'seriesIndex',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -194,6 +198,27 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const PageViewScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  page: 'page',
+  eventId: 'eventId',
+  viewedAt: 'viewedAt'
+} as const
+
+export type PageViewScalarFieldEnum = (typeof PageViewScalarFieldEnum)[keyof typeof PageViewScalarFieldEnum]
+
+
+export const EventSeriesScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  rule: 'rule',
+  createdAt: 'createdAt'
+} as const
+
+export type EventSeriesScalarFieldEnum = (typeof EventSeriesScalarFieldEnum)[keyof typeof EventSeriesScalarFieldEnum]
 
 
 export const SortOrder = {

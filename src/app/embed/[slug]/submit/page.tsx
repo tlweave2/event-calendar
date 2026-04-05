@@ -3,6 +3,7 @@
 import { getTenantBySlug } from "@/lib/tenant";
 import { notFound } from "next/navigation";
 import SubmitEventForm from "./SubmitEventForm";
+import { recordPageView } from "@/lib/page-views";
 
 export default async function SubmitPage({
   params,
@@ -13,6 +14,8 @@ export default async function SubmitPage({
   const tenant = await getTenantBySlug(slug);
 
   if (!tenant) notFound();
+
+  void recordPageView(tenant.id, "submit");
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10">

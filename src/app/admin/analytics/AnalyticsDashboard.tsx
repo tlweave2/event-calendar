@@ -16,6 +16,8 @@ export default function AnalyticsDashboard({
     submissionsByMonth,
     statusBreakdown,
     topCategories,
+    pageViews,
+    topViewedEvents,
     thisMonthCount,
     totalApproved,
     recentActivity,
@@ -157,6 +159,36 @@ export default function AnalyticsDashboard({
           )}
         </div>
       </div>
+
+      <div className="rounded-lg border bg-white p-5">
+        <h2 className="mb-4 text-sm font-medium text-gray-700">Public Page Views (All Time)</h2>
+        <div className="grid grid-cols-3 gap-4">
+          {[
+            { label: "Calendar", count: pageViews.calendar },
+            { label: "Event Detail", count: pageViews.event },
+            { label: "Submit Form", count: pageViews.submit },
+          ].map(({ label, count }) => (
+            <div key={label} className="rounded-md border p-3 text-center">
+              <p className="text-2xl font-bold text-gray-900">{count}</p>
+              <p className="mt-0.5 text-xs text-gray-400">{label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {topViewedEvents.length > 0 && (
+        <div className="rounded-lg border bg-white p-5">
+          <h2 className="mb-4 text-sm font-medium text-gray-700">Top Viewed Events</h2>
+          <div className="space-y-3">
+            {topViewedEvents.map((event) => (
+              <div key={event.id} className="flex items-center justify-between text-sm">
+                <span className="truncate text-gray-700">{event.title}</span>
+                <span className="ml-4 shrink-0 text-gray-400">{event.count} views</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
