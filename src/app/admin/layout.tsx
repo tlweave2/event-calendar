@@ -65,6 +65,12 @@ export default async function AdminLayout({
             Embed
           </Link>
           <Link
+            href="/admin/import"
+            className="flex items-center rounded-md px-3 py-2 text-gray-700 hover:bg-gray-100"
+          >
+            Import Flyers
+          </Link>
+          <Link
             href="/admin/settings"
             className="flex items-center rounded-md px-3 py-2 text-gray-700 hover:bg-gray-100"
           >
