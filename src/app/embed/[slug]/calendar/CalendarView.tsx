@@ -188,6 +188,15 @@ export default function CalendarView({
           tenantSlug={tenantSlug}
         />
       )}
+
+      <div className="border-t pt-4 text-center">
+        <Link
+          href={`/embed/${tenantSlug}/calendar/feed.ics`}
+          className="text-xs text-gray-400 underline hover:text-gray-600"
+        >
+          Subscribe to calendar (.ics)
+        </Link>
+      </div>
     </div>
   );
 }

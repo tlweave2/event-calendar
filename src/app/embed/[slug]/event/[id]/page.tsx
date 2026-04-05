@@ -9,6 +9,10 @@ type Props = {
   params: Promise<{ slug: string; id: string }>;
 };
 
+function formatICalDate(date: Date): string {
+  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, id } = await params;
   const tenant = await getTenantBySlug(slug);
@@ -164,6 +168,28 @@ export default async function EventPage({ params }: Props) {
                 </a>
               </div>
             )}
+
+            <div className="border-t pt-4">
+              <p className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-400">
+                Add to your calendar
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href={`/embed/${slug}/event/${event.id}/calendar.ics`}
+                  className="rounded-md border px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                >
+                  Apple Calendar / Outlook (.ics)
+                </a>
+                <a
+                  href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${formatICalDate(new Date(event.startAt))}/${formatICalDate(event.endAt ? new Date(event.endAt) : new Date(new Date(event.startAt).getTime() + 3600000))}&details=${encodeURIComponent(event.description ?? "")}&location=${encodeURIComponent(event.locationName ?? "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-md border px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                >
+                  Google Calendar
+                </a>
+              </div>
+            </div>
 
             <div className="border-t pt-4">
               <p className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-400">
