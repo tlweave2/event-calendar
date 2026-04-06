@@ -76,6 +76,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
 
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Only allow redirects to this app's own origin.
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      if (new URL(url).origin === baseUrl) return url;
+      return `${baseUrl}/admin`;
+    },
+
     async jwt({ token, user }) {
       // On sign-in, user object is present - persist to token
       if (user) {
