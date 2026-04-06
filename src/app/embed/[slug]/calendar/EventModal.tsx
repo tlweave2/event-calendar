@@ -64,19 +64,18 @@ export default function EventModal({
           </div>
 
           {event.imageUrl && (
-            <div
-              className="cursor-zoom-in overflow-hidden pt-4"
-              onClick={() => setLightboxOpen(true)}
-            >
-              <img
-                src={event.imageUrl}
-                alt={event.title}
-                className="w-full object-cover transition-transform hover:scale-105"
-                style={{ maxHeight: "180px" }}
-              />
-              <p className={`py-1 text-center text-xs ${darkMode ? "bg-gray-800 text-gray-500" : "bg-gray-50 text-gray-400"}`}>
-                Click to view full flyer
-              </p>
+            <div className="px-6 pt-4">
+              <div
+                className="inline-block cursor-zoom-in overflow-hidden rounded-md border"
+                onClick={() => setLightboxOpen(true)}
+              >
+                <img
+                  src={event.imageUrl}
+                  alt={event.title}
+                  className="h-24 w-24 object-cover transition-transform hover:scale-105"
+                />
+              </div>
+              <p className="mt-1 text-xs text-gray-400">Click to view full flyer</p>
             </div>
           )}
 

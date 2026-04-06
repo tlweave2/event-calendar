@@ -305,22 +305,21 @@ function EventCard({
                 onClick={(e) => e.stopPropagation()}
               >
                 {event.imageUrl && (
-                  <div
-                    className={`cursor-zoom-in overflow-hidden rounded-md border ${darkMode ? "border-gray-700" : ""}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setLightboxOpen(true);
-                    }}
-                  >
-                    <img
-                      src={event.imageUrl}
-                      alt={event.title}
-                      className="w-full object-cover transition-transform hover:scale-105"
-                      style={{ maxHeight: "160px" }}
-                    />
-                    <p className={`py-1 text-center text-xs ${darkMode ? "bg-gray-900 text-gray-500" : "bg-gray-50 text-gray-400"}`}>
-                      Click to view full flyer
-                    </p>
+                  <div>
+                    <div
+                      className="inline-block cursor-zoom-in overflow-hidden rounded-md border"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLightboxOpen(true);
+                      }}
+                    >
+                      <img
+                        src={event.imageUrl}
+                        alt={event.title}
+                        className="h-24 w-24 object-cover transition-transform hover:scale-105"
+                      />
+                    </div>
+                    <p className="text-xs text-gray-400">Click to view full flyer</p>
                   </div>
                 )}
                 {event.description && (
