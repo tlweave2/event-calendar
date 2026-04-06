@@ -1,5 +1,6 @@
 "use server";
 
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
@@ -14,6 +15,11 @@ const brandingSchema = z.object({
 });
 
 export async function updateTenantBranding(input: z.infer<typeof brandingSchema>) {
+  const session = await auth();
+  if (!session || session.user.tenantId !== input.tenantId) {
+    return { success: false, errors: { _form: ["Unauthorized"] } };
+  }
+
   const parsed = brandingSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, errors: parsed.error.flatten().fieldErrors };
@@ -53,6 +59,11 @@ const categoriesSchema = z.object({
 export async function updateTenantCategories(
   input: z.infer<typeof categoriesSchema>
 ) {
+  const session = await auth();
+  if (!session || session.user.tenantId !== input.tenantId) {
+    return { success: false, errors: { _form: ["Unauthorized"] } };
+  }
+
   const parsed = categoriesSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, errors: parsed.error.flatten().fieldErrors };

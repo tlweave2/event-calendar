@@ -1,6 +1,7 @@
+import { auth } from "@/lib/auth";
 import { getTenantBySlug } from "@/lib/tenant";
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import SetupWizard from "./SetupWizard";
 
 export default async function SetupPage({
@@ -9,8 +10,16 @@ export default async function SetupPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const session = await auth();
+  if (!session) redirect("/admin/login");
+
   const tenant = await getTenantBySlug(slug);
   if (!tenant) notFound();
+
+  // Only the tenant owner can access their setup page.
+  if (tenant.id !== session.user.tenantId) {
+    redirect("/admin");
+  }
 
   const requestHeaders = await headers();
   const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";

@@ -30,9 +30,9 @@ export default async function AdminLayout({
     <div className="min-h-screen flex bg-gray-50">
       <aside className="flex w-56 flex-col border-r bg-white">
         <div className="border-b px-5 py-5">
-          <span className="text-sm font-semibold text-gray-900">
+          <Link href="/" className="text-sm font-semibold text-gray-900 hover:text-gray-600">
             {tenant?.name ?? "Event Calendar"}
-          </span>
+          </Link>
         </div>
         <nav className="flex-1 space-y-1 px-3 py-4 text-sm">
           <Link

@@ -64,6 +64,16 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
     };
   }
 
+  // Auto-approve when submitter is an admin/owner of this tenant.
+  const isAdmin = await prisma.user.findFirst({
+    where: {
+      tenantId: tenant.id,
+      email: data.submitterEmail.toLowerCase(),
+      role: { in: ["OWNER", "ADMIN"] },
+    },
+  });
+  const status = isAdmin ? "APPROVED" : "PENDING";
+
   if (data.recurrence && data.occurrences && data.occurrences > 1) {
     const seriesResult = await createEventSeries({
       tenantId: tenant.id,
@@ -81,7 +91,7 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       imageUrl: data.imageUrl,
       rule: data.recurrence,
       occurrences: data.occurrences,
-      status: "PENDING",
+      status,
     });
 
     if (!seriesResult.success) {
@@ -104,24 +114,26 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       console.error("[email] submission confirmation failed:", err)
     );
 
-    const admins = await prisma.user.findMany({
-      where: { tenantId: tenant.id },
-      select: { email: true },
-    });
+    if (!isAdmin) {
+      const admins = await prisma.user.findMany({
+        where: { tenantId: tenant.id },
+        select: { email: true },
+      });
 
-    const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app"}/admin`;
+      const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app"}/admin`;
 
-    admins.forEach(({ email }) => {
-      sendAdminNotification({
-        to: email,
-        eventTitle: `${data.title} (recurring ${data.recurrence})`,
-        submitterName: data.submitterName,
-        tenantName: tenant.name,
-        adminUrl,
-      }).catch((err) =>
-        console.error("[email] admin notification failed:", err)
-      );
-    });
+      admins.forEach(({ email }) => {
+        sendAdminNotification({
+          to: email,
+          eventTitle: `${data.title} (recurring ${data.recurrence})`,
+          submitterName: data.submitterName,
+          tenantName: tenant.name,
+          adminUrl,
+        }).catch((err) =>
+          console.error("[email] admin notification failed:", err)
+        );
+      });
+    }
 
     revalidatePath(`/embed/${tenantSlug}/calendar`);
     return { success: true, eventId: firstEvent?.id ?? "" };
@@ -142,7 +154,7 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       ticketUrl: data.ticketUrl || null,
       cost: data.cost,
       imageUrl: data.imageUrl,
-      status: "PENDING",
+      status,
     },
   });
 
@@ -157,24 +169,26 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
     console.error("[email] submission confirmation failed:", err)
   );
 
-  const admins = await prisma.user.findMany({
-    where: { tenantId: tenant.id },
-    select: { email: true },
-  });
+  if (!isAdmin) {
+    const admins = await prisma.user.findMany({
+      where: { tenantId: tenant.id },
+      select: { email: true },
+    });
 
-  const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app"}/admin`;
+    const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app"}/admin`;
 
-  admins.forEach(({ email }) => {
-    sendAdminNotification({
-      to: email,
-      eventTitle: data.title,
-      submitterName: data.submitterName,
-      tenantName: tenant.name,
-      adminUrl,
-    }).catch((err) =>
-      console.error("[email] admin notification failed:", err)
-    );
-  });
+    admins.forEach(({ email }) => {
+      sendAdminNotification({
+        to: email,
+        eventTitle: data.title,
+        submitterName: data.submitterName,
+        tenantName: tenant.name,
+        adminUrl,
+      }).catch((err) =>
+        console.error("[email] admin notification failed:", err)
+      );
+    });
+  }
 
   revalidatePath(`/embed/${tenantSlug}/calendar`);
 
