@@ -108,7 +108,7 @@ export default function HomePage() {
             </h1>
 
             <p style={{ fontSize: "0.9375rem", color: C.muted, maxWidth: "380px", margin: "0 0 2rem", lineHeight: 1.7, fontFamily: "system-ui, sans-serif" }}>
-              Anyone can submit events. You approve what goes live. Embed it on your website in minutes — no dev needed.
+              Anyone can submit events. You approve what goes live. Share to your website, newsletter, or social media — all from one place.
             </p>
 
             <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: "1rem" }}>
@@ -181,7 +181,7 @@ export default function HomePage() {
       {/* ── Audience strip ── */}
       <div style={{ borderTop: `2px solid ${C.border}`, borderBottom: `2px solid ${C.border}`, padding: "1rem 2.5rem", background: C.ink, textAlign: "center" }}>
         <p style={{ fontSize: "0.75rem", color: "#888", fontFamily: "system-ui, sans-serif", margin: 0, letterSpacing: "0.06em", textTransform: "uppercase" }}>
-          Built for neighborhood associations · school groups · maker spaces · arts orgs · faith communities · sports leagues
+          Built for neighborhood associations · school groups · maker spaces · arts orgs · faith communities · sports leagues · anyone managing a community&apos;s social media
         </p>
       </div>
 
@@ -195,7 +195,7 @@ export default function HomePage() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1px", background: C.border, border: `2px solid ${C.border}`, borderRadius: "12px", overflow: "hidden" }}>
           {[
             { title: "Public submissions", desc: "Anyone in your community can submit an event. You review and approve every one before it goes live.", bar: C.red },
-            { title: "Embed anywhere", desc: "Drop your calendar onto any website with a single iframe tag. It just works — no dev skills needed.", bar: "#2563EB" },
+            { title: "Share anywhere", desc: "Embed on your website, drop a link in your newsletter, or share individual events straight to Facebook, Instagram, or anywhere else your community hangs out.", bar: "#2563EB" },
             { title: "Moderation queue", desc: "Approve, reject, or bulk-action submissions from a clean dashboard. Stay in full control.", bar: "#059669" },
             { title: "Recurring events", desc: "Set up weekly, monthly, or custom repeat schedules once. The series fills in automatically.", bar: "#7C3AED" },
             { title: "Team management", desc: "Invite editors and admins to help you moderate. Role-based access, no chaos.", bar: "#D97706" },
@@ -220,7 +220,7 @@ export default function HomePage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2.5rem" }}>
             {[
               { n: "01", title: "Sign up", desc: "Create your account and set up your calendar — pick your slug, colors, and event categories.", color: C.red },
-              { n: "02", title: "Share the link", desc: "Embed it on your website with an iframe, or share the hosted URL in your newsletter or social.", color: "#2563EB" },
+              { n: "02", title: "Share the link", desc: "Embed it on your website, post it to Facebook or Instagram, or drop the link in your newsletter. One calendar, everywhere.", color: "#2563EB" },
               { n: "03", title: "Moderate & publish", desc: "Events from the community come in. You approve what goes live. Everyone stays informed.", color: "#059669" },
             ].map((step) => (
               <div key={step.n}>
@@ -287,7 +287,7 @@ export default function HomePage() {
           <em style={{ color: C.red, fontStyle: "italic" }}>real</em> calendar.
         </h2>
         <p style={{ fontSize: "1rem", color: "#888", marginBottom: "2.25rem", fontFamily: "system-ui, sans-serif", maxWidth: "480px", margin: "0 auto 2.25rem", lineHeight: 1.6 }}>
-          Stop burying events in Facebook posts and email threads. Give people one place to look.
+          Stop scattering events across Facebook posts, email threads, and group chats. Give your community one place to find everything.
         </p>
         <Link href="/signup" style={{ background: C.red, color: "#fff", padding: "0.875rem 2.5rem", borderRadius: "0.4rem", fontSize: "1rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 700, display: "inline-block" }}>
           Create your calendar — it&rsquo;s free →
