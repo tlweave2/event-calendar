@@ -35,6 +35,7 @@ export default function EmbedPageClient({
   baseUrl: string;
 }) {
   const calendarUrl = `${baseUrl}/embed/${slug}/calendar`;
+  const calendarOnlyUrl = `${baseUrl}/embed/${slug}/calendar?minimal=true`;
   const submitUrl = `${baseUrl}/embed/${slug}/submit`;
 
   return (
@@ -48,6 +49,7 @@ export default function EmbedPageClient({
         </p>
         <div className="space-y-3">
           <CopyBlock label="Public Calendar" snippet={calendarUrl} />
+          <CopyBlock label="Calendar Only (no header)" snippet={calendarOnlyUrl} />
           <CopyBlock label="Event Submission Form" snippet={submitUrl} />
         </div>
       </div>
@@ -63,6 +65,10 @@ export default function EmbedPageClient({
           <CopyBlock
             label="Calendar iframe"
             snippet={`<iframe\n  src="${calendarUrl}"\n  width="100%"\n  height="700"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`}
+          />
+          <CopyBlock
+            label="Calendar Only iframe (no header/logo)"
+            snippet={`<iframe\n  src="${calendarOnlyUrl}"\n  width="100%"\n  height="600"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`}
           />
           <CopyBlock
             label="Submission Form iframe"
