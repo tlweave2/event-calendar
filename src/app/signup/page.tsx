@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
 import { z } from "zod";
 import { createTenant } from "@/lib/actions/create-tenant";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,6 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export default function SignupPage() {
-  const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {
@@ -47,7 +46,12 @@ export default function SignupPage() {
       return;
     }
 
-    router.push(`/setup/${result.slug}`);
+    await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: true,
+      redirectTo: `/setup/${result.slug}`,
+    });
   };
 
   return (
