@@ -6,6 +6,7 @@ import Link from "next/link";
 import { bulkModerateEvents } from "@/lib/actions/bulk-moderate";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -29,15 +30,32 @@ type EventRow = {
 export default function BulkActions({ events }: { events: EventRow[] }) {
   const [selected, setSelected] = useState<string[]>([]);
   const [message, setMessage] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
   const [isPending, startTransition] = useTransition();
 
+  const filtered = search
+    ? events.filter((event) =>
+        event.title.toLowerCase().includes(search.toLowerCase()) ||
+        event.submitterName?.toLowerCase().includes(search.toLowerCase()) ||
+        event.submitterEmail?.toLowerCase().includes(search.toLowerCase())
+      )
+    : events;
+
   const selectedCount = selected.length;
-  const allSelected = events.length > 0 && selectedCount === events.length;
+  const allSelected = filtered.length > 0 && filtered.every((event) => selected.includes(event.id));
 
   const selectedSet = useMemo(() => new Set(selected), [selected]);
 
   const toggleAll = () => {
-    setSelected(allSelected ? [] : events.map((event) => event.id));
+    setSelected((current) => {
+      if (allSelected) {
+        return current.filter((id) => !filtered.some((event) => event.id === id));
+      }
+
+      const merged = new Set(current);
+      filtered.forEach((event) => merged.add(event.id));
+      return Array.from(merged);
+    });
   };
 
   const toggleOne = (eventId: string) => {
@@ -71,7 +89,13 @@ export default function BulkActions({ events }: { events: EventRow[] }) {
           {selectedCount === 0 ? "Select events to moderate." : `${selectedCount} selected`}
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={toggleAll} disabled={events.length === 0}>
+          <Input
+            placeholder="Search events..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="h-8 w-56 text-sm"
+          />
+          <Button variant="outline" size="sm" onClick={toggleAll} disabled={filtered.length === 0}>
             {allSelected ? "Clear selection" : "Select all"}
           </Button>
           <Button size="sm" variant="outline" onClick={() => runAction("PENDING")} disabled={isPending || selectedCount === 0}>
@@ -102,7 +126,7 @@ export default function BulkActions({ events }: { events: EventRow[] }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {events.map((event) => (
+          {filtered.map((event) => (
             <TableRow key={event.id} data-state={selectedSet.has(event.id) ? "selected" : undefined}>
               <TableCell className="align-top">
                 <input type="checkbox" checked={selectedSet.has(event.id)} onChange={() => toggleOne(event.id)} />
@@ -134,6 +158,13 @@ export default function BulkActions({ events }: { events: EventRow[] }) {
               </TableCell>
             </TableRow>
           ))}
+          {filtered.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={6} className="py-12 text-center text-sm text-gray-400">
+                {search ? "No events match your search." : "No events yet."}
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

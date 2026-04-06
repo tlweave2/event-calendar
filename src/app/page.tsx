@@ -1,15 +1,6 @@
 import Link from "next/link";
-import { getTenantBySlug } from "@/lib/tenant";
-import { getApprovedEvents } from "@/lib/prisma-tenant";
-import { format } from "date-fns";
 
-const TENANT_SLUG = "test";
-
-export default async function Home() {
-  const tenant = await getTenantBySlug(TENANT_SLUG);
-  const events = tenant ? await getApprovedEvents(tenant.id) : [];
-  const upcoming = events.slice(0, 3);
-
+export default function Home() {
   return (
     <div
       style={{
@@ -28,11 +19,10 @@ export default async function Home() {
         .btn-primary:hover { opacity: 0.8; }
         .btn-outline { background: transparent; color: #1a1a18; padding: 0.5rem 1.25rem; border-radius: 100px; font-size: 0.875rem; border: 1px solid #c8c6be; display: inline-block; transition: border-color 0.15s; }
         .btn-outline:hover { border-color: #1a1a18; }
-        .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1px; background: #e8e6e0; border: 1px solid #e8e6e0; border-radius: 16px; overflow: hidden; }
-        .event-card { background: #FAFAF8; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; transition: background 0.15s; }
-        .event-card:hover { background: #f5f3ef; }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
         .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
         @media (max-width: 640px) {
+          .features-grid { grid-template-columns: 1fr; }
           .how-grid { grid-template-columns: 1fr; }
           nav { padding: 1rem 1.25rem !important; }
           .hero { padding: 3rem 1.25rem 2.5rem !important; }
@@ -54,25 +44,22 @@ export default async function Home() {
         }}
       >
         <span className="serif" style={{ fontSize: "1.25rem", letterSpacing: "-0.01em" }}>
-          {tenant?.name ?? "Community Calendar"}
+          Eventful
         </span>
-        <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-          <Link href={`/embed/${TENANT_SLUG}/calendar`} style={{ fontSize: "0.875rem", color: "#5a5a55" }}>
-            Browse events
+        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          <Link href="/admin/login" style={{ fontSize: "0.875rem", color: "#5a5a55" }}>
+            Sign in
           </Link>
-          <Link href={`/embed/${TENANT_SLUG}/submit`} style={{ fontSize: "0.875rem", color: "#5a5a55" }}>
-            Submit event
-          </Link>
-          <Link href="/signup" style={{ fontSize: "0.875rem", color: "#5a5a55" }}>
+          <Link href="/signup" className="btn-primary">
             Get started
-          </Link>
-          <Link href="/admin" className="btn-primary">
-            Admin
           </Link>
         </div>
       </nav>
 
-      <div className="hero" style={{ padding: "5rem 2.5rem 4rem", maxWidth: "900px", margin: "0 auto" }}>
+      <div
+        className="hero"
+        style={{ padding: "5rem 2.5rem 4rem", maxWidth: "900px", margin: "0 auto" }}
+      >
         <div
           style={{
             display: "inline-flex",
@@ -90,25 +77,40 @@ export default async function Home() {
           }}
         >
           <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#3d9a6e" }} />
-          Community Calendar
+          Community Calendar Platform
         </div>
-        <h1 className="serif" style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)", lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: "1.25rem" }}>
-          Your community,
+        <h1
+          className="serif"
+          style={{
+            fontSize: "clamp(2.5rem, 6vw, 4rem)",
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+            marginBottom: "1.25rem",
+          }}
+        >
+          Your community calendar,
           <br />
-          <span style={{ fontStyle: "italic", color: "#3d9a6e" }}>all in one place.</span>
+          <span style={{ fontStyle: "italic", color: "#3d9a6e" }}>up and running in minutes.</span>
         </h1>
-        <p style={{ fontSize: "1.0625rem", color: "#5a5a55", lineHeight: 1.65, maxWidth: "520px", marginBottom: "2rem", fontWeight: 300 }}>
-          Discover local events, submit your own, and stay connected with what&apos;s happening around you.
+        <p
+          style={{
+            fontSize: "1.0625rem",
+            color: "#5a5a55",
+            lineHeight: 1.65,
+            maxWidth: "520px",
+            marginBottom: "2rem",
+            fontWeight: 300,
+          }}
+        >
+          Give your community a place to discover local events, submit their own,
+          and stay connected with what&apos;s happening - embeddable anywhere.
         </p>
         <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-          <Link href={`/embed/${TENANT_SLUG}/calendar`} className="btn-primary">
-            Browse events
+          <Link href="/signup" className="btn-primary">
+            Create your calendar -&gt;
           </Link>
-          <Link href={`/embed/${TENANT_SLUG}/submit`} className="btn-outline">
-            Submit an event
-          </Link>
-          <Link href="/signup" className="btn-outline">
-            Get started
+          <Link href="/admin/login" className="btn-outline">
+            Sign in
           </Link>
         </div>
       </div>
@@ -116,121 +118,162 @@ export default async function Home() {
       <div style={{ height: "1px", background: "#e8e6e0", margin: "0 2.5rem" }} />
 
       <div className="section" style={{ padding: "4rem 2.5rem", maxWidth: "900px", margin: "0 auto" }}>
-        <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "#9a9890", fontWeight: 500, marginBottom: "2rem" }}>
-          Upcoming events
+        <p
+          style={{
+            fontSize: "0.75rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            color: "#9a9890",
+            fontWeight: 500,
+            marginBottom: "2rem",
+          }}
+        >
+          Everything you need
         </p>
-
-        {upcoming.length === 0 ? (
-          <div style={{ padding: "3rem", textAlign: "center", border: "1px dashed #e8e6e0", borderRadius: "16px" }}>
-            <p style={{ color: "#9a9890", fontSize: "0.9375rem" }}>No upcoming events yet.</p>
-            <Link href={`/embed/${TENANT_SLUG}/submit`} className="btn-outline" style={{ display: "inline-block", marginTop: "1rem" }}>
-              Submit the first one
-            </Link>
-          </div>
-        ) : (
-          <div className="events-grid">
-            {upcoming.map((event) => (
-              <div key={event.id} className="event-card">
-                <div>
-                  <div style={{ fontSize: "0.6875rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "#3d9a6e", fontWeight: 500 }}>
-                    {format(new Date(event.startAt), "MMM")}
-                  </div>
-                  <div className="serif" style={{ fontSize: "2rem", lineHeight: 1 }}>
-                    {format(new Date(event.startAt), "d")}
-                  </div>
-                </div>
-                <div style={{ fontSize: "0.9375rem", fontWeight: 500, lineHeight: 1.35 }}>{event.title}</div>
-                <div style={{ fontSize: "0.8125rem", color: "#9a9890", display: "flex", flexDirection: "column", gap: "2px" }}>
-                  <span>
-                    {format(new Date(event.startAt), "h:mm a")}
-                    {event.locationName ? ` · ${event.locationName}` : ""}
-                  </span>
-                  {event.cost && <span>{event.cost}</span>}
-                </div>
-                {event.category && (
-                  <span
-                    style={{
-                      display: "inline-block",
-                      padding: "0.2rem 0.6rem",
-                      borderRadius: "100px",
-                      fontSize: "0.6875rem",
-                      fontWeight: 500,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.04em",
-                      marginTop: "auto",
-                      background: `${event.category.color}22`,
-                      color: event.category.color ?? "#5a5a55",
-                    }}
-                  >
-                    {event.category.name}
-                  </span>
-                )}
-                {event.imageUrl && (
-                  <img
-                    src={event.imageUrl}
-                    alt={event.title}
-                    className="w-full rounded-md object-cover"
-                    style={{ maxHeight: "120px" }}
-                  />
-                )}
+        <div className="features-grid">
+          {[
+            {
+              icon: "📅",
+              title: "Public calendar",
+              desc: "A clean, embeddable calendar your community can browse. Drop it on any website with a single iframe.",
+            },
+            {
+              icon: "📝",
+              title: "Event submissions",
+              desc: "Anyone can submit an event. You review and approve before it goes live - keeping quality high.",
+            },
+            {
+              icon: "🔁",
+              title: "Recurring events",
+              desc: "Weekly markets, monthly meetups, annual festivals. Set it once and the series fills in automatically.",
+            },
+            {
+              icon: "📧",
+              title: "Automatic emails",
+              desc: "Submitters get a confirmation when they submit and a notification when their event is approved or rejected.",
+            },
+            {
+              icon: "📊",
+              title: "Analytics",
+              desc: "See how many people are viewing your calendar and which events are getting the most attention.",
+            },
+            {
+              icon: "👥",
+              title: "Team access",
+              desc: "Invite editors and admins to help manage submissions. Role-based permissions keep things organised.",
+            },
+          ].map((f) => (
+            <div key={f.title}>
+              <div style={{ fontSize: "1.5rem", marginBottom: "0.75rem" }}>{f.icon}</div>
+              <div style={{ fontSize: "0.9375rem", fontWeight: 500, marginBottom: "0.375rem" }}>
+                {f.title}
               </div>
-            ))}
-          </div>
-        )}
-
-        <div style={{ marginTop: "1.25rem" }}>
-          <Link href={`/embed/${TENANT_SLUG}/calendar`} className="btn-outline">
-            View all events →
-          </Link>
+              <div style={{ fontSize: "0.875rem", color: "#5a5a55", lineHeight: 1.6, fontWeight: 300 }}>
+                {f.desc}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
       <div style={{ height: "1px", background: "#e8e6e0", margin: "0 2.5rem" }} />
 
       <div className="section" style={{ padding: "4rem 2.5rem", maxWidth: "900px", margin: "0 auto" }}>
-        <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "#9a9890", fontWeight: 500, marginBottom: "2rem" }}>
+        <p
+          style={{
+            fontSize: "0.75rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            color: "#9a9890",
+            fontWeight: 500,
+            marginBottom: "2rem",
+          }}
+        >
           How it works
         </p>
         <div className="how-grid">
           {[
             {
               n: "01",
-              title: "Submit your event",
-              desc: "Fill out a simple form with your event details — title, date, location, and a short description.",
+              title: "Sign up",
+              desc: "Create your account and set up your calendar in minutes. Choose your slug, colours, and categories.",
             },
             {
               n: "02",
-              title: "We review it",
-              desc: "Our team reviews submissions to keep the calendar relevant and spam-free. You'll hear back by email.",
+              title: "Share the link",
+              desc: "Embed the calendar on your website or share the hosted URL directly in newsletters and social media.",
             },
             {
               n: "03",
-              title: "Go live",
-              desc: "Once approved, your event appears on the calendar and is visible to the whole community.",
+              title: "Manage submissions",
+              desc: "Review incoming events from your admin dashboard. Approve, reject, or edit before they go live.",
             },
           ].map((step) => (
             <div key={step.n}>
-              <div className="serif" style={{ fontSize: "2.5rem", color: "#e8e6e0", lineHeight: 1, marginBottom: "0.75rem" }}>
+              <div
+                className="serif"
+                style={{ fontSize: "2.5rem", color: "#e8e6e0", lineHeight: 1, marginBottom: "0.75rem" }}
+              >
                 {step.n}
               </div>
-              <div style={{ fontSize: "0.9375rem", fontWeight: 500, marginBottom: "0.375rem" }}>{step.title}</div>
-              <div style={{ fontSize: "0.875rem", color: "#5a5a55", lineHeight: 1.6, fontWeight: 300 }}>{step.desc}</div>
+              <div style={{ fontSize: "0.9375rem", fontWeight: 500, marginBottom: "0.375rem" }}>
+                {step.title}
+              </div>
+              <div style={{ fontSize: "0.875rem", color: "#5a5a55", lineHeight: 1.6, fontWeight: 300 }}>
+                {step.desc}
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      <footer style={{ borderTop: "1px solid #e8e6e0", padding: "2rem 2.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.8125rem", color: "#9a9890", flexWrap: "wrap", gap: "1rem" }}>
-        <span>© {new Date().getFullYear()} {tenant?.name ?? "Community Calendar"}</span>
+      <div style={{ height: "1px", background: "#e8e6e0", margin: "0 2.5rem" }} />
+
+      <div
+        className="section"
+        style={{
+          padding: "5rem 2.5rem",
+          maxWidth: "900px",
+          margin: "0 auto",
+          textAlign: "center",
+        }}
+      >
+        <h2
+          className="serif"
+          style={{ fontSize: "clamp(1.75rem, 4vw, 2.5rem)", letterSpacing: "-0.02em", marginBottom: "1rem" }}
+        >
+          Ready to launch your calendar?
+        </h2>
+        <p style={{ fontSize: "1rem", color: "#5a5a55", marginBottom: "2rem", fontWeight: 300 }}>
+          Free to start. No credit card required.
+        </p>
+        <Link href="/signup" className="btn-primary" style={{ fontSize: "1rem", padding: "0.75rem 2rem" }}>
+          Create your calendar -&gt;
+        </Link>
+      </div>
+
+      <footer
+        style={{
+          borderTop: "1px solid #e8e6e0",
+          padding: "2rem 2.5rem",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          fontSize: "0.8125rem",
+          color: "#9a9890",
+          flexWrap: "wrap",
+          gap: "1rem",
+        }}
+      >
+        <span className="serif" style={{ fontSize: "1rem" }}>
+          Eventful
+        </span>
         <div style={{ display: "flex", gap: "1.5rem" }}>
-          <Link href={`/embed/${TENANT_SLUG}/calendar`} style={{ color: "#9a9890" }}>
-            Calendar
+          <Link href="/signup" style={{ color: "#9a9890" }}>
+            Get started
           </Link>
-          <Link href={`/embed/${TENANT_SLUG}/submit`} style={{ color: "#9a9890" }}>
-            Submit event
-          </Link>
-          <Link href="/admin" style={{ color: "#9a9890" }}>
-            Admin
+          <Link href="/admin/login" style={{ color: "#9a9890" }}>
+            Sign in
           </Link>
         </div>
       </footer>

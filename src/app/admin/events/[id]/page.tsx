@@ -158,7 +158,12 @@ export default async function EventDetailPage({
             </p>
           </div>
 
-          <EventActions eventId={event.id} currentStatus={event.status} />
+          <EventActions
+            eventId={event.id}
+            currentStatus={event.status}
+            seriesId={event.seriesId ?? null}
+            seriesIndex={event.seriesIndex ?? null}
+          />
         </div>
       </div>
 
