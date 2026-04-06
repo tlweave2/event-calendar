@@ -1202,6 +1202,13 @@ export const TenantScalarFieldEnum = {
   plan: 'plan',
   customDomain: 'customDomain',
   timezone: 'timezone',
+  embedFontFamily: 'embedFontFamily',
+  embedDefaultView: 'embedDefaultView',
+  embedHideSearch: 'embedHideSearch',
+  embedHideCategories: 'embedHideCategories',
+  embedHideSubmit: 'embedHideSubmit',
+  embedBgColor: 'embedBgColor',
+  embedDarkMode: 'embedDarkMode',
   stripeCustomerId: 'stripeCustomerId',
   stripeSubscriptionId: 'stripeSubscriptionId',
   planExpiresAt: 'planExpiresAt',
@@ -1406,6 +1413,13 @@ export type EnumPlanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'Plan[]'
  */
 export type ListEnumPlanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Plan[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

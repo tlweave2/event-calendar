@@ -107,7 +107,9 @@ export default function SetupWizard({
       setError("Failed to save branding. Check that your calendar URL is unique.");
       return false;
     }
-    setCurrentSlug(result.slug!);
+    if (typeof result.slug === "string") {
+      setCurrentSlug(result.slug);
+    }
     return true;
   };
 

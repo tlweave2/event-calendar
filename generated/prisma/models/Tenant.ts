@@ -34,6 +34,13 @@ export type TenantMinAggregateOutputType = {
   plan: $Enums.Plan | null
   customDomain: string | null
   timezone: string | null
+  embedFontFamily: string | null
+  embedDefaultView: string | null
+  embedHideSearch: boolean | null
+  embedHideCategories: boolean | null
+  embedHideSubmit: boolean | null
+  embedBgColor: string | null
+  embedDarkMode: boolean | null
   stripeCustomerId: string | null
   stripeSubscriptionId: string | null
   planExpiresAt: Date | null
@@ -50,6 +57,13 @@ export type TenantMaxAggregateOutputType = {
   plan: $Enums.Plan | null
   customDomain: string | null
   timezone: string | null
+  embedFontFamily: string | null
+  embedDefaultView: string | null
+  embedHideSearch: boolean | null
+  embedHideCategories: boolean | null
+  embedHideSubmit: boolean | null
+  embedBgColor: string | null
+  embedDarkMode: boolean | null
   stripeCustomerId: string | null
   stripeSubscriptionId: string | null
   planExpiresAt: Date | null
@@ -66,6 +80,13 @@ export type TenantCountAggregateOutputType = {
   plan: number
   customDomain: number
   timezone: number
+  embedFontFamily: number
+  embedDefaultView: number
+  embedHideSearch: number
+  embedHideCategories: number
+  embedHideSubmit: number
+  embedBgColor: number
+  embedDarkMode: number
   stripeCustomerId: number
   stripeSubscriptionId: number
   planExpiresAt: number
@@ -84,6 +105,13 @@ export type TenantMinAggregateInputType = {
   plan?: true
   customDomain?: true
   timezone?: true
+  embedFontFamily?: true
+  embedDefaultView?: true
+  embedHideSearch?: true
+  embedHideCategories?: true
+  embedHideSubmit?: true
+  embedBgColor?: true
+  embedDarkMode?: true
   stripeCustomerId?: true
   stripeSubscriptionId?: true
   planExpiresAt?: true
@@ -100,6 +128,13 @@ export type TenantMaxAggregateInputType = {
   plan?: true
   customDomain?: true
   timezone?: true
+  embedFontFamily?: true
+  embedDefaultView?: true
+  embedHideSearch?: true
+  embedHideCategories?: true
+  embedHideSubmit?: true
+  embedBgColor?: true
+  embedDarkMode?: true
   stripeCustomerId?: true
   stripeSubscriptionId?: true
   planExpiresAt?: true
@@ -116,6 +151,13 @@ export type TenantCountAggregateInputType = {
   plan?: true
   customDomain?: true
   timezone?: true
+  embedFontFamily?: true
+  embedDefaultView?: true
+  embedHideSearch?: true
+  embedHideCategories?: true
+  embedHideSubmit?: true
+  embedBgColor?: true
+  embedDarkMode?: true
   stripeCustomerId?: true
   stripeSubscriptionId?: true
   planExpiresAt?: true
@@ -205,6 +247,13 @@ export type TenantGroupByOutputType = {
   plan: $Enums.Plan
   customDomain: string | null
   timezone: string
+  embedFontFamily: string | null
+  embedDefaultView: string
+  embedHideSearch: boolean
+  embedHideCategories: boolean
+  embedHideSubmit: boolean
+  embedBgColor: string | null
+  embedDarkMode: boolean
   stripeCustomerId: string | null
   stripeSubscriptionId: string | null
   planExpiresAt: Date | null
@@ -242,6 +291,13 @@ export type TenantWhereInput = {
   plan?: Prisma.EnumPlanFilter<"Tenant"> | $Enums.Plan
   customDomain?: Prisma.StringNullableFilter<"Tenant"> | string | null
   timezone?: Prisma.StringFilter<"Tenant"> | string
+  embedFontFamily?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  embedDefaultView?: Prisma.StringFilter<"Tenant"> | string
+  embedHideSearch?: Prisma.BoolFilter<"Tenant"> | boolean
+  embedHideCategories?: Prisma.BoolFilter<"Tenant"> | boolean
+  embedHideSubmit?: Prisma.BoolFilter<"Tenant"> | boolean
+  embedBgColor?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  embedDarkMode?: Prisma.BoolFilter<"Tenant"> | boolean
   stripeCustomerId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   stripeSubscriptionId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   planExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
@@ -264,6 +320,13 @@ export type TenantOrderByWithRelationInput = {
   plan?: Prisma.SortOrder
   customDomain?: Prisma.SortOrderInput | Prisma.SortOrder
   timezone?: Prisma.SortOrder
+  embedFontFamily?: Prisma.SortOrderInput | Prisma.SortOrder
+  embedDefaultView?: Prisma.SortOrder
+  embedHideSearch?: Prisma.SortOrder
+  embedHideCategories?: Prisma.SortOrder
+  embedHideSubmit?: Prisma.SortOrder
+  embedBgColor?: Prisma.SortOrderInput | Prisma.SortOrder
+  embedDarkMode?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -289,6 +352,13 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   plan?: Prisma.EnumPlanFilter<"Tenant"> | $Enums.Plan
   customDomain?: Prisma.StringNullableFilter<"Tenant"> | string | null
   timezone?: Prisma.StringFilter<"Tenant"> | string
+  embedFontFamily?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  embedDefaultView?: Prisma.StringFilter<"Tenant"> | string
+  embedHideSearch?: Prisma.BoolFilter<"Tenant"> | boolean
+  embedHideCategories?: Prisma.BoolFilter<"Tenant"> | boolean
+  embedHideSubmit?: Prisma.BoolFilter<"Tenant"> | boolean
+  embedBgColor?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  embedDarkMode?: Prisma.BoolFilter<"Tenant"> | boolean
   stripeCustomerId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   stripeSubscriptionId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   planExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
@@ -311,6 +381,13 @@ export type TenantOrderByWithAggregationInput = {
   plan?: Prisma.SortOrder
   customDomain?: Prisma.SortOrderInput | Prisma.SortOrder
   timezone?: Prisma.SortOrder
+  embedFontFamily?: Prisma.SortOrderInput | Prisma.SortOrder
+  embedDefaultView?: Prisma.SortOrder
+  embedHideSearch?: Prisma.SortOrder
+  embedHideCategories?: Prisma.SortOrder
+  embedHideSubmit?: Prisma.SortOrder
+  embedBgColor?: Prisma.SortOrderInput | Prisma.SortOrder
+  embedDarkMode?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -333,6 +410,13 @@ export type TenantScalarWhereWithAggregatesInput = {
   plan?: Prisma.EnumPlanWithAggregatesFilter<"Tenant"> | $Enums.Plan
   customDomain?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   timezone?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  embedFontFamily?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  embedDefaultView?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  embedHideSearch?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  embedHideCategories?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  embedHideSubmit?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  embedBgColor?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  embedDarkMode?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   stripeCustomerId?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   stripeSubscriptionId?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   planExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
@@ -349,6 +433,13 @@ export type TenantCreateInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -371,6 +462,13 @@ export type TenantUncheckedCreateInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -393,6 +491,13 @@ export type TenantUpdateInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -415,6 +520,13 @@ export type TenantUncheckedUpdateInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -437,6 +549,13 @@ export type TenantCreateManyInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -453,6 +572,13 @@ export type TenantUpdateManyMutationInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -469,6 +595,13 @@ export type TenantUncheckedUpdateManyInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -485,6 +618,13 @@ export type TenantCountOrderByAggregateInput = {
   plan?: Prisma.SortOrder
   customDomain?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
+  embedFontFamily?: Prisma.SortOrder
+  embedDefaultView?: Prisma.SortOrder
+  embedHideSearch?: Prisma.SortOrder
+  embedHideCategories?: Prisma.SortOrder
+  embedHideSubmit?: Prisma.SortOrder
+  embedBgColor?: Prisma.SortOrder
+  embedDarkMode?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrder
@@ -501,6 +641,13 @@ export type TenantMaxOrderByAggregateInput = {
   plan?: Prisma.SortOrder
   customDomain?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
+  embedFontFamily?: Prisma.SortOrder
+  embedDefaultView?: Prisma.SortOrder
+  embedHideSearch?: Prisma.SortOrder
+  embedHideCategories?: Prisma.SortOrder
+  embedHideSubmit?: Prisma.SortOrder
+  embedBgColor?: Prisma.SortOrder
+  embedDarkMode?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrder
@@ -517,6 +664,13 @@ export type TenantMinOrderByAggregateInput = {
   plan?: Prisma.SortOrder
   customDomain?: Prisma.SortOrder
   timezone?: Prisma.SortOrder
+  embedFontFamily?: Prisma.SortOrder
+  embedDefaultView?: Prisma.SortOrder
+  embedHideSearch?: Prisma.SortOrder
+  embedHideCategories?: Prisma.SortOrder
+  embedHideSubmit?: Prisma.SortOrder
+  embedBgColor?: Prisma.SortOrder
+  embedDarkMode?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrder
@@ -538,6 +692,10 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type EnumPlanFieldUpdateOperationsInput = {
   set?: $Enums.Plan
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -642,6 +800,13 @@ export type TenantCreateWithoutCategoriesInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -663,6 +828,13 @@ export type TenantUncheckedCreateWithoutCategoriesInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -700,6 +872,13 @@ export type TenantUpdateWithoutCategoriesInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -721,6 +900,13 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -742,6 +928,13 @@ export type TenantCreateWithoutEventsInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -763,6 +956,13 @@ export type TenantUncheckedCreateWithoutEventsInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -800,6 +1000,13 @@ export type TenantUpdateWithoutEventsInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -821,6 +1028,13 @@ export type TenantUncheckedUpdateWithoutEventsInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -842,6 +1056,13 @@ export type TenantCreateWithoutUsersInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -863,6 +1084,13 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -900,6 +1128,13 @@ export type TenantUpdateWithoutUsersInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -921,6 +1156,13 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -942,6 +1184,13 @@ export type TenantCreateWithoutAuditLogsInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -963,6 +1212,13 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1000,6 +1256,13 @@ export type TenantUpdateWithoutAuditLogsInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1021,6 +1284,13 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1042,6 +1312,13 @@ export type TenantCreateWithoutPageViewsInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1063,6 +1340,13 @@ export type TenantUncheckedCreateWithoutPageViewsInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1100,6 +1384,13 @@ export type TenantUpdateWithoutPageViewsInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1121,6 +1412,13 @@ export type TenantUncheckedUpdateWithoutPageViewsInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1142,6 +1440,13 @@ export type TenantCreateWithoutEventSeriesInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1163,6 +1468,13 @@ export type TenantUncheckedCreateWithoutEventSeriesInput = {
   plan?: $Enums.Plan
   customDomain?: string | null
   timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1200,6 +1512,13 @@ export type TenantUpdateWithoutEventSeriesInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1221,6 +1540,13 @@ export type TenantUncheckedUpdateWithoutEventSeriesInput = {
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1318,6 +1644,13 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   plan?: boolean
   customDomain?: boolean
   timezone?: boolean
+  embedFontFamily?: boolean
+  embedDefaultView?: boolean
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: boolean
+  embedDarkMode?: boolean
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
@@ -1341,6 +1674,13 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   plan?: boolean
   customDomain?: boolean
   timezone?: boolean
+  embedFontFamily?: boolean
+  embedDefaultView?: boolean
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: boolean
+  embedDarkMode?: boolean
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
@@ -1357,6 +1697,13 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   plan?: boolean
   customDomain?: boolean
   timezone?: boolean
+  embedFontFamily?: boolean
+  embedDefaultView?: boolean
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: boolean
+  embedDarkMode?: boolean
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
@@ -1373,13 +1720,20 @@ export type TenantSelectScalar = {
   plan?: boolean
   customDomain?: boolean
   timezone?: boolean
+  embedFontFamily?: boolean
+  embedDefaultView?: boolean
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: boolean
+  embedDarkMode?: boolean
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
   createdAt?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "logoUrl" | "primaryColor" | "secondaryColor" | "plan" | "customDomain" | "timezone" | "stripeCustomerId" | "stripeSubscriptionId" | "planExpiresAt" | "createdAt", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "logoUrl" | "primaryColor" | "secondaryColor" | "plan" | "customDomain" | "timezone" | "embedFontFamily" | "embedDefaultView" | "embedHideSearch" | "embedHideCategories" | "embedHideSubmit" | "embedBgColor" | "embedDarkMode" | "stripeCustomerId" | "stripeSubscriptionId" | "planExpiresAt" | "createdAt", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   events?: boolean | Prisma.Tenant$eventsArgs<ExtArgs>
   eventSeries?: boolean | Prisma.Tenant$eventSeriesArgs<ExtArgs>
@@ -1412,6 +1766,13 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     plan: $Enums.Plan
     customDomain: string | null
     timezone: string
+    embedFontFamily: string | null
+    embedDefaultView: string
+    embedHideSearch: boolean
+    embedHideCategories: boolean
+    embedHideSubmit: boolean
+    embedBgColor: string | null
+    embedDarkMode: boolean
     stripeCustomerId: string | null
     stripeSubscriptionId: string | null
     planExpiresAt: Date | null
@@ -1854,6 +2215,13 @@ export interface TenantFieldRefs {
   readonly plan: Prisma.FieldRef<"Tenant", 'Plan'>
   readonly customDomain: Prisma.FieldRef<"Tenant", 'String'>
   readonly timezone: Prisma.FieldRef<"Tenant", 'String'>
+  readonly embedFontFamily: Prisma.FieldRef<"Tenant", 'String'>
+  readonly embedDefaultView: Prisma.FieldRef<"Tenant", 'String'>
+  readonly embedHideSearch: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly embedHideCategories: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly embedHideSubmit: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly embedBgColor: Prisma.FieldRef<"Tenant", 'String'>
+  readonly embedDarkMode: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly stripeCustomerId: Prisma.FieldRef<"Tenant", 'String'>
   readonly stripeSubscriptionId: Prisma.FieldRef<"Tenant", 'String'>
   readonly planExpiresAt: Prisma.FieldRef<"Tenant", 'DateTime'>

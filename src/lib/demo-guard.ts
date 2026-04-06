@@ -6,6 +6,6 @@ export function isDemoTenant(tenantId: string, slug?: string | null): boolean {
   return slug === "demo";
 }
 
-export function demoFormError() {
+export function demoFormError(): { success: false; errors: { _form: string[] } } {
   return { success: false, errors: { _form: [DEMO_LOCK_MESSAGE] } };
 }

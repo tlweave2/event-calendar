@@ -15,7 +15,15 @@ const brandingSchema = z.object({
   slug: z.string().min(2).max(60),
 });
 
-export async function updateTenantBranding(input: z.infer<typeof brandingSchema>) {
+type BrandingSuccess = { success: true; slug: string };
+type BrandingFailure = {
+  success: false;
+  errors: Record<string, string[] | undefined>;
+};
+
+export async function updateTenantBranding(
+  input: z.infer<typeof brandingSchema>
+): Promise<BrandingSuccess | BrandingFailure> {
   const session = await auth();
   if (!session || session.user.tenantId !== input.tenantId) {
     return { success: false, errors: { _form: ["Unauthorized"] } };
