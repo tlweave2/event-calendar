@@ -54,7 +54,7 @@ export default function HomePage() {
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: C.bg, color: C.ink, minHeight: "100vh", overflowX: "hidden" }}>
 
       {/* ── Nav ── */}
-      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1.1rem 2.5rem", borderBottom: `2px solid ${C.border}`, background: C.bg }}>
+      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.95rem 2.25rem", borderBottom: `2px solid ${C.border}`, background: C.bg }}>
         <span style={{ fontSize: "1.375rem", letterSpacing: "-0.03em", fontWeight: 400 }}>
           Event<span style={{ color: C.red }}>ful</span>
         </span>
@@ -69,26 +69,26 @@ export default function HomePage() {
       </nav>
 
       {/* ── Hero ── */}
-      <section style={{ padding: "4rem 2.5rem 3.5rem", maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }}>
+      <section style={{ padding: "3.2rem 2.25rem 2.75rem", maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center" }}>
 
           {/* Left */}
           <div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: C.amber.bg, border: "1.5px solid #F59E0B", borderRadius: "0.375rem", padding: "0.3rem 0.75rem", fontSize: "0.68rem", letterSpacing: "0.06em", textTransform: "uppercase", color: C.amber.text, marginBottom: "1.75rem", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: C.amber.bg, border: "1.5px solid #F59E0B", borderRadius: "0.375rem", padding: "0.3rem 0.75rem", fontSize: "0.68rem", letterSpacing: "0.06em", textTransform: "uppercase", color: C.amber.text, marginBottom: "1.35rem", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
               <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#F59E0B", display: "inline-block" }} />
               Community event calendars
             </div>
 
-            <h1 style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", lineHeight: 1.05, letterSpacing: "-0.04em", fontWeight: 400, margin: "0 0 1.25rem", color: C.ink }}>
+            <h1 style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", lineHeight: 1.05, letterSpacing: "-0.04em", fontWeight: 400, margin: "0 0 1rem", color: C.ink }}>
               The calendar your<br />
               community <em style={{ color: C.red, fontStyle: "italic" }}>actually uses</em>
             </h1>
 
-            <p style={{ fontSize: "0.9375rem", color: C.muted, maxWidth: "380px", margin: "0 0 2rem", lineHeight: 1.7, fontFamily: "system-ui, sans-serif" }}>
+            <p style={{ fontSize: "0.9375rem", color: C.muted, maxWidth: "380px", margin: "0 0 1.5rem", lineHeight: 1.7, fontFamily: "system-ui, sans-serif" }}>
               Anyone can submit events. You approve what goes live. Share to your website, newsletter, or social media — all from one place.
             </p>
 
-            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.75rem" }}>
               <Link href="/signup" style={{ background: C.red, color: "#fff", padding: "0.7rem 1.75rem", borderRadius: "0.4rem", fontSize: "0.9rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 700 }}>
                 Create your calendar →
               </Link>
@@ -146,10 +146,10 @@ export default function HomePage() {
       </section>
 
       {/* ── Features ── */}
-      <section style={{ padding: "4rem 2.5rem 5rem", maxWidth: "1100px", margin: "0 auto" }}>
-        <div style={{ borderTop: `2px solid ${C.faint}`, paddingTop: "4rem" }}>
+      <section style={{ padding: "3rem 2.25rem 3.75rem", maxWidth: "1100px", margin: "0 auto" }}>
+        <div style={{ borderTop: `2px solid ${C.faint}`, paddingTop: "3rem" }}>
           <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "0.75rem" }}>Everything you need</p>
-          <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)", letterSpacing: "-0.03em", fontWeight: 400, marginBottom: "3rem", lineHeight: 1.1, color: C.ink }}>
+          <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)", letterSpacing: "-0.03em", fontWeight: 400, marginBottom: "2.25rem", lineHeight: 1.1, color: C.ink }}>
             Run your calendar like a pro
           </h2>
 
@@ -165,7 +165,7 @@ export default function HomePage() {
               { title: "Email notifications", desc: "Submitters get a confirmation, then a notification when you approve or reject their event.", bar: "#059669" },
               { title: "CSV export", desc: "Download your full event list any time. Useful for reports, newsletters, or migrating data.", bar: "#6B7280", pro: true },
             ].map((f) => (
-              <div key={f.title} style={{ background: C.surface, padding: "2rem", position: "relative" }}>
+              <div key={f.title} style={{ background: C.surface, padding: "1.5rem", position: "relative" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.25rem" }}>
                   <div style={{ width: "32px", height: "4px", borderRadius: "2px", background: f.bar }} />
                   {f.pro && (
@@ -181,13 +181,13 @@ export default function HomePage() {
       </section>
 
       {/* ── How it works ── */}
-      <section style={{ padding: "0 2.5rem 5rem", maxWidth: "1000px", margin: "0 auto" }}>
-        <div style={{ borderTop: `2px solid ${C.faint}`, paddingTop: "4.5rem" }}>
+      <section style={{ padding: "0 2.25rem 3.75rem", maxWidth: "1000px", margin: "0 auto" }}>
+        <div style={{ borderTop: `2px solid ${C.faint}`, paddingTop: "3.25rem" }}>
           <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "0.75rem" }}>How it works</p>
-          <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)", letterSpacing: "-0.03em", fontWeight: 400, marginBottom: "3rem", lineHeight: 1.1, color: C.ink }}>
+          <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)", letterSpacing: "-0.03em", fontWeight: 400, marginBottom: "2.25rem", lineHeight: 1.1, color: C.ink }}>
             Up and running in minutes
           </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2.5rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2rem" }}>
             {[
               { n: "01", title: "Sign up", desc: "Create your account and set up your calendar — pick your slug, colors, and event categories.", color: C.red },
               { n: "02", title: "Share the link", desc: "Embed it on your website, post it to Facebook or Instagram, or drop the link in your newsletter. One calendar, everywhere.", color: "#2563EB" },
@@ -204,13 +204,13 @@ export default function HomePage() {
       </section>
 
       {/* ── Pricing ── */}
-      <section style={{ padding: "0 2.5rem 5rem", maxWidth: "860px", margin: "0 auto" }}>
-        <div style={{ borderTop: `2px solid ${C.faint}`, paddingTop: "4.5rem" }}>
+      <section style={{ padding: "0 2.25rem 3.75rem", maxWidth: "860px", margin: "0 auto" }}>
+        <div style={{ borderTop: `2px solid ${C.faint}`, paddingTop: "3.25rem" }}>
           <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "0.75rem" }}>Pricing</p>
           <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)", letterSpacing: "-0.03em", fontWeight: 400, marginBottom: "0.75rem", lineHeight: 1.1, color: C.ink }}>
             Simple, honest pricing
           </h2>
-          <p style={{ fontSize: "0.9375rem", color: C.muted, fontFamily: "system-ui, sans-serif", marginBottom: "3rem", maxWidth: "480px", lineHeight: 1.6 }}>
+          <p style={{ fontSize: "0.9375rem", color: C.muted, fontFamily: "system-ui, sans-serif", marginBottom: "2.25rem", maxWidth: "480px", lineHeight: 1.6 }}>
             Start free. Upgrade when your community grows — or when you want the tools that save real time.
           </p>
 
@@ -268,12 +268,12 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA banner ── */}
-      <section style={{ margin: "0 2.5rem 5rem", borderRadius: "16px", background: C.ink, padding: "4rem 3rem", textAlign: "center", border: `2px solid ${C.border}` }}>
-        <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 3rem)", letterSpacing: "-0.04em", fontWeight: 400, marginBottom: "1.25rem", lineHeight: 1.05, color: C.bg }}>
+      <section style={{ margin: "0 2.25rem 3.75rem", borderRadius: "16px", background: C.ink, padding: "3rem 2.5rem", textAlign: "center", border: `2px solid ${C.border}` }}>
+        <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 3rem)", letterSpacing: "-0.04em", fontWeight: 400, marginBottom: "1rem", lineHeight: 1.05, color: C.bg }}>
           Your community deserves a{" "}
           <em style={{ color: C.red, fontStyle: "italic" }}>real</em> calendar.
         </h2>
-        <p style={{ fontSize: "1rem", color: "#888", marginBottom: "2.25rem", fontFamily: "system-ui, sans-serif", maxWidth: "480px", margin: "0 auto 2.25rem", lineHeight: 1.6 }}>
+        <p style={{ fontSize: "1rem", color: "#888", marginBottom: "1.75rem", fontFamily: "system-ui, sans-serif", maxWidth: "480px", margin: "0 auto 1.75rem", lineHeight: 1.6 }}>
           Stop scattering events across Facebook posts, email threads, and group chats. Give your community one place to find everything.
         </p>
         <Link href="/signup" style={{ background: C.red, color: "#fff", padding: "0.875rem 2.5rem", borderRadius: "0.4rem", fontSize: "1rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 700, display: "inline-block" }}>
@@ -283,7 +283,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer style={{ borderTop: `2px solid ${C.border}`, padding: "1.75rem 2.5rem", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
+      <footer style={{ borderTop: `2px solid ${C.border}`, padding: "1.35rem 2.25rem", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem" }}>
         <span style={{ fontSize: "1.125rem", letterSpacing: "-0.03em" }}>
           Event<span style={{ color: C.red }}>ful</span>
         </span>
