@@ -92,8 +92,8 @@ export default function HomePage() {
               <Link href="/signup" style={{ background: C.red, color: "#fff", padding: "0.7rem 1.75rem", borderRadius: "0.4rem", fontSize: "0.9rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 700 }}>
                 Create your calendar →
               </Link>
-              <Link href="/embed/test/calendar" style={{ background: C.surface, color: C.ink, padding: "0.7rem 1.75rem", borderRadius: "0.4rem", fontSize: "0.9rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", border: `1.5px solid ${C.border}`, fontWeight: 500 }}>
-                See a live demo
+              <Link href="/api/demo" style={{ background: C.surface, color: C.ink, padding: "0.7rem 1.75rem", borderRadius: "0.4rem", fontSize: "0.9rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", border: `1.5px solid ${C.border}`, fontWeight: 500 }}>
+                Try live demo
               </Link>
             </div>
 
@@ -276,9 +276,14 @@ export default function HomePage() {
         <p style={{ fontSize: "1rem", color: "#888", marginBottom: "1.75rem", fontFamily: "system-ui, sans-serif", maxWidth: "480px", margin: "0 auto 1.75rem", lineHeight: 1.6 }}>
           Stop scattering events across Facebook posts, email threads, and group chats. Give your community one place to find everything.
         </p>
-        <Link href="/signup" style={{ background: C.red, color: "#fff", padding: "0.875rem 2.5rem", borderRadius: "0.4rem", fontSize: "1rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 700, display: "inline-block" }}>
-          Create your calendar — it&rsquo;s free →
-        </Link>
+        <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+          <Link href="/signup" style={{ background: C.red, color: "#fff", padding: "0.875rem 2.5rem", borderRadius: "0.4rem", fontSize: "1rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 700, display: "inline-block" }}>
+            Create your calendar →
+          </Link>
+          <Link href="/api/demo" style={{ background: "transparent", color: C.bg, padding: "0.875rem 2.5rem", borderRadius: "0.4rem", fontSize: "1rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600, display: "inline-block", border: `1.5px solid ${C.bg}` }}>
+            Try the demo first
+          </Link>
+        </div>
         <p style={{ marginTop: "1rem", fontSize: "0.75rem", color: "#555", fontFamily: "system-ui, sans-serif" }}>No credit card required</p>
       </section>
 

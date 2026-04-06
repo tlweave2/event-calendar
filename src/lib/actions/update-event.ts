@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
 
 const updateEventSchema = z.object({
   eventId: z.string().uuid(),
@@ -22,6 +23,14 @@ const updateEventSchema = z.object({
 export async function updateEvent(input: z.infer<typeof updateEventSchema>) {
   const session = await auth();
   if (!session) return { success: false, error: "Unauthorized" };
+
+  const tenant = await prisma.tenant.findUnique({
+    where: { id: session.user.tenantId },
+    select: { id: true, slug: true },
+  });
+  if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
+    return { success: false, error: DEMO_LOCK_MESSAGE };
+  }
 
   const parsed = updateEventSchema.safeParse(input);
   if (!parsed.success) return { success: false, error: "Invalid input" };

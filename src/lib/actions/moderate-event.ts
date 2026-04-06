@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { sendModerationNotice } from "@/lib/email";
+import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
 
 const moderateSchema = z.object({
   eventId: z.string().uuid(),
@@ -23,6 +24,14 @@ export async function moderateEvent(input: {
 
   const { eventId, action } = parsed.data;
   const tenantId = session.user.tenantId;
+
+  const tenant = await prisma.tenant.findUnique({
+    where: { id: tenantId },
+    select: { id: true, slug: true },
+  });
+  if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
+    return { success: false, error: DEMO_LOCK_MESSAGE };
+  }
 
   // Confirm event belongs to this tenant
   const event = await prisma.event.findFirst({

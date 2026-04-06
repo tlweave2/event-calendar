@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { demoFormError, isDemoTenant } from "@/lib/demo-guard";
 
 const brandingSchema = z.object({
   tenantId: z.string().uuid(),
@@ -18,6 +19,14 @@ export async function updateTenantBranding(input: z.infer<typeof brandingSchema>
   const session = await auth();
   if (!session || session.user.tenantId !== input.tenantId) {
     return { success: false, errors: { _form: ["Unauthorized"] } };
+  }
+
+  const tenant = await prisma.tenant.findUnique({
+    where: { id: session.user.tenantId },
+    select: { id: true, slug: true },
+  });
+  if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
+    return demoFormError();
   }
 
   const parsed = brandingSchema.safeParse(input);
@@ -64,6 +73,14 @@ export async function updateTenantCategories(
     return { success: false, errors: { _form: ["Unauthorized"] } };
   }
 
+  const tenant = await prisma.tenant.findUnique({
+    where: { id: session.user.tenantId },
+    select: { id: true, slug: true },
+  });
+  if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
+    return demoFormError();
+  }
+
   const parsed = categoriesSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, errors: parsed.error.flatten().fieldErrors };
@@ -104,6 +121,14 @@ export async function updateEmbedSettings(
   const session = await auth();
   if (!session || session.user.tenantId !== input.tenantId) {
     return { success: false, errors: { _form: ["Unauthorized"] } };
+  }
+
+  const tenant = await prisma.tenant.findUnique({
+    where: { id: session.user.tenantId },
+    select: { id: true, slug: true },
+  });
+  if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
+    return demoFormError();
   }
 
   const parsed = embedSettingsSchema.safeParse(input);

@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { isDemoTenant } from "@/lib/demo-guard";
 
 export async function createCheckoutSession(formData: FormData): Promise<void> {
   void formData;
@@ -14,6 +15,9 @@ export async function createCheckoutSession(formData: FormData): Promise<void> {
     where: { id: session.user.tenantId },
   });
   if (!tenant) return;
+  if (isDemoTenant(tenant.id, tenant.slug)) {
+    redirect("/admin/settings?demo=1");
+  }
 
   const baseUrl = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
 
@@ -49,6 +53,9 @@ export async function createPortalSession(formData: FormData): Promise<void> {
   });
 
   if (!tenant?.stripeCustomerId) return;
+  if (isDemoTenant(tenant.id, tenant.slug)) {
+    redirect("/admin/settings?demo=1");
+  }
 
   const baseUrl = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
 

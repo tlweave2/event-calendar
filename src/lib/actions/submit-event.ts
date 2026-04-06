@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { sendAdminNotification, sendSubmissionConfirmation } from "@/lib/email";
 import { checkEventLimit } from "@/lib/plan-limits";
 import { createEventSeries } from "./create-event-series";
+import { demoFormError, isDemoTenant } from "@/lib/demo-guard";
 
 const submitEventSchema = z.object({
   tenantSlug: z.string(),
@@ -49,6 +50,10 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
 
   if (!tenant) {
     return { success: false, errors: { tenantSlug: ["Tenant not found"] } };
+  }
+
+  if (isDemoTenant(tenant.id, tenant.slug)) {
+    return demoFormError();
   }
 
   const limitCheck = await checkEventLimit(tenant.id);

@@ -1,7 +1,9 @@
 "use server";
 
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { isDemoTenant } from "@/lib/demo-guard";
 
 export async function createEventFromImport(input: {
   tenantId: string;
@@ -16,6 +18,19 @@ export async function createEventFromImport(input: {
   categoryId?: string;
   imageUrl?: string;
 }) {
+  const session = await auth();
+  if (!session || session.user.tenantId !== input.tenantId) {
+    throw new Error("Unauthorized");
+  }
+
+  const tenant = await prisma.tenant.findUnique({
+    where: { id: input.tenantId },
+    select: { id: true, slug: true },
+  });
+  if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
+    throw new Error("Demo mode is read-only");
+  }
+
   await prisma.event.create({
     data: {
       tenantId: input.tenantId,

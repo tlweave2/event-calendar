@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { sendModerationNotice } from "@/lib/email";
+import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
 
 type EventWithTenant = {
   id: string;
@@ -32,6 +33,14 @@ export async function bulkModerateEvents(input: {
 
   const { eventIds, action } = parsed.data;
   const tenantId = session.user.tenantId;
+
+  const tenant = await prisma.tenant.findUnique({
+    where: { id: tenantId },
+    select: { id: true, slug: true },
+  });
+  if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
+    return { success: false, error: DEMO_LOCK_MESSAGE };
+  }
 
   const events: EventWithTenant[] = await prisma.event.findMany({
     where: { id: { in: eventIds }, tenantId },

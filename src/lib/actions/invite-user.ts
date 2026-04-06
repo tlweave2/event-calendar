@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { checkAdminUserLimit } from "@/lib/plan-limits";
 import { Role } from "@generated/prisma/enums";
+import { isDemoTenant } from "@/lib/demo-guard";
 
 const inviteSchema = z.object({
   email: z.string().email(),
@@ -41,6 +42,7 @@ export async function inviteUser(
     where: { id: session.user.tenantId },
   });
   if (!tenant) return;
+  if (isDemoTenant(tenant.id, tenant.slug)) return;
 
   const userLimit = await checkAdminUserLimit(tenant.id);
   if (!userLimit.allowed) {
