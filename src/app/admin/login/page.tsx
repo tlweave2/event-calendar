@@ -12,7 +12,7 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
   const [credLoading, setCredLoading] = useState(false);
-  const [credEmail, setCredEmail] = useState("admin@test.com");
+  const [credEmail, setCredEmail] = useState("");
   const [credPassword, setCredPassword] = useState("");
 
   const handleCredentialsSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -25,7 +25,6 @@ export default function LoginPage() {
         redirect: true,
         redirectTo: "/admin",
       });
-      // If signIn succeeds with redirect: true, this code won't execute (browser redirects)
     } catch {
       alert("Login failed");
       setCredLoading(false);
@@ -43,7 +42,7 @@ export default function LoginPage() {
             <div className="rounded bg-red-100 p-3 text-sm text-red-700">
               {error === "MissingCSRF"
                 ? "Something went wrong. Please try again."
-                : error}
+                : "Invalid email or password. Please try again."}
             </div>
           )}
 
@@ -53,6 +52,7 @@ export default function LoginPage() {
               <Input
                 id="email"
                 type="email"
+                placeholder="you@organization.org"
                 value={credEmail}
                 onChange={(e) => setCredEmail(e.target.value)}
                 required
@@ -79,6 +79,13 @@ export default function LoginPage() {
               {credLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
+
+          <p className="text-center text-xs text-gray-400">
+            Don&apos;t have an account?{" "}
+            <a href="/signup" className="text-gray-600 underline">
+              Create a calendar
+            </a>
+          </p>
         </CardContent>
       </Card>
     </div>
