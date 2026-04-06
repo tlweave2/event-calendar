@@ -83,6 +83,23 @@ export default function EmbedPageClient({
           Add an HTML block to any page or post and paste the iframe code above. Works with any page builder including Elementor, Divi, and Gutenberg.
         </p>
       </div>
+
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600">
+        <p className="font-medium text-gray-900">Query Parameter Overrides</p>
+        <p className="mt-1 text-gray-500">
+          Add these to any embed URL to override your defaults:
+        </p>
+        <code className="mt-2 block whitespace-pre-wrap text-xs text-gray-500">
+{`?minimal=true        - Hide header/logo
+&font=Poppins        - Google Font name
+&view=grid           - Default to calendar grid
+&hideSearch=true     - Hide search bar
+&hideCategories=true - Hide category filter
+&hideSubmit=true     - Hide submit link
+&bg=transparent      - Background color (hex or "transparent")
+&dark=true           - Dark mode`}
+        </code>
+      </div>
     </div>
   );
 }

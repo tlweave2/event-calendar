@@ -19,6 +19,14 @@ model Tenant {
   plan           Plan     @default(FREE)
   customDomain   String?  @db.VarChar(255)
   timezone       String   @default("America/Los_Angeles") @db.VarChar(50)
+  // Embed customization defaults
+  embedFontFamily     String? @db.VarChar(100)
+  embedDefaultView    String  @default("list") @db.VarChar(10)
+  embedHideSearch     Boolean @default(false)
+  embedHideCategories Boolean @default(false)
+  embedHideSubmit     Boolean @default(false)
+  embedBgColor        String? @db.VarChar(20)
+  embedDarkMode       Boolean @default(false)
   stripeCustomerId     String?  @db.VarChar(255)
   stripeSubscriptionId String?  @db.VarChar(255)
   planExpiresAt        DateTime?

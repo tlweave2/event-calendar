@@ -10,11 +10,10 @@ export default async function CalendarPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { slug } = await params;
   const sp = await searchParams;
-  const minimal = sp.minimal === "true";
 
   const tenant = await getTenantBySlug(slug);
   if (!tenant) notFound();
@@ -23,8 +22,58 @@ export default async function CalendarPage({
 
   const events = await getApprovedEvents(tenant.id);
 
+  const param = (key: string) => {
+    const value = sp[key];
+    if (Array.isArray(value)) return value[0];
+    return value;
+  };
+
+  const minimal = param("minimal") === "true";
+  const font = param("font") ?? tenant.embedFontFamily ?? undefined;
+  const viewRaw = param("view") ?? tenant.embedDefaultView ?? "list";
+  const defaultView = viewRaw === "grid" ? "grid" : "list";
+  const hideSearch =
+    param("hideSearch") === "true" ||
+    (param("hideSearch") === undefined && tenant.embedHideSearch);
+  const hideCategories =
+    param("hideCategories") === "true" ||
+    (param("hideCategories") === undefined && tenant.embedHideCategories);
+  const hideSubmit =
+    param("hideSubmit") === "true" ||
+    (param("hideSubmit") === undefined && tenant.embedHideSubmit);
+  const bgColor = param("bg") ?? tenant.embedBgColor ?? undefined;
+  const darkMode =
+    param("dark") === "true" ||
+    (param("dark") === undefined && tenant.embedDarkMode);
+
+  const fontLink =
+    font && font !== "system-ui"
+      ? `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:wght@300;400;500;600;700&display=swap`
+      : null;
+
+  const bgStyle =
+    bgColor === "transparent"
+      ? "transparent"
+      : bgColor ?? (darkMode ? "#111827" : "#f9fafb");
+
   return (
-    <div className={`min-h-screen bg-gray-50 px-4 ${minimal ? "py-4" : "py-10"}`}>
+    <div
+      className={`min-h-screen px-4 ${minimal ? "py-4" : "py-10"}`}
+      style={{
+        backgroundColor: bgStyle,
+        fontFamily:
+          font === "system-ui"
+            ? "system-ui, sans-serif"
+            : font
+              ? `"${font}", system-ui, sans-serif`
+              : undefined,
+        color: darkMode ? "#f3f4f6" : undefined,
+      }}
+    >
+      {fontLink && (
+        // eslint-disable-next-line @next/next/no-page-custom-font
+        <link rel="stylesheet" href={fontLink} />
+      )}
       <div className="mx-auto max-w-4xl">
         {!minimal && (
           <div className="mb-8 text-center">
@@ -37,8 +86,12 @@ export default async function CalendarPage({
                 className="mx-auto mb-4 object-contain"
               />
             )}
-            <h1 className="text-2xl font-semibold text-gray-900">{tenant.name}</h1>
-            <p className="mt-1 text-sm text-gray-500">Upcoming Events</p>
+            <h1 className={`text-2xl font-semibold ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
+              {tenant.name}
+            </h1>
+            <p className={`mt-1 text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+              Upcoming Events
+            </p>
           </div>
         )}
 
@@ -47,6 +100,11 @@ export default async function CalendarPage({
           categories={tenant.categories}
           primaryColor={tenant.primaryColor}
           tenantSlug={slug}
+          defaultView={defaultView}
+          hideSearch={hideSearch}
+          hideCategories={hideCategories}
+          hideSubmit={hideSubmit}
+          darkMode={darkMode}
         />
       </div>
     </div>

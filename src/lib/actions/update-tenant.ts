@@ -86,3 +86,38 @@ export async function updateTenantCategories(
 
   return { success: true };
 }
+
+const embedSettingsSchema = z.object({
+  tenantId: z.string().uuid(),
+  embedFontFamily: z.string().max(100).optional().nullable(),
+  embedDefaultView: z.enum(["list", "grid"]).default("list"),
+  embedHideSearch: z.boolean().default(false),
+  embedHideCategories: z.boolean().default(false),
+  embedHideSubmit: z.boolean().default(false),
+  embedBgColor: z.string().max(20).optional().nullable(),
+  embedDarkMode: z.boolean().default(false),
+});
+
+export async function updateEmbedSettings(
+  input: z.infer<typeof embedSettingsSchema>
+) {
+  const session = await auth();
+  if (!session || session.user.tenantId !== input.tenantId) {
+    return { success: false, errors: { _form: ["Unauthorized"] } };
+  }
+
+  const parsed = embedSettingsSchema.safeParse(input);
+  if (!parsed.success) {
+    return { success: false, errors: parsed.error.flatten().fieldErrors };
+  }
+
+  const { tenantId, ...data } = parsed.data;
+
+  await prisma.tenant.update({
+    where: { id: tenantId },
+    data,
+  });
+
+  revalidatePath("/admin/embed");
+  return { success: true };
+}

@@ -40,13 +40,23 @@ export default function CalendarView({
   categories,
   primaryColor,
   tenantSlug,
+  defaultView = "list",
+  hideSearch = false,
+  hideCategories = false,
+  hideSubmit = false,
+  darkMode = false,
 }: {
   events: CalendarEvent[];
   categories: Category[];
   primaryColor: string | null;
   tenantSlug: string;
+  defaultView?: "list" | "grid";
+  hideSearch?: boolean;
+  hideCategories?: boolean;
+  hideSubmit?: boolean;
+  darkMode?: boolean;
 }) {
-  const [view, setView] = useState<ViewMode>("list");
+  const [view, setView] = useState<ViewMode>(defaultView);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -71,15 +81,17 @@ export default function CalendarView({
 
   if (events.length === 0) {
     return (
-      <div className="py-20 text-center text-gray-400">
+      <div className={`py-20 text-center ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
         <p className="text-lg">No upcoming events</p>
-        <a
-          href={`/embed/${tenantSlug}/submit`}
-          className="mt-4 inline-block text-sm underline"
-          style={{ color: accent }}
-        >
-          Submit an event
-        </a>
+        {!hideSubmit && (
+          <a
+            href={`/embed/${tenantSlug}/submit`}
+            className="mt-4 inline-block text-sm underline"
+            style={{ color: accent }}
+          >
+            Submit an event
+          </a>
+        )}
       </div>
     );
   }
@@ -87,19 +99,21 @@ export default function CalendarView({
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
-        <Input
-          placeholder="Search events..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="max-w-xs bg-white"
-        />
+        {!hideSearch && (
+          <Input
+            placeholder="Search events..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className={`max-w-xs ${darkMode ? "border-gray-700 bg-gray-800 text-gray-100 placeholder:text-gray-400" : "bg-white"}`}
+          />
+        )}
 
-        {categories.length > 0 && (
+        {!hideCategories && categories.length > 0 && (
           <Select
             value={categoryFilter}
             onValueChange={(value) => setCategoryFilter(value ?? "all")}
           >
-            <SelectTrigger className="w-44 bg-white">
+            <SelectTrigger className={`w-44 ${darkMode ? "border-gray-700 bg-gray-800 text-gray-100" : "bg-white"}`}>
               <SelectValue placeholder="All categories" />
             </SelectTrigger>
             <SelectContent>
@@ -113,7 +127,7 @@ export default function CalendarView({
           </Select>
         )}
 
-        <div className="ml-auto flex overflow-hidden rounded-md border bg-white">
+        <div className={`ml-auto flex overflow-hidden rounded-md border ${darkMode ? "border-gray-700 bg-gray-800" : "bg-white"}`}>
           <button
             type="button"
             onClick={() => setView("list")}
@@ -136,17 +150,19 @@ export default function CalendarView({
           </button>
         </div>
 
-        <a
-          href={`/embed/${tenantSlug}/submit`}
-          className="self-center text-sm font-medium underline"
-          style={{ color: accent }}
-        >
-          + Submit an Event
-        </a>
+        {!hideSubmit && (
+          <a
+            href={`/embed/${tenantSlug}/submit`}
+            className="self-center text-sm font-medium underline"
+            style={{ color: accent }}
+          >
+            + Submit an Event
+          </a>
+        )}
       </div>
 
       {view === "list" && (search || categoryFilter !== "all") ? (
-        <p className="text-sm text-gray-500">
+        <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
           {filtered.length} event{filtered.length !== 1 ? "s" : ""} found
         </p>
       ) : null}
@@ -155,12 +171,13 @@ export default function CalendarView({
         <CalendarGrid
           events={filtered}
           primaryColor={primaryColor}
+          darkMode={darkMode}
           onEventClick={(event) => setModalEvent(event)}
         />
       ) : (
         <div className="space-y-3">
           {filtered.length === 0 ? (
-            <p className="py-12 text-center text-gray-400">
+            <p className={`py-12 text-center ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
               No events match your search.
             </p>
           ) : (
@@ -174,6 +191,7 @@ export default function CalendarView({
                 }
                 accent={accent}
                 tenantSlug={tenantSlug}
+                darkMode={darkMode}
               />
             ))
           )}
@@ -186,13 +204,14 @@ export default function CalendarView({
           onClose={() => setModalEvent(null)}
           primaryColor={primaryColor}
           tenantSlug={tenantSlug}
+          darkMode={darkMode}
         />
       )}
 
       <div className="border-t pt-4 text-center">
         <Link
           href={`/embed/${tenantSlug}/calendar/feed.ics`}
-          className="text-xs text-gray-400 underline hover:text-gray-600"
+          className={`text-xs underline ${darkMode ? "text-gray-500 hover:text-gray-300" : "text-gray-400 hover:text-gray-600"}`}
         >
           Subscribe to calendar (.ics)
         </Link>
@@ -207,19 +226,21 @@ function EventCard({
   onToggle,
   accent,
   tenantSlug,
+  darkMode,
 }: {
   event: CalendarEvent;
   expanded: boolean;
   onToggle: () => void;
   accent: string;
   tenantSlug: string;
+  darkMode: boolean;
 }) {
   const isHappeningToday = isToday(new Date(event.startAt));
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   return (
     <Card
-      className="cursor-pointer overflow-hidden transition-shadow hover:shadow-md"
+      className={`cursor-pointer overflow-hidden transition-shadow hover:shadow-md ${darkMode ? "border-gray-700 bg-gray-800" : ""}`}
       onClick={onToggle}
     >
       <CardContent className="p-0">
@@ -243,7 +264,7 @@ function EventCard({
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="truncate font-medium text-gray-900">{event.title}</h3>
+                  <h3 className={`truncate font-medium ${darkMode ? "text-gray-100" : "text-gray-900"}`}>{event.title}</h3>
                   {isHappeningToday && (
                     <Badge className="bg-green-100 text-xs text-green-700">
                       Today
@@ -266,14 +287,14 @@ function EventCard({
                     </Badge>
                   )}
                 </div>
-                <p className="mt-0.5 text-sm text-gray-500">
+                <p className={`mt-0.5 text-sm ${darkMode ? "text-gray-300" : "text-gray-500"}`}>
                   {format(new Date(event.startAt), "h:mm a")}
                   {event.endAt &&
                     ` - ${format(new Date(event.endAt), "h:mm a")}`}
                   {event.locationName && ` · ${event.locationName}`}
                 </p>
                 {event.cost && (
-                  <p className="mt-0.5 text-xs text-gray-400">{event.cost}</p>
+                  <p className={`mt-0.5 text-xs ${darkMode ? "text-gray-400" : "text-gray-400"}`}>{event.cost}</p>
                 )}
               </div>
             </div>
@@ -285,7 +306,7 @@ function EventCard({
               >
                 {event.imageUrl && (
                   <div
-                    className="cursor-zoom-in overflow-hidden rounded-md border"
+                    className={`cursor-zoom-in overflow-hidden rounded-md border ${darkMode ? "border-gray-700" : ""}`}
                     onClick={(e) => {
                       e.stopPropagation();
                       setLightboxOpen(true);
@@ -297,16 +318,16 @@ function EventCard({
                       className="w-full object-cover transition-transform hover:scale-105"
                       style={{ maxHeight: "160px" }}
                     />
-                    <p className="bg-gray-50 py-1 text-center text-xs text-gray-400">
+                    <p className={`py-1 text-center text-xs ${darkMode ? "bg-gray-900 text-gray-500" : "bg-gray-50 text-gray-400"}`}>
                       Click to view full flyer
                     </p>
                   </div>
                 )}
                 {event.description && (
-                  <p className="text-sm text-gray-600">{event.description}</p>
+                  <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}>{event.description}</p>
                 )}
                 {event.address && (
-                  <p className="text-sm text-gray-500">{`Location: ${event.address}`}</p>
+                  <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>{`Location: ${event.address}`}</p>
                 )}
                 {event.ticketUrl && (
                   <a

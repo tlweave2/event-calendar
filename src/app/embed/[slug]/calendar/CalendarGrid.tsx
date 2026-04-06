@@ -34,10 +34,12 @@ export default function CalendarGrid({
   events,
   primaryColor,
   onEventClick,
+  darkMode = false,
 }: {
   events: CalendarEvent[];
   primaryColor: string | null;
   onEventClick: (event: CalendarEvent) => void;
+  darkMode?: boolean;
 }) {
   const [current, setCurrent] = useState(new Date());
   const accent = primaryColor ?? "#2563eb";
@@ -59,7 +61,7 @@ export default function CalendarGrid({
   }, [events]);
 
   return (
-    <div className="overflow-hidden rounded-lg border bg-white">
+    <div className={`overflow-hidden rounded-lg border ${darkMode ? "border-gray-700 bg-gray-900" : "bg-white"}`}>
       <div
         className="flex items-center justify-between px-5 py-4"
         style={{ backgroundColor: accent }}
@@ -83,9 +85,9 @@ export default function CalendarGrid({
         </button>
       </div>
 
-      <div className="grid grid-cols-7 border-b">
+      <div className={`grid grid-cols-7 border-b ${darkMode ? "border-gray-700" : ""}`}>
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <div key={day} className="py-2 text-center text-xs font-medium text-gray-400">
+          <div key={day} className={`py-2 text-center text-xs font-medium ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
             {day}
           </div>
         ))}
@@ -102,13 +104,16 @@ export default function CalendarGrid({
             <div
               key={key}
               className={`min-h-24 border-b border-r p-1.5 ${index % 7 === 6 ? "border-r-0" : ""} ${
-                !inMonth ? "bg-gray-50" : "bg-white"
+                !inMonth
+                  ? darkMode ? "bg-gray-800" : "bg-gray-50"
+                  : darkMode ? "bg-gray-900" : "bg-white"
               }`}
+              style={darkMode ? { borderColor: "#374151" } : undefined}
             >
               <div className="mb-1 flex justify-end">
                 <span
                   className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium ${
-                    today ? "text-white" : inMonth ? "text-gray-700" : "text-gray-300"
+                    today ? "text-white" : inMonth ? (darkMode ? "text-gray-200" : "text-gray-700") : "text-gray-400"
                   }`}
                   style={today ? { backgroundColor: accent } : undefined}
                 >
@@ -128,7 +133,7 @@ export default function CalendarGrid({
                   </button>
                 ))}
                 {dayEvents.length > 3 && (
-                  <p className="px-1 text-xs text-gray-400">+{dayEvents.length - 3} more</p>
+                  <p className={`px-1 text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>+{dayEvents.length - 3} more</p>
                 )}
               </div>
             </div>
