@@ -42,10 +42,12 @@ export default function SubmitEventForm({
   tenantSlug,
   categories,
   primaryColor,
+  darkMode = false,
 }: {
   tenantSlug: string;
   categories: Category[];
   primaryColor: string | null;
+  darkMode?: boolean;
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -214,13 +216,13 @@ export default function SubmitEventForm({
 
   if (submitted) {
     return (
-      <Card>
+      <Card className={darkMode ? "border-gray-700 bg-gray-800" : ""}>
         <CardContent className="py-12 text-center">
           <div className="mb-4 text-4xl">✓</div>
-          <h2 className="mb-2 text-xl font-semibold text-gray-900">
+          <h2 className={`mb-2 text-xl font-semibold ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
             Event Submitted!
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-500"}`}>
             Your event is under review. You&apos;ll receive an email once it&apos;s approved.
           </p>
         </CardContent>
@@ -229,39 +231,53 @@ export default function SubmitEventForm({
   }
 
   return (
-    <Card>
+    <Card className={darkMode ? "border-gray-700 bg-gray-800" : ""}>
       <CardContent className="py-8">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-1">
-            <Label htmlFor="title">Event Title *</Label>
-            <Input id="title" {...register("title")} />
+            <Label htmlFor="title" className={darkMode ? "text-gray-200" : ""}>
+              Event Title *
+            </Label>
+            <Input
+              id="title"
+              {...register("title")}
+              className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
+            />
             {errors.title && (
               <p className="text-xs text-red-500">{errors.title.message}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="image">Event Flyer / Image</Label>
+            <Label htmlFor="image" className={darkMode ? "text-gray-200" : ""}>
+              Event Flyer / Image
+            </Label>
             <Input
               id="image"
               type="file"
               accept="image/jpeg,image/png,image/webp,image/gif"
               onChange={handleImageChange}
-              className="cursor-pointer"
+              className={`cursor-pointer ${darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}`}
             />
             {uploading && (
-              <p className="text-xs text-gray-500">Uploading image...</p>
+              <p className={`text-xs ${darkMode ? "text-gray-300" : "text-gray-500"}`}>
+                Uploading image...
+              </p>
             )}
 
             {extracting && !uploading && (
-              <div className="flex items-center gap-2 rounded-md bg-blue-50 px-3 py-2">
+              <div
+                className={`flex items-center gap-2 rounded-md px-3 py-2 ${darkMode ? "bg-blue-900/40" : "bg-blue-50"}`}
+              >
                 <div className="h-3 w-3 animate-spin rounded-full border-2 border-blue-400 border-t-transparent" />
                 <p className="text-xs text-blue-600">Reading flyer with AI...</p>
               </div>
             )}
 
             {extractedFields.length > 0 && !extracting && (
-              <div className="rounded-md bg-green-50 px-3 py-2">
+              <div
+                className={`rounded-md px-3 py-2 ${darkMode ? "bg-green-900/30" : "bg-green-50"}`}
+              >
                 <p className="text-xs text-green-700">
                   {`✓ Auto-filled from flyer: ${extractedFields.join(", ")}. Please review and correct if needed.`}
                 </p>
@@ -271,7 +287,7 @@ export default function SubmitEventForm({
             {imagePreview && (
               <>
                 <div
-                  className="mt-2 inline-block cursor-zoom-in overflow-hidden rounded-md border"
+                  className={`mt-2 inline-block cursor-zoom-in overflow-hidden rounded-md border ${darkMode ? "border-gray-600" : ""}`}
                   onClick={() => setLightboxOpen(true)}
                 >
                   <img
@@ -279,7 +295,9 @@ export default function SubmitEventForm({
                     alt="Preview"
                     className="h-24 w-24 object-cover transition-transform hover:scale-105"
                   />
-                  <p className="bg-gray-50 py-1 text-center text-xs text-gray-400">
+                  <p
+                    className={`py-1 text-center text-xs ${darkMode ? "bg-gray-700 text-gray-300" : "bg-gray-50 text-gray-400"}`}
+                  >
                     Click to enlarge
                   </p>
                 </div>
@@ -304,39 +322,56 @@ export default function SubmitEventForm({
                 )}
               </>
             )}
-            <p className="text-xs text-gray-400">
+            <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-400"}`}>
               JPG, PNG, WebP, GIF up to 5MB - AI will auto-fill event details
             </p>
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description" className={darkMode ? "text-gray-200" : ""}>
+              Description
+            </Label>
             <Textarea
               id="description"
               rows={4}
               placeholder="Tell people what your event is about..."
               {...register("description")}
+              className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1">
-              <Label htmlFor="startAt">Start Date & Time *</Label>
-              <Input id="startAt" type="datetime-local" {...register("startAt")} />
+              <Label htmlFor="startAt" className={darkMode ? "text-gray-200" : ""}>
+                Start Date & Time *
+              </Label>
+              <Input
+                id="startAt"
+                type="datetime-local"
+                {...register("startAt")}
+                className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
+              />
               {errors.startAt && (
                 <p className="text-xs text-red-500">{errors.startAt.message}</p>
               )}
             </div>
             <div className="space-y-1">
-              <Label htmlFor="endAt">End Date & Time</Label>
-              <Input id="endAt" type="datetime-local" {...register("endAt")} />
+              <Label htmlFor="endAt" className={darkMode ? "text-gray-200" : ""}>
+                End Date & Time
+              </Label>
+              <Input
+                id="endAt"
+                type="datetime-local"
+                {...register("endAt")}
+                className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
+              />
             </div>
           </div>
 
-          <div className="space-y-3 rounded-lg border p-4">
-            <Label>Repeats</Label>
+          <div className={`space-y-3 rounded-lg border p-4 ${darkMode ? "border-gray-600" : ""}`}>
+            <Label className={darkMode ? "text-gray-200" : ""}>Repeats</Label>
             <select
-              className="h-10 w-full rounded-md border border-gray-200 bg-white px-3 text-sm"
+              className={`h-10 w-full rounded-md border px-3 text-sm ${darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : "border-gray-200 bg-white"}`}
               value={recurrence}
               onChange={(e) => setRecurrence(e.target.value as typeof recurrence)}
             >
@@ -348,7 +383,9 @@ export default function SubmitEventForm({
 
             {recurrence && (
               <div className="space-y-1">
-                <Label htmlFor="occurrences">Number of occurrences (max 52)</Label>
+                <Label htmlFor="occurrences" className={darkMode ? "text-gray-200" : ""}>
+                  Number of occurrences (max 52)
+                </Label>
                 <Input
                   id="occurrences"
                   type="number"
@@ -356,9 +393,9 @@ export default function SubmitEventForm({
                   max={52}
                   defaultValue={8}
                   {...register("occurrences", { valueAsNumber: true })}
-                  className="w-32"
+                  className={`w-32 ${darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}`}
                 />
-                <p className="text-xs text-gray-400">
+                <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-400"}`}>
                   Including the first date you selected above.
                 </p>
               </div>
@@ -366,27 +403,43 @@ export default function SubmitEventForm({
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="locationName">Venue / Location Name</Label>
-            <Input id="locationName" {...register("locationName")} />
+            <Label htmlFor="locationName" className={darkMode ? "text-gray-200" : ""}>
+              Venue / Location Name
+            </Label>
+            <Input
+              id="locationName"
+              {...register("locationName")}
+              className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
+            />
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="address">Address</Label>
-            <Input id="address" {...register("address")} />
+            <Label htmlFor="address" className={darkMode ? "text-gray-200" : ""}>
+              Address
+            </Label>
+            <Input
+              id="address"
+              {...register("address")}
+              className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
+            />
           </div>
 
           {categories.length > 0 && (
             <div className="space-y-1">
-              <Label>Category</Label>
+              <Label className={darkMode ? "text-gray-200" : ""}>Category</Label>
               <Select
                 onValueChange={(val) =>
                   setValue("categoryId", typeof val === "string" ? val : undefined)
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger
+                  className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
+                >
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent
+                  className={darkMode ? "border-gray-600 bg-gray-800 text-gray-100" : ""}
+                >
                   {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.id}>
                       {cat.name}
@@ -397,26 +450,48 @@ export default function SubmitEventForm({
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1">
-              <Label htmlFor="cost">Cost</Label>
-              <Input id="cost" placeholder="Free, $10, Varies..." {...register("cost")} />
+              <Label htmlFor="cost" className={darkMode ? "text-gray-200" : ""}>
+                Cost
+              </Label>
+              <Input
+                id="cost"
+                placeholder="Free, $10, Varies..."
+                {...register("cost")}
+                className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
+              />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="ticketUrl">Ticket / Registration URL</Label>
-              <Input id="ticketUrl" placeholder="https://..." {...register("ticketUrl")} />
+              <Label htmlFor="ticketUrl" className={darkMode ? "text-gray-200" : ""}>
+                Ticket / Registration URL
+              </Label>
+              <Input
+                id="ticketUrl"
+                placeholder="https://..."
+                {...register("ticketUrl")}
+                className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
+              />
               {errors.ticketUrl && (
                 <p className="text-xs text-red-500">{errors.ticketUrl.message}</p>
               )}
             </div>
           </div>
 
-          <div className="space-y-4 border-t pt-6">
-            <p className="text-sm font-medium text-gray-700">Your Information</p>
-            <div className="grid grid-cols-2 gap-4">
+          <div className={`space-y-4 border-t pt-6 ${darkMode ? "border-gray-700" : ""}`}>
+            <p className={`text-sm font-medium ${darkMode ? "text-gray-200" : "text-gray-700"}`}>
+              Your Information
+            </p>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1">
-                <Label htmlFor="submitterName">Your Name *</Label>
-                <Input id="submitterName" {...register("submitterName")} />
+                <Label htmlFor="submitterName" className={darkMode ? "text-gray-200" : ""}>
+                  Your Name *
+                </Label>
+                <Input
+                  id="submitterName"
+                  {...register("submitterName")}
+                  className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
+                />
                 {errors.submitterName && (
                   <p className="text-xs text-red-500">
                     {errors.submitterName.message}
@@ -424,8 +499,15 @@ export default function SubmitEventForm({
                 )}
               </div>
               <div className="space-y-1">
-                <Label htmlFor="submitterEmail">Your Email *</Label>
-                <Input id="submitterEmail" type="email" {...register("submitterEmail")} />
+                <Label htmlFor="submitterEmail" className={darkMode ? "text-gray-200" : ""}>
+                  Your Email *
+                </Label>
+                <Input
+                  id="submitterEmail"
+                  type="email"
+                  {...register("submitterEmail")}
+                  className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
+                />
                 {errors.submitterEmail && (
                   <p className="text-xs text-red-500">
                     {errors.submitterEmail.message}

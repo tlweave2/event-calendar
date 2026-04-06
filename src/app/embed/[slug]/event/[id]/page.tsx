@@ -8,6 +8,7 @@ import { recordPageView } from "@/lib/page-views";
 
 type Props = {
   params: Promise<{ slug: string; id: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
 function formatICalDate(date: Date): string {
@@ -43,8 +44,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function EventPage({ params }: Props) {
+export default async function EventPage({ params, searchParams }: Props) {
   const { slug, id } = await params;
+  const sp = (await searchParams) ?? {};
   const tenant = await getTenantBySlug(slug);
   if (!tenant) notFound();
 
@@ -53,18 +55,46 @@ export default async function EventPage({ params }: Props) {
 
   void recordPageView(tenant.id, "event", event.id);
 
+  // Embed settings: query params override tenant defaults.
+  const fontParam = Array.isArray(sp.font) ? sp.font[0] : sp.font;
+  const bgParam = Array.isArray(sp.bg) ? sp.bg[0] : sp.bg;
+  const darkParam = Array.isArray(sp.dark) ? sp.dark[0] : sp.dark;
+
+  const font = fontParam ?? tenant.embedFontFamily ?? undefined;
+  const bgColor = bgParam ?? tenant.embedBgColor ?? undefined;
+  const darkMode = darkParam === "true" || (!darkParam && Boolean(tenant.embedDarkMode));
+
+  const fontLink =
+    font && font !== "system-ui"
+      ? `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:wght@300;400;500;600;700&display=swap`
+      : null;
+
+  const bgStyle =
+    bgColor === "transparent"
+      ? "transparent"
+      : bgColor ?? (darkMode ? "#111827" : "#f9fafb");
+
   const accent = tenant.primaryColor ?? "#2563eb";
   const calendarUrl = `/embed/${slug}/calendar`;
   const baseUrl = process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app";
   const eventUrl = `${baseUrl}/embed/${slug}/event/${id}`;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="border-b bg-white px-4 py-4">
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundColor: bgStyle,
+        fontFamily: font ? `"${font}", system-ui, sans-serif` : undefined,
+        color: darkMode ? "#f3f4f6" : undefined,
+      }}
+    >
+      {fontLink && <link rel="stylesheet" href={fontLink} />}
+
+      <div className={`border-b px-4 py-4 ${darkMode ? "border-gray-700 bg-gray-800" : "bg-white"}`}>
         <div className="mx-auto flex max-w-2xl items-center justify-between">
           <Link
             href={calendarUrl}
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className={`text-sm ${darkMode ? "text-gray-400 hover:text-gray-200" : "text-gray-500 hover:text-gray-700"}`}
           >
             ← Back to calendar
           </Link>
@@ -76,7 +106,9 @@ export default async function EventPage({ params }: Props) {
 
       <div className="mx-auto max-w-2xl space-y-6 px-4 py-8">
         {event.imageUrl && (
-          <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
+          <div
+            className={`overflow-hidden rounded-xl border shadow-sm ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"}`}
+          >
             <img
               src={event.imageUrl}
               alt={event.title}
@@ -86,7 +118,9 @@ export default async function EventPage({ params }: Props) {
           </div>
         )}
 
-        <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
+        <div
+          className={`overflow-hidden rounded-xl border shadow-sm ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"}`}
+        >
           <div
             className="h-1.5"
             style={{ backgroundColor: event.category?.color ?? accent }}
@@ -105,17 +139,19 @@ export default async function EventPage({ params }: Props) {
                   {event.category.name}
                 </span>
               )}
-              <h1 className="text-2xl font-semibold text-gray-900">{event.title}</h1>
+              <h1 className={`text-2xl font-semibold ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
+                {event.title}
+              </h1>
             </div>
 
             <div className="space-y-3 text-sm">
               <div className="flex gap-3">
                 <span className="text-lg">📅</span>
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className={`font-medium ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
                     {format(new Date(event.startAt), "EEEE, MMMM d, yyyy")}
                   </p>
-                  <p className="text-gray-500">
+                  <p className={darkMode ? "text-gray-300" : "text-gray-500"}>
                     {format(new Date(event.startAt), "h:mm a")}
                     {event.endAt && ` - ${format(new Date(event.endAt), "h:mm a")}`}
                   </p>
@@ -126,7 +162,9 @@ export default async function EventPage({ params }: Props) {
                 <div className="flex gap-3">
                   <span className="text-lg">📍</span>
                   <div>
-                    <p className="font-medium text-gray-900">{event.locationName}</p>
+                    <p className={`font-medium ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
+                      {event.locationName}
+                    </p>
                     {event.address && (
                       <a
                         href={`https://maps.google.com/?q=${encodeURIComponent(event.address)}`}
@@ -145,14 +183,18 @@ export default async function EventPage({ params }: Props) {
               {event.cost && (
                 <div className="flex gap-3">
                   <span className="text-lg">💰</span>
-                  <p className="font-medium text-gray-900">{event.cost}</p>
+                  <p className={`font-medium ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
+                    {event.cost}
+                  </p>
                 </div>
               )}
             </div>
 
             {event.description && (
-              <div className="border-t pt-4">
-                <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-600">
+              <div className={`border-t pt-4 ${darkMode ? "border-gray-700" : ""}`}>
+                <p
+                  className={`whitespace-pre-wrap text-sm leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-600"}`}
+                >
                   {event.description}
                 </p>
               </div>
@@ -172,14 +214,16 @@ export default async function EventPage({ params }: Props) {
               </div>
             )}
 
-            <div className="border-t pt-4">
-              <p className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-400">
+            <div className={`border-t pt-4 ${darkMode ? "border-gray-700" : ""}`}>
+              <p
+                className={`mb-2 text-xs font-medium uppercase tracking-wide ${darkMode ? "text-gray-500" : "text-gray-400"}`}
+              >
                 Add to your calendar
               </p>
               <div className="flex flex-wrap gap-2">
                 <a
                   href={`/embed/${slug}/event/${event.id}/calendar.ics`}
-                  className="rounded-md border px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                  className={`rounded-md border px-3 py-1.5 text-xs font-medium ${darkMode ? "border-gray-600 text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-50"}`}
                 >
                   Apple Calendar / Outlook (.ics)
                 </a>
@@ -187,18 +231,20 @@ export default async function EventPage({ params }: Props) {
                   href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${formatICalDate(new Date(event.startAt))}/${formatICalDate(event.endAt ? new Date(event.endAt) : new Date(new Date(event.startAt).getTime() + 3600000))}&details=${encodeURIComponent(event.description ?? "")}&location=${encodeURIComponent(event.locationName ?? "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-md border px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                  className={`rounded-md border px-3 py-1.5 text-xs font-medium ${darkMode ? "border-gray-600 text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-50"}`}
                 >
                   Google Calendar
                 </a>
               </div>
             </div>
 
-            <div className="border-t pt-4">
-              <p className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-400">
+            <div className={`border-t pt-4 ${darkMode ? "border-gray-700" : ""}`}>
+              <p
+                className={`mb-2 text-xs font-medium uppercase tracking-wide ${darkMode ? "text-gray-500" : "text-gray-400"}`}
+              >
                 Share this event
               </p>
-              <ShareButtons url={eventUrl} title={event.title} />
+              <ShareButtons url={eventUrl} title={event.title} darkMode={darkMode} />
             </div>
           </div>
         </div>
@@ -213,14 +259,26 @@ export default async function EventPage({ params }: Props) {
   );
 }
 
-function ShareButtons({ url, title }: { url: string; title: string }) {
+function ShareButtons({
+  url,
+  title,
+  darkMode = false,
+}: {
+  url: string;
+  title: string;
+  darkMode?: boolean;
+}) {
+  const btnClass = darkMode
+    ? "rounded-md border border-gray-600 px-3 py-1.5 text-xs font-medium text-gray-300 hover:bg-gray-700"
+    : "rounded-md border px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50";
+
   return (
     <div className="flex flex-wrap gap-2">
       <a
         href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-md border px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+        className={btnClass}
       >
         Share on Facebook
       </a>
@@ -228,7 +286,7 @@ function ShareButtons({ url, title }: { url: string; title: string }) {
         href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-md border px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+        className={btnClass}
       >
         Share on X
       </a>
@@ -236,7 +294,7 @@ function ShareButtons({ url, title }: { url: string; title: string }) {
         href={`https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-md border px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+        className={btnClass}
       >
         WhatsApp
       </a>
