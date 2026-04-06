@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import SignOutButton from "./SignOutButton";
 
 export default async function AdminLayout({
   children,
@@ -15,17 +16,22 @@ export default async function AdminLayout({
     return <>{children}</>;
   }
 
-  const pendingCount = await prisma.event.count({
-    where: { tenantId: session.user.tenantId, status: "PENDING" },
-  });
+  const [pendingCount, tenant] = await Promise.all([
+    prisma.event.count({
+      where: { tenantId: session.user.tenantId, status: "PENDING" },
+    }),
+    prisma.tenant.findUnique({
+      where: { id: session.user.tenantId },
+      select: { slug: true, name: true },
+    }),
+  ]);
 
   return (
     <div className="min-h-screen flex bg-gray-50">
-      {/* Sidebar */}
       <aside className="flex w-56 flex-col border-r bg-white">
         <div className="border-b px-5 py-5">
           <span className="text-sm font-semibold text-gray-900">
-            Event Calendar
+            {tenant?.name ?? "Event Calendar"}
           </span>
         </div>
         <nav className="flex-1 space-y-1 px-3 py-4 text-sm">
@@ -82,13 +88,33 @@ export default async function AdminLayout({
           >
             Settings
           </Link>
+
+          {tenant?.slug && (
+            <div className="pt-3 mt-3 border-t">
+              <Link
+                href={`/embed/${tenant.slug}/calendar`}
+                target="_blank"
+                className="flex items-center rounded-md px-3 py-2 text-blue-600 hover:bg-blue-50"
+              >
+                View Calendar ↗
+              </Link>
+              <Link
+                href={`/embed/${tenant.slug}/submit`}
+                target="_blank"
+                className="flex items-center rounded-md px-3 py-2 text-blue-600 hover:bg-blue-50"
+              >
+                Submit Form ↗
+              </Link>
+            </div>
+          )}
         </nav>
-        <div className="border-t px-5 py-4 text-xs text-gray-400">
-          {session.user.email}
+
+        <div className="border-t px-5 py-4 space-y-2">
+          <p className="text-xs text-gray-400 truncate">{session.user.email}</p>
+          <SignOutButton />
         </div>
       </aside>
 
-      {/* Main */}
       <main className="flex-1 overflow-auto">{children}</main>
     </div>
   );
