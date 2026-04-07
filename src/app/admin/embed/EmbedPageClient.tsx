@@ -27,6 +27,23 @@ function CopyBlock({ label, snippet }: { label: string; snippet: string }) {
   );
 }
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <button
+      onClick={async () => {
+        await navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }}
+      className="shrink-0 rounded border border-gray-200 px-2 py-1 text-xs text-gray-500 hover:bg-gray-50"
+    >
+      {copied ? "Copied!" : "Copy"}
+    </button>
+  );
+}
+
 export default function EmbedPageClient({
   slug,
   baseUrl,
@@ -84,21 +101,85 @@ export default function EmbedPageClient({
         </p>
       </div>
 
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600">
-        <p className="font-medium text-gray-900">Query Parameter Overrides</p>
-        <p className="mt-1 text-gray-500">
-          Add these to any embed URL to override your defaults:
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
+        <p className="mb-1 font-medium text-gray-900">Query Parameter Overrides</p>
+        <p className="mb-4 text-gray-500">
+          Append these to any embed URL to customize the look without changing your saved defaults.
+          You can combine multiple parameters together.
         </p>
-        <code className="mt-2 block whitespace-pre-wrap text-xs text-gray-500">
-{`?minimal=true        - Hide header/logo
-&font=Poppins        - Google Font name
-&view=grid           - Default to calendar grid
-&hideSearch=true     - Hide search bar
-&hideCategories=true - Hide category filter
-&hideSubmit=true     - Hide submit link
-&bg=transparent      - Background color (hex or "transparent")
-&dark=true           - Dark mode`}
-        </code>
+
+        <div className="space-y-3">
+          {[
+            {
+              param: "?minimal=true",
+              desc: "Hide the header and logo - great for tight embeds",
+              example: `/embed/${slug}/calendar?minimal=true`,
+            },
+            {
+              param: "&font=Poppins",
+              desc: "Use any Google Font by name",
+              example: `/embed/${slug}/calendar?font=Poppins`,
+            },
+            {
+              param: "&view=grid",
+              desc: "Default to the calendar grid instead of list view",
+              example: `/embed/${slug}/calendar?view=grid`,
+            },
+            {
+              param: "&dark=true",
+              desc: "Enable dark mode - useful for dark-themed websites",
+              example: `/embed/${slug}/calendar?dark=true`,
+            },
+            {
+              param: "&bg=transparent",
+              desc: "Transparent background so it blends into your site",
+              example: `/embed/${slug}/calendar?bg=transparent`,
+            },
+            {
+              param: "&bg=%23ff0000",
+              desc: "Custom background color (use %23 instead of # in URLs)",
+              example: `/embed/${slug}/calendar?bg=%23f3f4f6`,
+            },
+            {
+              param: "&hideSearch=true",
+              desc: "Hide the search bar",
+              example: `/embed/${slug}/calendar?hideSearch=true`,
+            },
+            {
+              param: "&hideCategories=true",
+              desc: "Hide the category filter",
+              example: `/embed/${slug}/calendar?hideCategories=true`,
+            },
+            {
+              param: "&hideSubmit=true",
+              desc: "Hide the submit an event link",
+              example: `/embed/${slug}/calendar?hideSubmit=true`,
+            },
+          ].map(({ param, desc, example }) => (
+            <div key={param} className="space-y-1 rounded-md border bg-white p-3">
+              <div className="flex items-center gap-2">
+                <code className="text-xs font-mono font-semibold text-violet-600">{param}</code>
+                <span className="text-xs text-gray-500">{desc}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <code className="flex-1 truncate rounded bg-gray-50 px-2 py-1 text-xs text-gray-500">
+                  {baseUrl}{example}
+                </code>
+                <CopyButton text={`${baseUrl}${example}`} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 space-y-1 rounded-md border bg-white p-3">
+          <p className="text-xs font-medium text-gray-700">Combining multiple params</p>
+          <div className="flex items-center gap-2">
+            <code className="flex-1 truncate rounded bg-gray-50 px-2 py-1 text-xs text-gray-500">
+              {baseUrl}/embed/{slug}/calendar?minimal=true&dark=true&font=Inter&hideSubmit=true
+            </code>
+            <CopyButton text={`${baseUrl}/embed/${slug}/calendar?minimal=true&dark=true&font=Inter&hideSubmit=true`} />
+          </div>
+        </div>
       </div>
     </div>
   );
