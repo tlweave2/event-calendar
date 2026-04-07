@@ -10,8 +10,7 @@ export default auth((req) => {
   if (
     pathname.startsWith("/admin") &&
     !pathname.startsWith("/admin/login") &&
-    !pathname.startsWith("/admin/accept-invite") &&
-    !pathname.startsWith("/admin/demo")
+    !pathname.startsWith("/admin/accept-invite")
   ) {
     if (!req.auth) {
       const loginUrl = new URL("/admin/login", req.url);
