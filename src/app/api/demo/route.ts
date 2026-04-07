@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { encode } from "next-auth/jwt";
 import { cookies } from "next/headers";
 
-async function createPersonalDemoTenant() {
+async function createSandboxTenant() {
   const id = Math.random().toString(36).slice(2, 8);
   const slug = `demo-${id}`;
 
@@ -65,7 +65,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "AUTH_SECRET not configured" }, { status: 500 });
   }
 
-  const { user, tenant } = await createPersonalDemoTenant();
+  const { user, tenant } = await createSandboxTenant();
 
   const secureCookie = process.env.NODE_ENV === "production";
   const cookieName = secureCookie ? "__Secure-authjs.session-token" : "authjs.session-token";
