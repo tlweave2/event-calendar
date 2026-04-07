@@ -115,7 +115,7 @@ export async function updateTenantCategories(
 const embedSettingsSchema = z.object({
   tenantId: z.string().uuid(),
   embedFontFamily: z.string().max(100).optional().nullable(),
-  embedDefaultView: z.enum(["list", "grid"]).default("list"),
+  embedDefaultView: z.enum(["list", "grid"]).default("grid"),
   embedHideSearch: z.boolean().default(false),
   embedHideCategories: z.boolean().default(false),
   embedHideSubmit: z.boolean().default(false),

@@ -30,7 +30,7 @@ export default async function CalendarPage({
 
   const minimal = param("minimal") === "true";
   const font = param("font") ?? tenant.embedFontFamily ?? undefined;
-  const viewRaw = param("view") ?? tenant.embedDefaultView ?? "list";
+  const viewRaw = param("view") ?? tenant.embedDefaultView ?? "grid";
   const defaultView = viewRaw === "grid" ? "grid" : "list";
   const hideSearch =
     param("hideSearch") === "true" ||
