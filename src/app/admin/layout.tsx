@@ -9,19 +9,20 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  const hdrs = await headers();
+  const pathname = hdrs.get("x-pathname") ?? "";
 
-  // Never render admin chrome (sidebar / demo banner) on the login page,
-  // even if a session cookie exists (e.g. demo session).  The middleware
-  // normally redirects authenticated users away from /admin/login, but
-  // this serves as a safety net.
-  if (!session) {
+  // Never render admin chrome on the login or accept-invite pages.
+  // The proxy sets x-pathname on every request so this check is reliable.
+  if (
+    pathname.startsWith("/admin/login") ||
+    pathname.startsWith("/admin/accept-invite")
+  ) {
     return <>{children}</>;
   }
 
-  const hdrs = await headers();
-  const pathname = hdrs.get("x-next-url") ?? hdrs.get("x-invoke-path") ?? "";
-  if (pathname.startsWith("/admin/login")) {
+  const session = await auth();
+  if (!session) {
     return <>{children}</>;
   }
 
