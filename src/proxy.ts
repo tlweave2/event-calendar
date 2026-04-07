@@ -7,16 +7,9 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const { pathname } = req.nextUrl;
 
-  // Already-authenticated users should not see the login page — send them
-  // to the dashboard (or wherever callbackUrl points).  This prevents the
-  // admin layout from wrapping the login form with sidebar / demo banner.
-  if (pathname.startsWith("/admin/login") && req.auth) {
-    const raw = req.nextUrl.searchParams.get("callbackUrl") ?? "/admin";
-    // Only allow relative paths (prevent open-redirect via absolute URLs).
-    const dest = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/admin";
-    return NextResponse.redirect(new URL(dest, req.url));
-  }
-
+  // Protect all /admin routes except login and accept-invite.
+  // Unauthenticated users are redirected to /admin/login with a callbackUrl
+  // so they land on their intended page after signing in.
   if (
     pathname.startsWith("/admin") &&
     !pathname.startsWith("/admin/login") &&
@@ -29,7 +22,14 @@ export default auth((req) => {
     }
   }
 
-  return NextResponse.next();
+  // Pass the pathname to the server components via a request header.
+  // The admin layout uses this to decide whether to show the sidebar/chrome
+  // (e.g. skip it on /admin/login so the login form is always standalone).
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-pathname", pathname);
+  return NextResponse.next({
+    request: { headers: requestHeaders },
+  });
 });
 
 export const config = {
