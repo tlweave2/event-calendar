@@ -11,7 +11,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export default function LoginPage() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
   const [credLoading, setCredLoading] = useState(false);
   const [credEmail, setCredEmail] = useState("");
   const [credPassword, setCredPassword] = useState("");
@@ -24,7 +23,7 @@ export default function LoginPage() {
         email: credEmail,
         password: credPassword,
         redirect: true,
-        redirectTo: callbackUrl,
+        redirectTo: "/admin",
       });
     } catch {
       alert("Login failed");
