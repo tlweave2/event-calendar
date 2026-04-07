@@ -85,6 +85,10 @@ export default function BrandingForm({ tenant }: {
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
+      // If slug changed, reload so sidebar and URLs update correctly
+      if (result.slug !== tenant.slug) {
+        window.location.reload();
+      }
     } else {
       setError("Failed to save. Check that your calendar URL is unique.");
     }

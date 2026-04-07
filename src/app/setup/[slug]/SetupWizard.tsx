@@ -109,6 +109,10 @@ export default function SetupWizard({
     }
     if (typeof result.slug === "string") {
       setCurrentSlug(result.slug);
+      // If the slug changed, update the URL so the page doesn't break
+      if (result.slug !== tenant.slug) {
+        router.replace(`/setup/${result.slug}`);
+      }
     }
     return true;
   };
