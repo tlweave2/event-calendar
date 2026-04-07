@@ -20,7 +20,7 @@ export default async function AdminLayout({
     }),
     prisma.tenant.findUnique({
       where: { id: session.user.tenantId },
-      select: { slug: true, name: true },
+      select: { slug: true, name: true, isDemoSandbox: true },
     }),
   ]);
 
@@ -33,11 +33,11 @@ export default async function AdminLayout({
         pendingCount={pendingCount}
       />
       <main className="min-h-screen pt-14 md:pt-0 md:pl-56">
-        {tenant?.slug === "demo" && (
+        {tenant?.isDemoSandbox && (
           <div className="bg-violet-600 px-4 py-2 text-center text-sm text-white">
-            You&apos;re viewing a live demo.{" "}
+            You&apos;re in a demo sandbox - changes are yours but expire in 1 hour.{" "}
             <Link href="/signup" className="font-medium underline">
-              Create your own calendar →
+              Create a permanent calendar →
             </Link>
           </div>
         )}

@@ -3,7 +3,8 @@ export const DEMO_LOCK_MESSAGE =
 
 export function isDemoTenant(tenantId: string, slug?: string | null): boolean {
   void tenantId;
-  return slug === "demo";
+  void slug;
+  return false;
 }
 
 export function demoFormError(): { success: false; errors: { _form: string[] } } {

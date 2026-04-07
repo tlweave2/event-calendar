@@ -1,0 +1,3 @@
+ALTER TABLE "tenants"
+ADD COLUMN "isDemoSandbox" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN "demoExpiresAt" TIMESTAMP(3);

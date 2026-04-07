@@ -30,6 +30,8 @@ model Tenant {
   stripeCustomerId     String?  @db.VarChar(255)
   stripeSubscriptionId String?  @db.VarChar(255)
   planExpiresAt        DateTime?
+  isDemoSandbox        Boolean   @default(false)
+  demoExpiresAt        DateTime?
   createdAt      DateTime @default(now())
 
   // Relations

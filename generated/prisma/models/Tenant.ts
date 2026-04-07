@@ -44,6 +44,8 @@ export type TenantMinAggregateOutputType = {
   stripeCustomerId: string | null
   stripeSubscriptionId: string | null
   planExpiresAt: Date | null
+  isDemoSandbox: boolean | null
+  demoExpiresAt: Date | null
   createdAt: Date | null
 }
 
@@ -67,6 +69,8 @@ export type TenantMaxAggregateOutputType = {
   stripeCustomerId: string | null
   stripeSubscriptionId: string | null
   planExpiresAt: Date | null
+  isDemoSandbox: boolean | null
+  demoExpiresAt: Date | null
   createdAt: Date | null
 }
 
@@ -90,6 +94,8 @@ export type TenantCountAggregateOutputType = {
   stripeCustomerId: number
   stripeSubscriptionId: number
   planExpiresAt: number
+  isDemoSandbox: number
+  demoExpiresAt: number
   createdAt: number
   _all: number
 }
@@ -115,6 +121,8 @@ export type TenantMinAggregateInputType = {
   stripeCustomerId?: true
   stripeSubscriptionId?: true
   planExpiresAt?: true
+  isDemoSandbox?: true
+  demoExpiresAt?: true
   createdAt?: true
 }
 
@@ -138,6 +146,8 @@ export type TenantMaxAggregateInputType = {
   stripeCustomerId?: true
   stripeSubscriptionId?: true
   planExpiresAt?: true
+  isDemoSandbox?: true
+  demoExpiresAt?: true
   createdAt?: true
 }
 
@@ -161,6 +171,8 @@ export type TenantCountAggregateInputType = {
   stripeCustomerId?: true
   stripeSubscriptionId?: true
   planExpiresAt?: true
+  isDemoSandbox?: true
+  demoExpiresAt?: true
   createdAt?: true
   _all?: true
 }
@@ -257,6 +269,8 @@ export type TenantGroupByOutputType = {
   stripeCustomerId: string | null
   stripeSubscriptionId: string | null
   planExpiresAt: Date | null
+  isDemoSandbox: boolean
+  demoExpiresAt: Date | null
   createdAt: Date
   _count: TenantCountAggregateOutputType | null
   _min: TenantMinAggregateOutputType | null
@@ -301,6 +315,8 @@ export type TenantWhereInput = {
   stripeCustomerId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   stripeSubscriptionId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   planExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
+  isDemoSandbox?: Prisma.BoolFilter<"Tenant"> | boolean
+  demoExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   events?: Prisma.EventListRelationFilter
   eventSeries?: Prisma.EventSeriesListRelationFilter
@@ -330,6 +346,8 @@ export type TenantOrderByWithRelationInput = {
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  isDemoSandbox?: Prisma.SortOrder
+  demoExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   events?: Prisma.EventOrderByRelationAggregateInput
   eventSeries?: Prisma.EventSeriesOrderByRelationAggregateInput
@@ -362,6 +380,8 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   stripeCustomerId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   stripeSubscriptionId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   planExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
+  isDemoSandbox?: Prisma.BoolFilter<"Tenant"> | boolean
+  demoExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   events?: Prisma.EventListRelationFilter
   eventSeries?: Prisma.EventSeriesListRelationFilter
@@ -391,6 +411,8 @@ export type TenantOrderByWithAggregationInput = {
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  isDemoSandbox?: Prisma.SortOrder
+  demoExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TenantCountOrderByAggregateInput
   _max?: Prisma.TenantMaxOrderByAggregateInput
@@ -420,6 +442,8 @@ export type TenantScalarWhereWithAggregatesInput = {
   stripeCustomerId?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   stripeSubscriptionId?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   planExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
+  isDemoSandbox?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  demoExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Tenant"> | Date | string
 }
 
@@ -443,6 +467,8 @@ export type TenantCreateInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
@@ -472,6 +498,8 @@ export type TenantUncheckedCreateInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
@@ -501,6 +529,8 @@ export type TenantUpdateInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
@@ -530,6 +560,8 @@ export type TenantUncheckedUpdateInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
@@ -559,6 +591,8 @@ export type TenantCreateManyInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -582,6 +616,8 @@ export type TenantUpdateManyMutationInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -605,6 +641,8 @@ export type TenantUncheckedUpdateManyInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -628,6 +666,8 @@ export type TenantCountOrderByAggregateInput = {
   stripeCustomerId?: Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrder
+  isDemoSandbox?: Prisma.SortOrder
+  demoExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -651,6 +691,8 @@ export type TenantMaxOrderByAggregateInput = {
   stripeCustomerId?: Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrder
+  isDemoSandbox?: Prisma.SortOrder
+  demoExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -674,6 +716,8 @@ export type TenantMinOrderByAggregateInput = {
   stripeCustomerId?: Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrder
+  isDemoSandbox?: Prisma.SortOrder
+  demoExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -810,6 +854,8 @@ export type TenantCreateWithoutCategoriesInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
@@ -838,6 +884,8 @@ export type TenantUncheckedCreateWithoutCategoriesInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
@@ -882,6 +930,8 @@ export type TenantUpdateWithoutCategoriesInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
@@ -910,6 +960,8 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
@@ -938,6 +990,8 @@ export type TenantCreateWithoutEventsInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
@@ -966,6 +1020,8 @@ export type TenantUncheckedCreateWithoutEventsInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
@@ -1010,6 +1066,8 @@ export type TenantUpdateWithoutEventsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
@@ -1038,6 +1096,8 @@ export type TenantUncheckedUpdateWithoutEventsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
@@ -1066,6 +1126,8 @@ export type TenantCreateWithoutUsersInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
@@ -1094,6 +1156,8 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
@@ -1138,6 +1202,8 @@ export type TenantUpdateWithoutUsersInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
@@ -1166,6 +1232,8 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
@@ -1194,6 +1262,8 @@ export type TenantCreateWithoutAuditLogsInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
@@ -1222,6 +1292,8 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
@@ -1266,6 +1338,8 @@ export type TenantUpdateWithoutAuditLogsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
@@ -1294,6 +1368,8 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
@@ -1322,6 +1398,8 @@ export type TenantCreateWithoutPageViewsInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
@@ -1350,6 +1428,8 @@ export type TenantUncheckedCreateWithoutPageViewsInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
@@ -1394,6 +1474,8 @@ export type TenantUpdateWithoutPageViewsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
@@ -1422,6 +1504,8 @@ export type TenantUncheckedUpdateWithoutPageViewsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
@@ -1450,6 +1534,8 @@ export type TenantCreateWithoutEventSeriesInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
@@ -1478,6 +1564,8 @@ export type TenantUncheckedCreateWithoutEventSeriesInput = {
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
   createdAt?: Date | string
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
@@ -1522,6 +1610,8 @@ export type TenantUpdateWithoutEventSeriesInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
@@ -1550,6 +1640,8 @@ export type TenantUncheckedUpdateWithoutEventSeriesInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
@@ -1654,6 +1746,8 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
+  isDemoSandbox?: boolean
+  demoExpiresAt?: boolean
   createdAt?: boolean
   events?: boolean | Prisma.Tenant$eventsArgs<ExtArgs>
   eventSeries?: boolean | Prisma.Tenant$eventSeriesArgs<ExtArgs>
@@ -1684,6 +1778,8 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
+  isDemoSandbox?: boolean
+  demoExpiresAt?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["tenant"]>
 
@@ -1707,6 +1803,8 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
+  isDemoSandbox?: boolean
+  demoExpiresAt?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["tenant"]>
 
@@ -1730,10 +1828,12 @@ export type TenantSelectScalar = {
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
+  isDemoSandbox?: boolean
+  demoExpiresAt?: boolean
   createdAt?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "logoUrl" | "primaryColor" | "secondaryColor" | "plan" | "customDomain" | "timezone" | "embedFontFamily" | "embedDefaultView" | "embedHideSearch" | "embedHideCategories" | "embedHideSubmit" | "embedBgColor" | "embedDarkMode" | "stripeCustomerId" | "stripeSubscriptionId" | "planExpiresAt" | "createdAt", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "logoUrl" | "primaryColor" | "secondaryColor" | "plan" | "customDomain" | "timezone" | "embedFontFamily" | "embedDefaultView" | "embedHideSearch" | "embedHideCategories" | "embedHideSubmit" | "embedBgColor" | "embedDarkMode" | "stripeCustomerId" | "stripeSubscriptionId" | "planExpiresAt" | "isDemoSandbox" | "demoExpiresAt" | "createdAt", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   events?: boolean | Prisma.Tenant$eventsArgs<ExtArgs>
   eventSeries?: boolean | Prisma.Tenant$eventSeriesArgs<ExtArgs>
@@ -1776,6 +1876,8 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     stripeCustomerId: string | null
     stripeSubscriptionId: string | null
     planExpiresAt: Date | null
+    isDemoSandbox: boolean
+    demoExpiresAt: Date | null
     createdAt: Date
   }, ExtArgs["result"]["tenant"]>
   composites: {}
@@ -2225,6 +2327,8 @@ export interface TenantFieldRefs {
   readonly stripeCustomerId: Prisma.FieldRef<"Tenant", 'String'>
   readonly stripeSubscriptionId: Prisma.FieldRef<"Tenant", 'String'>
   readonly planExpiresAt: Prisma.FieldRef<"Tenant", 'DateTime'>
+  readonly isDemoSandbox: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly demoExpiresAt: Prisma.FieldRef<"Tenant", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Tenant", 'DateTime'>
 }
     
