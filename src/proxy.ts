@@ -11,7 +11,9 @@ export default auth((req) => {
   // to the dashboard (or wherever callbackUrl points).  This prevents the
   // admin layout from wrapping the login form with sidebar / demo banner.
   if (pathname.startsWith("/admin/login") && req.auth) {
-    const dest = req.nextUrl.searchParams.get("callbackUrl") ?? "/admin";
+    const raw = req.nextUrl.searchParams.get("callbackUrl") ?? "/admin";
+    // Only allow relative paths (prevent open-redirect via absolute URLs).
+    const dest = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/admin";
     return NextResponse.redirect(new URL(dest, req.url));
   }
 
