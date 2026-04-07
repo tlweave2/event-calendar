@@ -7,6 +7,11 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const { pathname } = req.nextUrl;
 
+  // Already authenticated users should not see the login page — send them to the dashboard.
+  if (pathname === "/admin/login" && req.auth) {
+    return NextResponse.redirect(new URL("/admin", req.url));
+  }
+
   if (
     pathname.startsWith("/admin") &&
     !pathname.startsWith("/admin/login") &&
