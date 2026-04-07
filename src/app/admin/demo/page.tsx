@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
+import { notFound } from "next/navigation";
 
 const NAV_ITEMS = [
   { href: "/admin/demo", label: "Queue" },
@@ -51,7 +51,7 @@ export default async function DemoPage() {
               className={`flex items-center justify-between rounded-md px-3 py-2 ${
                 i === 0
                   ? "bg-gray-100 font-medium text-gray-900"
-                  : "cursor-default text-gray-500"
+                  : "text-gray-500 cursor-default"
               }`}
             >
               {item.label}
@@ -155,7 +155,7 @@ export default async function DemoPage() {
                   </div>
                 </div>
                 {event.description && (
-                  <div className="line-clamp-2 border-t bg-gray-50 px-5 py-3 text-sm text-gray-600">
+                  <div className="border-t bg-gray-50 px-5 py-3 text-sm text-gray-600 line-clamp-2">
                     {event.description}
                   </div>
                 )}
