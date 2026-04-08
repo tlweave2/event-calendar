@@ -8,22 +8,25 @@ import { signOut } from "next-auth/react";
 const NAV_ITEMS = [
   { href: "/admin", label: "Queue", exact: true },
   { href: "/admin/events", label: "All Events" },
+  { href: "/admin/events/new", label: "Create Event" },
   { href: "/admin/branding", label: "Branding" },
   { href: "/admin/categories", label: "Categories" },
   { href: "/admin/analytics", label: "Analytics" },
   { href: "/admin/embed", label: "Embed" },
-  { href: "/admin/import", label: "Create Event" },
+  { href: "/admin/import", label: "Import Flyers" },
   { href: "/admin/settings", label: "Settings" },
 ];
 
 export default function AdminSidebar({
   tenantName,
   tenantSlug,
+  plan,
   email,
   pendingCount,
 }: {
   tenantName: string;
   tenantSlug: string;
+  plan: string;
   email: string;
   pendingCount: number;
 }) {
@@ -33,10 +36,15 @@ export default function AdminSidebar({
   const isActive = (href: string, exact?: boolean) =>
     exact ? pathname === href : pathname.startsWith(href);
 
+  const navItems =
+    plan === "PRO"
+      ? NAV_ITEMS
+      : NAV_ITEMS.filter((item) => item.href !== "/admin/import");
+
   const navContent = (
     <>
       <nav className="flex-1 space-y-1 px-3 py-4 text-sm">
-        {NAV_ITEMS.map((item) => (
+        {navItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}

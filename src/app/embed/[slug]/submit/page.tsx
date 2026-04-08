@@ -28,6 +28,8 @@ export default async function SubmitPage({
   const font = fontParam ?? tenant.embedFontFamily ?? undefined;
   const bgColor = bgParam ?? tenant.embedBgColor ?? undefined;
   const darkMode = darkParam === "true" || (!darkParam && Boolean(tenant.embedDarkMode));
+  const isPro = tenant.plan === "PRO";
+  const showBadge = tenant.plan !== "PRO";
 
   const fontLink =
     font && font !== "system-ui"
@@ -71,6 +73,8 @@ export default async function SubmitPage({
           categories={tenant.categories}
           primaryColor={tenant.primaryColor}
           darkMode={darkMode}
+          isPro={isPro}
+          showBadge={showBadge}
         />
       </div>
     </div>

@@ -41,9 +41,11 @@ type FlyerCard = {
 
 export default function ImportFlyersClient({
   tenantId,
+  tenantSlug,
   categories,
 }: {
   tenantId: string;
+  tenantSlug: string;
   categories: Category[];
 }) {
   const [cards, setCards] = useState<FlyerCard[]>([]);
@@ -120,7 +122,11 @@ export default function ImportFlyersClient({
         const extractRes = await fetch("/api/extract-flyer", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ image: base64, mediaType: card.file.type }),
+          body: JSON.stringify({
+            image: base64,
+            mediaType: card.file.type,
+            tenantSlug,
+          }),
         });
 
         if (!extractRes.ok) throw new Error("extract-failed");

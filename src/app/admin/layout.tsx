@@ -32,7 +32,7 @@ export default async function AdminLayout({
     }),
     prisma.tenant.findUnique({
       where: { id: session.user.tenantId },
-      select: { slug: true, name: true, isDemoSandbox: true },
+      select: { slug: true, name: true, isDemoSandbox: true, plan: true },
     }),
   ]);
 
@@ -41,6 +41,7 @@ export default async function AdminLayout({
       <AdminSidebar
         tenantName={tenant?.name ?? "Event Calendar"}
         tenantSlug={tenant?.slug ?? ""}
+        plan={tenant?.plan ?? "FREE"}
         email={session.user.email ?? ""}
         pendingCount={pendingCount}
       />

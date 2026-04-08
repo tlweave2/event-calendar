@@ -1,8 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { PLANS } from "@/lib/stripe";
-
-export const FREE_MONTHLY_EVENT_LIMIT = PLANS.FREE.monthlyEvents;
-export const FREE_ADMIN_USER_LIMIT = PLANS.FREE.adminUsers;
+import { getPlanConfig, hasFeature } from "@/lib/stripe";
 
 export async function checkEventLimit(tenantId: string) {
   const tenant = await prisma.tenant.findUnique({
@@ -10,22 +7,21 @@ export async function checkEventLimit(tenantId: string) {
     select: { plan: true },
   });
 
+  const plan = tenant?.plan ?? "FREE";
+  const config = getPlanConfig(plan);
+
   const current = await prisma.event.count({
     where: {
       tenantId,
-      createdAt: {
-        gte: startOfMonth(new Date()),
-      },
+      createdAt: { gte: startOfMonth(new Date()) },
     },
   });
 
-  const limit = tenant?.plan === "FREE" ? FREE_MONTHLY_EVENT_LIMIT : Infinity;
-
   return {
-    plan: tenant?.plan ?? "FREE",
+    plan,
     current,
-    limit,
-    allowed: current < limit,
+    limit: config.monthlyEvents,
+    allowed: current < config.monthlyEvents,
   };
 }
 
@@ -35,21 +31,32 @@ export async function checkAdminUserLimit(tenantId: string) {
     select: { plan: true },
   });
 
+  const plan = tenant?.plan ?? "FREE";
+  const config = getPlanConfig(plan);
+
   const current = await prisma.user.count({
-    where: {
-      tenantId,
-      role: { in: ["OWNER", "ADMIN"] },
-    },
+    where: { tenantId, role: { in: ["OWNER", "ADMIN"] } },
   });
 
-  const limit = tenant?.plan === "FREE" ? FREE_ADMIN_USER_LIMIT : Infinity;
-
   return {
-    plan: tenant?.plan ?? "FREE",
+    plan,
     current,
-    limit,
-    allowed: current < limit,
+    limit: config.adminUsers,
+    allowed: current < config.adminUsers,
   };
+}
+
+export async function checkFeatureAccess(
+  tenantId: string,
+  feature: "aiFlyer" | "removeBadge"
+) {
+  const tenant = await prisma.tenant.findUnique({
+    where: { id: tenantId },
+    select: { plan: true },
+  });
+
+  const plan = tenant?.plan ?? "FREE";
+  return { plan, allowed: hasFeature(plan, feature) };
 }
 
 function startOfMonth(date: Date) {

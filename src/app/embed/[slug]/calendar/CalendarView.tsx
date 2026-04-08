@@ -44,6 +44,7 @@ export default function CalendarView({
   hideSearch = false,
   hideCategories = false,
   hideSubmit = false,
+  showBadge = true,
   darkMode = false,
 }: {
   events: CalendarEvent[];
@@ -54,6 +55,7 @@ export default function CalendarView({
   hideSearch?: boolean;
   hideCategories?: boolean;
   hideSubmit?: boolean;
+  showBadge?: boolean;
   darkMode?: boolean;
 }) {
   const [view, setView] = useState<ViewMode>(defaultView);
@@ -216,6 +218,19 @@ export default function CalendarView({
           Subscribe to calendar (.ics)
         </Link>
       </div>
+
+      {showBadge && (
+        <div className="border-t pt-3 text-center">
+          <a
+            href="https://eventful.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-gray-400 hover:text-gray-500"
+          >
+            Powered by Eventful
+          </a>
+        </div>
+      )}
     </div>
   );
 }

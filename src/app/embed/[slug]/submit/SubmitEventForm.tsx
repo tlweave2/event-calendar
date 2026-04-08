@@ -43,11 +43,15 @@ export default function SubmitEventForm({
   categories,
   primaryColor,
   darkMode = false,
+  isPro = false,
+  showBadge = true,
 }: {
   tenantSlug: string;
   categories: Category[];
   primaryColor: string | null;
   darkMode?: boolean;
+  isPro?: boolean;
+  showBadge?: boolean;
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -78,7 +82,7 @@ export default function SubmitEventForm({
     setServerError(null);
     setImagePreview(URL.createObjectURL(file));
     setUploading(true);
-    setExtracting(true);
+    setExtracting(isPro);
     setExtractedFields([]);
 
     await Promise.allSettled([
@@ -119,6 +123,10 @@ export default function SubmitEventForm({
       })(),
 
       (async () => {
+        if (!isPro) {
+          return;
+        }
+
         try {
           const base64 = await new Promise<string>((resolve, reject) => {
             const reader = new FileReader();
@@ -135,7 +143,11 @@ export default function SubmitEventForm({
           const res = await fetch("/api/extract-flyer", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ image: base64, mediaType: file.type }),
+            body: JSON.stringify({
+              image: base64,
+              mediaType: file.type,
+              tenantSlug,
+            }),
           });
 
           if (!res.ok) return;
@@ -312,7 +324,9 @@ export default function SubmitEventForm({
               </>
             )}
             <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-400"}`}>
-              JPG, PNG, WebP, GIF up to 5MB - AI will auto-fill event details
+              {isPro
+                ? "JPG, PNG, WebP, GIF up to 5MB - AI will auto-fill event details"
+                : "JPG, PNG, WebP, GIF up to 5MB"}
             </p>
           </div>
 
@@ -521,6 +535,19 @@ export default function SubmitEventForm({
           </div>
 
           {serverError && <p className="text-sm text-red-500">{serverError}</p>}
+
+          {showBadge && (
+            <div className="border-t pt-2 text-center">
+              <a
+                href="https://eventful.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-gray-400 hover:text-gray-500"
+              >
+                Powered by Eventful
+              </a>
+            </div>
+          )}
 
           <Button
             type="submit"

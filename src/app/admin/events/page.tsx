@@ -19,16 +19,32 @@ export default async function AllEventsPage() {
             {events.length} total event{events.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <Link
-          href="/api/export/events"
-          className="rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Export CSV
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/admin/events/new"
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          >
+            + Create Event
+          </Link>
+          <Link
+            href="/api/export/events"
+            className="rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            Export CSV
+          </Link>
+        </div>
       </div>
 
       {events.length === 0 ? (
-        <p className="py-12 text-center text-gray-400">No events yet.</p>
+        <div className="rounded-lg border-2 border-dashed border-gray-200 py-12 text-center">
+          <p className="text-gray-500">No events yet.</p>
+          <Link
+            href="/admin/events/new"
+            className="mt-3 inline-block text-sm font-medium text-blue-600 hover:underline"
+          >
+            Create your first event →
+          </Link>
+        </div>
       ) : (
         <BulkActions
           events={events.map((event) => ({

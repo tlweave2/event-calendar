@@ -63,7 +63,7 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       limitReached: true,
       errors: {
         _form: [
-          `This calendar has reached its monthly limit of ${limitCheck.limit} events. Please contact the calendar administrator.`,
+          `This calendar has reached its monthly limit of ${limitCheck.limit} events. The calendar administrator can upgrade to Pro for unlimited events.`,
         ],
       },
     };

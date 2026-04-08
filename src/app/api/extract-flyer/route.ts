@@ -1,13 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
-  const { image, mediaType } = (await req.json()) as {
+  const { image, mediaType, tenantSlug } = (await req.json()) as {
     image?: string;
     mediaType?: string;
+    tenantSlug?: string;
   };
 
   if (!image || !mediaType) {
     return NextResponse.json({}, { status: 400 });
+  }
+
+  if (tenantSlug) {
+    const tenant = await prisma.tenant.findUnique({
+      where: { slug: tenantSlug },
+      select: { plan: true },
+    });
+
+    if (!tenant || tenant.plan !== "PRO") {
+      return NextResponse.json(
+        { error: "AI flyer scanning requires a Pro plan." },
+        { status: 403 }
+      );
+    }
   }
 
   if (!process.env.ANTHROPIC_API_KEY) {

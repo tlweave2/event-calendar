@@ -41,6 +41,7 @@ export default async function CalendarPage({
   const hideSubmit =
     param("hideSubmit") === "true" ||
     (param("hideSubmit") === undefined && tenant.embedHideSubmit);
+  const showBadge = tenant.plan !== "PRO";
   const bgColor = param("bg") ?? tenant.embedBgColor ?? undefined;
   const darkMode =
     param("dark") === "true" ||
@@ -104,6 +105,7 @@ export default async function CalendarPage({
           hideSearch={hideSearch}
           hideCategories={hideCategories}
           hideSubmit={hideSubmit}
+          showBadge={showBadge}
           darkMode={darkMode}
         />
       </div>

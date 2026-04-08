@@ -223,7 +223,7 @@ export default function HomePage() {
               <p style={{ fontSize: "0.875rem", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "1.75rem" }}>Forever free</p>
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 0.5rem", fontSize: "0.875rem", color: C.muted, fontFamily: "system-ui, sans-serif", lineHeight: 2.1 }}>
                 <li>✓ &nbsp;1 calendar</li>
-                <li>✓ &nbsp;Up to 50 events per year</li>
+                <li>✓ &nbsp;Up to 5 events per month</li>
                 <li>✓ &nbsp;Public submissions</li>
                 <li>✓ &nbsp;Email notifications</li>
                 <li>✓ &nbsp;Embeddable calendar</li>
@@ -242,22 +242,18 @@ export default function HomePage() {
                 Most popular
               </div>
               <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: C.red, fontFamily: "system-ui, sans-serif", margin: "0 0 1rem", fontWeight: 600 }}>Pro</p>
-              <div style={{ fontSize: "2.5rem", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: "0.2rem", color: C.ink }}>$12</div>
-              <p style={{ fontSize: "0.875rem", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "1.75rem" }}>per month</p>
+              <div style={{ fontSize: "2.5rem", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: "0.2rem", color: C.ink }}>$99</div>
+              <p style={{ fontSize: "0.875rem", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "1.75rem" }}>per year</p>
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 0.5rem", fontSize: "0.875rem", color: C.muted, fontFamily: "system-ui, sans-serif", lineHeight: 2.1 }}>
                 <li>✓ &nbsp;Unlimited events</li>
-                <li>✓ &nbsp;Multiple team members</li>
-                <li>✓ &nbsp;Analytics dashboard</li>
-                <li>✓ &nbsp;CSV export</li>
-                <li>✓ &nbsp;Recurring event series</li>
-                <li>✓ &nbsp;Custom branding</li>
                 <li style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
                   ✓ &nbsp;AI flyer scanning
                   <span style={{ fontSize: "0.6rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", background: C.purple.bg, color: C.purple.text, padding: "0.1rem 0.4rem", borderRadius: "2rem" }}>New</span>
                 </li>
+                <li>✓ &nbsp;Custom branding (remove badge)</li>
               </ul>
               <p style={{ fontSize: "0.75rem", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "1.75rem", lineHeight: 1.5 }}>
-                For communities that are serious about keeping everyone in the loop.
+                For communities that need room to grow.
               </p>
               <Link href="/signup" style={{ display: "block", textAlign: "center", background: C.red, color: "#fff", padding: "0.7rem", borderRadius: "0.4rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontSize: "0.875rem", fontWeight: 700 }}>
                 Start free trial

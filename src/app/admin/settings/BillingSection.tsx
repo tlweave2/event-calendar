@@ -23,8 +23,8 @@ export default function BillingSection({
             </p>
             <p className="mt-0.5 text-sm text-gray-500">
               {isPro
-                ? "Unlimited events, custom domain, full API access"
-                : "25 events/month, 1 admin user, platform badge"}
+                ? "Unlimited events, AI flyer scanning, custom branding"
+                : "5 events/month, Powered by Eventful badge"}
             </p>
           </div>
           <span
@@ -38,14 +38,11 @@ export default function BillingSection({
 
         {!isPro && (
           <div className="space-y-2 border-t pt-4">
-            <p className="font-medium text-gray-900">Upgrade to Pro - $49/mo</p>
+            <p className="font-medium text-gray-900">Upgrade to Pro - $99/year</p>
             <ul className="space-y-1 text-sm text-gray-500">
               <li>✓ Unlimited events</li>
-              <li>✓ Up to 5 admin users</li>
-              <li>✓ Custom domain</li>
-              <li>✓ Remove platform badge</li>
-              <li>✓ Read-only API access</li>
-              <li>✓ Priority support</li>
+              <li>✓ AI flyer scanning</li>
+              <li>✓ Custom branding (remove badge)</li>
             </ul>
             <form action={createCheckoutSession}>
               <Button type="submit" className="mt-2">
