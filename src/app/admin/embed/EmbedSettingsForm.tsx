@@ -94,7 +94,7 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
         <div className="space-y-1">
           <Label>Default View</Label>
           <Select value={defaultView} onValueChange={(value) => setDefaultView(value ?? "list")}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger className="h-12 text-base"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="list">List</SelectItem>
               <SelectItem value="grid">Calendar Grid</SelectItem>
