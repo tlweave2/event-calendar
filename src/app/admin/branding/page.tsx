@@ -25,6 +25,7 @@ export default async function BrandingPage() {
 
       <EmbedSettingsForm
         tenantId={tenant.id}
+        primaryColor={tenant.primaryColor}
         embedFontFamily={tenant.embedFontFamily}
         embedDefaultView={tenant.embedDefaultView}
         embedCardStyle={tenant.embedCardStyle}

@@ -4,14 +4,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { updateEmbedSettings } from "@/lib/actions/update-tenant";
+import CalendarStylePicker from "./CalendarStylePicker";
 
 const FONT_OPTIONS = [
   { value: "system-ui", label: "System Default" },
@@ -28,6 +23,7 @@ const FONT_OPTIONS = [
 
 type Props = {
   tenantId: string;
+  primaryColor: string | null;
   embedFontFamily: string | null;
   embedDefaultView: string;
   embedCardStyle: string;
@@ -107,19 +103,6 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
         </div>
 
         <div className="space-y-1">
-          <Label>Calendar Style</Label>
-          <Select value={cardStyle} onValueChange={(value) => setCardStyle(value ?? "modern")}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="modern">Modern - colored date blocks, expandable cards</SelectItem>
-              <SelectItem value="compact">Compact - dense single-line, colored dots</SelectItem>
-              <SelectItem value="image">Image Forward - thumbnail images, visual</SelectItem>
-              <SelectItem value="minimal">Minimal - plain text, no cards</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-1">
           <Label>Background Color</Label>
           <div className="flex items-center gap-2">
             <Input
@@ -135,6 +118,14 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
               />
             )}
           </div>
+        </div>
+
+        <div className="sm:col-span-2">
+          <CalendarStylePicker
+            value={cardStyle}
+            onChange={setCardStyle}
+            accentColor={initial.primaryColor ?? "#2563eb"}
+          />
         </div>
       </div>
 
