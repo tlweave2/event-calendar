@@ -27,6 +27,7 @@ type Props = {
   embedFontFamily: string | null;
   embedDefaultView: string;
   embedCardStyle: string;
+  embedShowFlyerGallery: boolean;
   embedHideSearch: boolean;
   embedHideCategories: boolean;
   embedHideSubmit: boolean;
@@ -38,6 +39,7 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
   const [fontFamily, setFontFamily] = useState(initial.embedFontFamily ?? "system-ui");
   const [defaultView, setDefaultView] = useState(initial.embedDefaultView);
   const [cardStyle, setCardStyle] = useState(initial.embedCardStyle ?? "modern");
+  const [showFlyerGallery, setShowFlyerGallery] = useState(initial.embedShowFlyerGallery);
   const [hideSearch, setHideSearch] = useState(initial.embedHideSearch);
   const [hideCategories, setHideCategories] = useState(initial.embedHideCategories);
   const [hideSubmit, setHideSubmit] = useState(initial.embedHideSubmit);
@@ -53,6 +55,7 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
       embedFontFamily: fontFamily === "system-ui" ? null : fontFamily,
       embedDefaultView: defaultView as "list" | "grid",
       embedCardStyle: cardStyle as "modern" | "compact" | "image" | "minimal",
+      embedShowFlyerGallery: showFlyerGallery,
       embedHideSearch: hideSearch,
       embedHideCategories: hideCategories,
       embedHideSubmit: hideSubmit,
@@ -136,6 +139,7 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
           { label: "Hide category filter", value: hideCategories, set: setHideCategories },
           { label: 'Hide "Submit an Event" link', value: hideSubmit, set: setHideSubmit },
           { label: "Dark mode", value: darkMode, set: setDarkMode },
+          { label: "Show flyer gallery at bottom", value: showFlyerGallery, set: setShowFlyerGallery },
         ].map((item) => (
           <label key={item.label} className="flex cursor-pointer items-center gap-3">
             <input

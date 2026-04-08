@@ -28,6 +28,7 @@ model Tenant {
   embedBgColor        String? @db.VarChar(20)
   embedDarkMode       Boolean @default(false)
   embedCardStyle      String  @default("modern") @db.VarChar(20)
+  embedShowFlyerGallery Boolean @default(false)
   stripeCustomerId     String?  @db.VarChar(255)
   stripeSubscriptionId String?  @db.VarChar(255)
   planExpiresAt        DateTime?

@@ -16,6 +16,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import CalendarGrid from "./CalendarGrid";
 import EventModal from "./EventModal";
 import ImageLightbox from "./ImageLightbox";
+import FlyerGallery from "./FlyerGallery";
 
 type ViewMode = "list" | "grid";
 
@@ -47,6 +48,7 @@ export default function CalendarView({
   showBadge = true,
   darkMode = false,
   cardStyle = "modern",
+  showFlyerGallery = false,
 }: {
   events: CalendarEvent[];
   categories: Category[];
@@ -59,12 +61,14 @@ export default function CalendarView({
   showBadge?: boolean;
   darkMode?: boolean;
   cardStyle?: "modern" | "compact" | "image" | "minimal";
+  showFlyerGallery?: boolean;
 }) {
   const [view, setView] = useState<ViewMode>(defaultView);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [modalEvent, setModalEvent] = useState<CalendarEvent | null>(null);
+  const [displayedMonth, setDisplayedMonth] = useState(new Date());
 
   const filtered = useMemo(() => {
     return events.filter((e) => {
@@ -178,6 +182,7 @@ export default function CalendarView({
           darkMode={darkMode}
           onEventClick={(event) => setModalEvent(event)}
           cardStyle={cardStyle}
+          onMonthChange={setDisplayedMonth}
         />
       ) : (
         <div className="space-y-3">
@@ -242,6 +247,15 @@ export default function CalendarView({
           event={modalEvent}
           onClose={() => setModalEvent(null)}
           primaryColor={primaryColor}
+          tenantSlug={tenantSlug}
+          darkMode={darkMode}
+        />
+      )}
+
+      {showFlyerGallery && (
+        <FlyerGallery
+          events={events}
+          currentMonth={displayedMonth}
           tenantSlug={tenantSlug}
           darkMode={darkMode}
         />

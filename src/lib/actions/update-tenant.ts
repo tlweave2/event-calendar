@@ -117,6 +117,7 @@ const embedSettingsSchema = z.object({
   embedFontFamily: z.string().max(100).optional().nullable(),
   embedDefaultView: z.enum(["list", "grid"]).default("grid"),
   embedCardStyle: z.enum(["modern", "compact", "image", "minimal"]).optional(),
+  embedShowFlyerGallery: z.boolean().optional(),
   embedHideSearch: z.boolean().default(false),
   embedHideCategories: z.boolean().default(false),
   embedHideSubmit: z.boolean().default(false),
@@ -152,6 +153,7 @@ export async function updateEmbedSettings(
     data: {
       ...data,
       embedCardStyle: parsed.data.embedCardStyle ?? "modern",
+      embedShowFlyerGallery: parsed.data.embedShowFlyerGallery ?? false,
     },
   });
 

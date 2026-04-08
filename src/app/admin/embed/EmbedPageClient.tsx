@@ -160,6 +160,11 @@ export default function EmbedPageClient({
               desc: "Hide the submit an event link",
               example: `/embed/${slug}/calendar?hideSubmit=true`,
             },
+            {
+              param: "&flyers=true",
+              desc: "Show or hide the flyer gallery strip at the bottom",
+              example: `/embed/${slug}/calendar?flyers=true`,
+            },
           ].map(({ param, desc, example }) => (
             <div key={param} className="space-y-1 rounded-md border bg-white p-3">
               <div className="flex items-center gap-2">

@@ -1210,6 +1210,7 @@ export const TenantScalarFieldEnum = {
   embedBgColor: 'embedBgColor',
   embedDarkMode: 'embedDarkMode',
   embedCardStyle: 'embedCardStyle',
+  embedShowFlyerGallery: 'embedShowFlyerGallery',
   stripeCustomerId: 'stripeCustomerId',
   stripeSubscriptionId: 'stripeSubscriptionId',
   planExpiresAt: 'planExpiresAt',

@@ -29,6 +29,7 @@ export default async function BrandingPage() {
         embedFontFamily={tenant.embedFontFamily}
         embedDefaultView={tenant.embedDefaultView}
         embedCardStyle={tenant.embedCardStyle}
+        embedShowFlyerGallery={tenant.embedShowFlyerGallery}
         embedHideSearch={tenant.embedHideSearch}
         embedHideCategories={tenant.embedHideCategories}
         embedHideSubmit={tenant.embedHideSubmit}

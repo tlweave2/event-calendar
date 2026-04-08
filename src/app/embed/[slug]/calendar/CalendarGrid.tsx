@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   startOfMonth,
   endOfMonth,
@@ -36,15 +36,22 @@ export default function CalendarGrid({
   onEventClick,
   darkMode = false,
   cardStyle = "modern",
+  onMonthChange,
 }: {
   events: CalendarEvent[];
   primaryColor: string | null;
   onEventClick: (event: CalendarEvent) => void;
   darkMode?: boolean;
   cardStyle?: "modern" | "compact" | "image" | "minimal";
+  onMonthChange?: (month: Date) => void;
 }) {
   const [current, setCurrent] = useState(new Date());
   const accent = primaryColor ?? "#2563eb";
+
+  useEffect(() => {
+    onMonthChange?.(current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const days = useMemo(() => {
     const start = startOfWeek(startOfMonth(current));
@@ -71,7 +78,13 @@ export default function CalendarGrid({
           }`}
         >
           <button
-            onClick={() => setCurrent((d) => subMonths(d, 1))}
+            onClick={() => {
+              setCurrent((d) => {
+                const newMonth = subMonths(d, 1);
+                onMonthChange?.(newMonth);
+                return newMonth;
+              });
+            }}
             className={`px-2 text-lg font-light ${darkMode ? "text-gray-500 hover:text-gray-300" : "text-gray-400 hover:text-gray-600"}`}
             aria-label="Previous month"
           >
@@ -79,7 +92,13 @@ export default function CalendarGrid({
           </button>
           <h2 className="text-lg font-medium">{format(current, "MMMM yyyy")}</h2>
           <button
-            onClick={() => setCurrent((d) => addMonths(d, 1))}
+            onClick={() => {
+              setCurrent((d) => {
+                const newMonth = addMonths(d, 1);
+                onMonthChange?.(newMonth);
+                return newMonth;
+              });
+            }}
             className={`px-2 text-lg font-light ${darkMode ? "text-gray-500 hover:text-gray-300" : "text-gray-400 hover:text-gray-600"}`}
             aria-label="Next month"
           >
@@ -94,7 +113,13 @@ export default function CalendarGrid({
           }}
         >
           <button
-            onClick={() => setCurrent((d) => subMonths(d, 1))}
+            onClick={() => {
+              setCurrent((d) => {
+                const newMonth = subMonths(d, 1);
+                onMonthChange?.(newMonth);
+                return newMonth;
+              });
+            }}
             className="px-2 text-lg font-light text-white opacity-80 hover:opacity-100"
             aria-label="Previous month"
           >
@@ -104,7 +129,13 @@ export default function CalendarGrid({
             {format(current, "MMMM yyyy")}
           </h2>
           <button
-            onClick={() => setCurrent((d) => addMonths(d, 1))}
+            onClick={() => {
+              setCurrent((d) => {
+                const newMonth = addMonths(d, 1);
+                onMonthChange?.(newMonth);
+                return newMonth;
+              });
+            }}
             className="px-2 text-lg font-light text-white opacity-80 hover:opacity-100"
             aria-label="Next month"
           >

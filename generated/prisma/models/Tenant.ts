@@ -42,6 +42,7 @@ export type TenantMinAggregateOutputType = {
   embedBgColor: string | null
   embedDarkMode: boolean | null
   embedCardStyle: string | null
+  embedShowFlyerGallery: boolean | null
   stripeCustomerId: string | null
   stripeSubscriptionId: string | null
   planExpiresAt: Date | null
@@ -68,6 +69,7 @@ export type TenantMaxAggregateOutputType = {
   embedBgColor: string | null
   embedDarkMode: boolean | null
   embedCardStyle: string | null
+  embedShowFlyerGallery: boolean | null
   stripeCustomerId: string | null
   stripeSubscriptionId: string | null
   planExpiresAt: Date | null
@@ -94,6 +96,7 @@ export type TenantCountAggregateOutputType = {
   embedBgColor: number
   embedDarkMode: number
   embedCardStyle: number
+  embedShowFlyerGallery: number
   stripeCustomerId: number
   stripeSubscriptionId: number
   planExpiresAt: number
@@ -122,6 +125,7 @@ export type TenantMinAggregateInputType = {
   embedBgColor?: true
   embedDarkMode?: true
   embedCardStyle?: true
+  embedShowFlyerGallery?: true
   stripeCustomerId?: true
   stripeSubscriptionId?: true
   planExpiresAt?: true
@@ -148,6 +152,7 @@ export type TenantMaxAggregateInputType = {
   embedBgColor?: true
   embedDarkMode?: true
   embedCardStyle?: true
+  embedShowFlyerGallery?: true
   stripeCustomerId?: true
   stripeSubscriptionId?: true
   planExpiresAt?: true
@@ -174,6 +179,7 @@ export type TenantCountAggregateInputType = {
   embedBgColor?: true
   embedDarkMode?: true
   embedCardStyle?: true
+  embedShowFlyerGallery?: true
   stripeCustomerId?: true
   stripeSubscriptionId?: true
   planExpiresAt?: true
@@ -273,6 +279,7 @@ export type TenantGroupByOutputType = {
   embedBgColor: string | null
   embedDarkMode: boolean
   embedCardStyle: string
+  embedShowFlyerGallery: boolean
   stripeCustomerId: string | null
   stripeSubscriptionId: string | null
   planExpiresAt: Date | null
@@ -320,6 +327,7 @@ export type TenantWhereInput = {
   embedBgColor?: Prisma.StringNullableFilter<"Tenant"> | string | null
   embedDarkMode?: Prisma.BoolFilter<"Tenant"> | boolean
   embedCardStyle?: Prisma.StringFilter<"Tenant"> | string
+  embedShowFlyerGallery?: Prisma.BoolFilter<"Tenant"> | boolean
   stripeCustomerId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   stripeSubscriptionId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   planExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
@@ -352,6 +360,7 @@ export type TenantOrderByWithRelationInput = {
   embedBgColor?: Prisma.SortOrderInput | Prisma.SortOrder
   embedDarkMode?: Prisma.SortOrder
   embedCardStyle?: Prisma.SortOrder
+  embedShowFlyerGallery?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -387,6 +396,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   embedBgColor?: Prisma.StringNullableFilter<"Tenant"> | string | null
   embedDarkMode?: Prisma.BoolFilter<"Tenant"> | boolean
   embedCardStyle?: Prisma.StringFilter<"Tenant"> | string
+  embedShowFlyerGallery?: Prisma.BoolFilter<"Tenant"> | boolean
   stripeCustomerId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   stripeSubscriptionId?: Prisma.StringNullableFilter<"Tenant"> | string | null
   planExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
@@ -419,6 +429,7 @@ export type TenantOrderByWithAggregationInput = {
   embedBgColor?: Prisma.SortOrderInput | Prisma.SortOrder
   embedDarkMode?: Prisma.SortOrder
   embedCardStyle?: Prisma.SortOrder
+  embedShowFlyerGallery?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -451,6 +462,7 @@ export type TenantScalarWhereWithAggregatesInput = {
   embedBgColor?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   embedDarkMode?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   embedCardStyle?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  embedShowFlyerGallery?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   stripeCustomerId?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   stripeSubscriptionId?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   planExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
@@ -477,6 +489,7 @@ export type TenantCreateInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -509,6 +522,7 @@ export type TenantUncheckedCreateInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -541,6 +555,7 @@ export type TenantUpdateInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -573,6 +588,7 @@ export type TenantUncheckedUpdateInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -605,6 +621,7 @@ export type TenantCreateManyInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -631,6 +648,7 @@ export type TenantUpdateManyMutationInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -657,6 +675,7 @@ export type TenantUncheckedUpdateManyInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -683,6 +702,7 @@ export type TenantCountOrderByAggregateInput = {
   embedBgColor?: Prisma.SortOrder
   embedDarkMode?: Prisma.SortOrder
   embedCardStyle?: Prisma.SortOrder
+  embedShowFlyerGallery?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrder
@@ -709,6 +729,7 @@ export type TenantMaxOrderByAggregateInput = {
   embedBgColor?: Prisma.SortOrder
   embedDarkMode?: Prisma.SortOrder
   embedCardStyle?: Prisma.SortOrder
+  embedShowFlyerGallery?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrder
@@ -735,6 +756,7 @@ export type TenantMinOrderByAggregateInput = {
   embedBgColor?: Prisma.SortOrder
   embedDarkMode?: Prisma.SortOrder
   embedCardStyle?: Prisma.SortOrder
+  embedShowFlyerGallery?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
   stripeSubscriptionId?: Prisma.SortOrder
   planExpiresAt?: Prisma.SortOrder
@@ -874,6 +896,7 @@ export type TenantCreateWithoutCategoriesInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -905,6 +928,7 @@ export type TenantUncheckedCreateWithoutCategoriesInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -952,6 +976,7 @@ export type TenantUpdateWithoutCategoriesInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -983,6 +1008,7 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1014,6 +1040,7 @@ export type TenantCreateWithoutEventsInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1045,6 +1072,7 @@ export type TenantUncheckedCreateWithoutEventsInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1092,6 +1120,7 @@ export type TenantUpdateWithoutEventsInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1123,6 +1152,7 @@ export type TenantUncheckedUpdateWithoutEventsInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1154,6 +1184,7 @@ export type TenantCreateWithoutUsersInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1185,6 +1216,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1232,6 +1264,7 @@ export type TenantUpdateWithoutUsersInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1263,6 +1296,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1294,6 +1328,7 @@ export type TenantCreateWithoutAuditLogsInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1325,6 +1360,7 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1372,6 +1408,7 @@ export type TenantUpdateWithoutAuditLogsInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1403,6 +1440,7 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1434,6 +1472,7 @@ export type TenantCreateWithoutPageViewsInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1465,6 +1504,7 @@ export type TenantUncheckedCreateWithoutPageViewsInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1512,6 +1552,7 @@ export type TenantUpdateWithoutPageViewsInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1543,6 +1584,7 @@ export type TenantUncheckedUpdateWithoutPageViewsInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1574,6 +1616,7 @@ export type TenantCreateWithoutEventSeriesInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1605,6 +1648,7 @@ export type TenantUncheckedCreateWithoutEventSeriesInput = {
   embedBgColor?: string | null
   embedDarkMode?: boolean
   embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: string | null
   stripeSubscriptionId?: string | null
   planExpiresAt?: Date | string | null
@@ -1652,6 +1696,7 @@ export type TenantUpdateWithoutEventSeriesInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1683,6 +1728,7 @@ export type TenantUncheckedUpdateWithoutEventSeriesInput = {
   embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1790,6 +1836,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   embedBgColor?: boolean
   embedDarkMode?: boolean
   embedCardStyle?: boolean
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
@@ -1823,6 +1870,7 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   embedBgColor?: boolean
   embedDarkMode?: boolean
   embedCardStyle?: boolean
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
@@ -1849,6 +1897,7 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   embedBgColor?: boolean
   embedDarkMode?: boolean
   embedCardStyle?: boolean
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
@@ -1875,6 +1924,7 @@ export type TenantSelectScalar = {
   embedBgColor?: boolean
   embedDarkMode?: boolean
   embedCardStyle?: boolean
+  embedShowFlyerGallery?: boolean
   stripeCustomerId?: boolean
   stripeSubscriptionId?: boolean
   planExpiresAt?: boolean
@@ -1883,7 +1933,7 @@ export type TenantSelectScalar = {
   createdAt?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "logoUrl" | "primaryColor" | "secondaryColor" | "plan" | "customDomain" | "timezone" | "embedFontFamily" | "embedDefaultView" | "embedHideSearch" | "embedHideCategories" | "embedHideSubmit" | "embedBgColor" | "embedDarkMode" | "embedCardStyle" | "stripeCustomerId" | "stripeSubscriptionId" | "planExpiresAt" | "isDemoSandbox" | "demoExpiresAt" | "createdAt", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "logoUrl" | "primaryColor" | "secondaryColor" | "plan" | "customDomain" | "timezone" | "embedFontFamily" | "embedDefaultView" | "embedHideSearch" | "embedHideCategories" | "embedHideSubmit" | "embedBgColor" | "embedDarkMode" | "embedCardStyle" | "embedShowFlyerGallery" | "stripeCustomerId" | "stripeSubscriptionId" | "planExpiresAt" | "isDemoSandbox" | "demoExpiresAt" | "createdAt", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   events?: boolean | Prisma.Tenant$eventsArgs<ExtArgs>
   eventSeries?: boolean | Prisma.Tenant$eventSeriesArgs<ExtArgs>
@@ -1924,6 +1974,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     embedBgColor: string | null
     embedDarkMode: boolean
     embedCardStyle: string
+    embedShowFlyerGallery: boolean
     stripeCustomerId: string | null
     stripeSubscriptionId: string | null
     planExpiresAt: Date | null
@@ -2376,6 +2427,7 @@ export interface TenantFieldRefs {
   readonly embedBgColor: Prisma.FieldRef<"Tenant", 'String'>
   readonly embedDarkMode: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly embedCardStyle: Prisma.FieldRef<"Tenant", 'String'>
+  readonly embedShowFlyerGallery: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly stripeCustomerId: Prisma.FieldRef<"Tenant", 'String'>
   readonly stripeSubscriptionId: Prisma.FieldRef<"Tenant", 'String'>
   readonly planExpiresAt: Prisma.FieldRef<"Tenant", 'DateTime'>

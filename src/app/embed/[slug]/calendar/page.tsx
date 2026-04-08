@@ -46,6 +46,13 @@ export default async function CalendarPage({
   const hideSubmit =
     param("hideSubmit") === "true" ||
     (param("hideSubmit") === undefined && tenant.embedHideSubmit);
+  const flyersParam = param("flyers");
+  const showFlyerGallery =
+    flyersParam === "true"
+      ? true
+      : flyersParam === "false"
+        ? false
+        : tenant.embedShowFlyerGallery;
   const showBadge = tenant.plan !== "PRO";
   const bgColor = param("bg") ?? tenant.embedBgColor ?? undefined;
   const darkMode =
@@ -113,6 +120,7 @@ export default async function CalendarPage({
           showBadge={showBadge}
           darkMode={darkMode}
           cardStyle={cardStyle}
+          showFlyerGallery={showFlyerGallery}
         />
       </div>
     </div>
