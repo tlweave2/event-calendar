@@ -85,117 +85,119 @@ export default function SubmitEventForm({
     setExtracting(isPro);
     setExtractedFields([]);
 
-    await Promise.allSettled([
-      (async () => {
-        try {
-          const res = await fetch("/api/upload", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ filename: file.name, contentType: file.type }),
-          });
+    const uploadTask = (async () => {
+      try {
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename: file.name, contentType: file.type }),
+        });
 
-          if (!res.ok) {
-            throw new Error("Failed to get upload URL");
-          }
-
-          const { uploadUrl, publicUrl } = (await res.json()) as {
-            uploadUrl: string;
-            publicUrl: string;
-          };
-
-          const uploadResult = await fetch(uploadUrl, {
-            method: "PUT",
-            body: file,
-            headers: { "Content-Type": file.type },
-          });
-
-          if (!uploadResult.ok) {
-            throw new Error("Upload failed");
-          }
-
-          setImageUrl(publicUrl);
-        } catch {
-          setServerError("Image upload failed. Please try again.");
-          setImageUrl(undefined);
-        } finally {
-          setUploading(false);
-        }
-      })(),
-
-      (async () => {
-        if (!isPro) {
-          return;
+        if (!res.ok) {
+          throw new Error("Failed to get upload URL");
         }
 
-        try {
-          const base64 = await new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-              const result = reader.result as string;
-              resolve(result.split(",")[1] ?? "");
-            };
-            reader.onerror = () => reject(new Error("Failed to read image"));
-            reader.readAsDataURL(file);
-          });
+        const { uploadUrl, publicUrl } = (await res.json()) as {
+          uploadUrl: string;
+          publicUrl: string;
+        };
 
-          if (!base64) return;
+        const uploadResult = await fetch(uploadUrl, {
+          method: "PUT",
+          body: file,
+          headers: { "Content-Type": file.type },
+        });
 
-          const res = await fetch("/api/extract-flyer", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              image: base64,
-              mediaType: file.type,
-              tenantSlug,
-            }),
-          });
-
-          if (!res.ok) return;
-
-          const data = (await res.json()) as Record<string, string | undefined>;
-          const filled: string[] = [];
-
-          if (data.title) {
-            setValue("title", data.title);
-            filled.push("title");
-          }
-          if (data.description) {
-            setValue("description", data.description);
-            filled.push("description");
-          }
-          if (data.locationName) {
-            setValue("locationName", data.locationName);
-            filled.push("location");
-          }
-          if (data.address) {
-            setValue("address", data.address);
-            filled.push("address");
-          }
-          if (data.cost) {
-            setValue("cost", data.cost);
-            filled.push("cost");
-          }
-          if (data.startAt) {
-            setValue("startAt", data.startAt);
-            filled.push("date & time");
-          }
-          if (data.endAt) {
-            setValue("endAt", data.endAt);
-            filled.push("end time");
-          }
-          if (data.ticketUrl) {
-            setValue("ticketUrl", data.ticketUrl);
-            filled.push("ticket URL");
-          }
-
-          setExtractedFields(filled);
-        } catch {
-          // Silent failure: users can still fill form manually.
-        } finally {
-          setExtracting(false);
+        if (!uploadResult.ok) {
+          throw new Error("Upload failed");
         }
-      })(),
-    ]);
+
+        setImageUrl(publicUrl);
+      } catch {
+        setServerError("Image upload failed. Please try again.");
+        setImageUrl(undefined);
+      } finally {
+        setUploading(false);
+      }
+    })();
+
+    const tasks: Promise<unknown>[] = [uploadTask];
+
+    if (isPro) {
+      tasks.push(
+        (async () => {
+          try {
+            const base64 = await new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const result = reader.result as string;
+                resolve(result.split(",")[1] ?? "");
+              };
+              reader.onerror = () => reject(new Error("Failed to read image"));
+              reader.readAsDataURL(file);
+            });
+
+            if (!base64) return;
+
+            const res = await fetch("/api/extract-flyer", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                image: base64,
+                mediaType: file.type,
+                tenantSlug,
+              }),
+            });
+
+            if (!res.ok) return;
+
+            const data = (await res.json()) as Record<string, string | undefined>;
+            const filled: string[] = [];
+
+            if (data.title) {
+              setValue("title", data.title);
+              filled.push("title");
+            }
+            if (data.description) {
+              setValue("description", data.description);
+              filled.push("description");
+            }
+            if (data.locationName) {
+              setValue("locationName", data.locationName);
+              filled.push("location");
+            }
+            if (data.address) {
+              setValue("address", data.address);
+              filled.push("address");
+            }
+            if (data.cost) {
+              setValue("cost", data.cost);
+              filled.push("cost");
+            }
+            if (data.startAt) {
+              setValue("startAt", data.startAt);
+              filled.push("date & time");
+            }
+            if (data.endAt) {
+              setValue("endAt", data.endAt);
+              filled.push("end time");
+            }
+            if (data.ticketUrl) {
+              setValue("ticketUrl", data.ticketUrl);
+              filled.push("ticket URL");
+            }
+
+            setExtractedFields(filled);
+          } catch {
+            // Silent failure: users can still fill form manually.
+          } finally {
+            setExtracting(false);
+          }
+        })(),
+      );
+    }
+
+    await Promise.allSettled(tasks);
   };
 
   const onSubmit = async (values: FormValues) => {
@@ -248,10 +250,12 @@ export default function SubmitEventForm({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="image" className={darkMode ? "text-gray-200" : ""}>
-              Upload a Flyer
+              {isPro ? "Event Flyer / Image" : "Event Image"}
             </Label>
             <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-              Upload your event flyer and AI will fill in the details automatically.
+              {isPro
+                ? "Upload your event flyer and AI will fill in the details automatically."
+                : "Upload an optional image for your event."}
             </p>
             <Input
               id="image"
@@ -266,7 +270,7 @@ export default function SubmitEventForm({
               </p>
             )}
 
-            {extracting && !uploading && (
+            {isPro && extracting && !uploading && (
               <div
                 className={`flex items-center gap-2 rounded-md px-3 py-2 ${darkMode ? "bg-blue-900/40" : "bg-blue-50"}`}
               >
@@ -275,7 +279,7 @@ export default function SubmitEventForm({
               </div>
             )}
 
-            {extractedFields.length > 0 && !extracting && (
+            {isPro && extractedFields.length > 0 && !extracting && (
               <div
                 className={`rounded-md px-3 py-2 ${darkMode ? "bg-green-900/30" : "bg-green-50"}`}
               >

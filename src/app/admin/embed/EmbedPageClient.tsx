@@ -126,6 +126,11 @@ export default function EmbedPageClient({
               example: `/embed/${slug}/calendar?view=grid`,
             },
             {
+              param: "&style=compact",
+              desc: "Calendar style: modern, compact, image, or minimal",
+              example: `/embed/${slug}/calendar?style=compact`,
+            },
+            {
               param: "&dark=true",
               desc: "Enable dark mode - useful for dark-themed websites",
               example: `/embed/${slug}/calendar?dark=true`,

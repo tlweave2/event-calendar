@@ -32,6 +32,11 @@ export default async function CalendarPage({
   const font = param("font") ?? tenant.embedFontFamily ?? undefined;
   const viewRaw = param("view") ?? tenant.embedDefaultView ?? "grid";
   const defaultView = viewRaw === "grid" ? "grid" : "list";
+  const styleParam = param("style");
+  const cardStyle =
+    styleParam && ["modern", "compact", "image", "minimal"].includes(styleParam)
+      ? (styleParam as "modern" | "compact" | "image" | "minimal")
+      : ((tenant.embedCardStyle ?? "modern") as "modern" | "compact" | "image" | "minimal");
   const hideSearch =
     param("hideSearch") === "true" ||
     (param("hideSearch") === undefined && tenant.embedHideSearch);
@@ -107,6 +112,7 @@ export default async function CalendarPage({
           hideSubmit={hideSubmit}
           showBadge={showBadge}
           darkMode={darkMode}
+          cardStyle={cardStyle}
         />
       </div>
     </div>

@@ -27,6 +27,7 @@ export default async function BrandingPage() {
         tenantId={tenant.id}
         embedFontFamily={tenant.embedFontFamily}
         embedDefaultView={tenant.embedDefaultView}
+        embedCardStyle={tenant.embedCardStyle}
         embedHideSearch={tenant.embedHideSearch}
         embedHideCategories={tenant.embedHideCategories}
         embedHideSubmit={tenant.embedHideSubmit}

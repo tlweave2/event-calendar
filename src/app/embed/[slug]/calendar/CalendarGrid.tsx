@@ -35,11 +35,13 @@ export default function CalendarGrid({
   primaryColor,
   onEventClick,
   darkMode = false,
+  cardStyle = "modern",
 }: {
   events: CalendarEvent[];
   primaryColor: string | null;
   onEventClick: (event: CalendarEvent) => void;
   darkMode?: boolean;
+  cardStyle?: "modern" | "compact" | "image" | "minimal";
 }) {
   const [current, setCurrent] = useState(new Date());
   const accent = primaryColor ?? "#2563eb";
@@ -62,28 +64,54 @@ export default function CalendarGrid({
 
   return (
     <div className={`overflow-hidden rounded-lg border ${darkMode ? "border-gray-700 bg-gray-900" : "bg-white"}`}>
-      <div
-        className="flex items-center justify-between px-5 py-4"
-        style={{ backgroundColor: accent }}
-      >
-        <button
-          onClick={() => setCurrent((d) => subMonths(d, 1))}
-          className="px-2 text-lg font-light text-white opacity-80 hover:opacity-100"
-          aria-label="Previous month"
+      {cardStyle === "minimal" ? (
+        <div
+          className={`flex items-center justify-between px-5 py-3 ${
+            darkMode ? "text-gray-200" : "text-gray-800"
+          }`}
         >
-          ‹
-        </button>
-        <h2 className="text-lg font-semibold text-white">
-          {format(current, "MMMM yyyy")}
-        </h2>
-        <button
-          onClick={() => setCurrent((d) => addMonths(d, 1))}
-          className="px-2 text-lg font-light text-white opacity-80 hover:opacity-100"
-          aria-label="Next month"
+          <button
+            onClick={() => setCurrent((d) => subMonths(d, 1))}
+            className={`px-2 text-lg font-light ${darkMode ? "text-gray-500 hover:text-gray-300" : "text-gray-400 hover:text-gray-600"}`}
+            aria-label="Previous month"
+          >
+            ‹
+          </button>
+          <h2 className="text-lg font-medium">{format(current, "MMMM yyyy")}</h2>
+          <button
+            onClick={() => setCurrent((d) => addMonths(d, 1))}
+            className={`px-2 text-lg font-light ${darkMode ? "text-gray-500 hover:text-gray-300" : "text-gray-400 hover:text-gray-600"}`}
+            aria-label="Next month"
+          >
+            ›
+          </button>
+        </div>
+      ) : (
+        <div
+          className="flex items-center justify-between px-5 py-4"
+          style={{
+            backgroundColor: cardStyle === "compact" ? (darkMode ? "#374151" : "#374151") : accent,
+          }}
         >
-          ›
-        </button>
-      </div>
+          <button
+            onClick={() => setCurrent((d) => subMonths(d, 1))}
+            className="px-2 text-lg font-light text-white opacity-80 hover:opacity-100"
+            aria-label="Previous month"
+          >
+            ‹
+          </button>
+          <h2 className="text-lg font-semibold text-white">
+            {format(current, "MMMM yyyy")}
+          </h2>
+          <button
+            onClick={() => setCurrent((d) => addMonths(d, 1))}
+            className="px-2 text-lg font-light text-white opacity-80 hover:opacity-100"
+            aria-label="Next month"
+          >
+            ›
+          </button>
+        </div>
+      )}
 
       <div className={`grid grid-cols-7 border-b ${darkMode ? "border-gray-700" : ""}`}>
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
@@ -122,18 +150,105 @@ export default function CalendarGrid({
               </div>
 
               <div className="space-y-0.5">
-                {dayEvents.slice(0, 3).map((event) => (
-                  <button
-                    key={event.id}
-                    onClick={() => onEventClick(event)}
-                    className="w-full truncate rounded px-1.5 py-0.5 text-left text-xs font-medium text-white"
-                    style={{ backgroundColor: event.category?.color ?? accent }}
-                  >
-                    {format(new Date(event.startAt), "h:mma")} {event.title}
-                  </button>
-                ))}
-                {dayEvents.length > 3 && (
-                  <p className={`px-1 text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>+{dayEvents.length - 3} more</p>
+                {cardStyle === "compact" ? (
+                  <>
+                    {dayEvents.length > 0 && (
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {dayEvents.slice(0, 5).map((event) => (
+                          <button
+                            key={event.id}
+                            onClick={() => onEventClick(event)}
+                            className="h-2 w-2 rounded-full"
+                            style={{ backgroundColor: event.category?.color ?? accent }}
+                            title={event.title}
+                          />
+                        ))}
+                      </div>
+                    )}
+                    {dayEvents.length > 5 && (
+                      <p className={`text-center text-xs ${darkMode ? "text-gray-600" : "text-gray-300"}`}>
+                        +{dayEvents.length - 5}
+                      </p>
+                    )}
+                  </>
+                ) : cardStyle === "image" ? (
+                  <>
+                    {dayEvents.slice(0, 2).map((event) => (
+                      <button
+                        key={event.id}
+                        onClick={() => onEventClick(event)}
+                        className="flex w-full items-center gap-1 truncate"
+                      >
+                        {event.imageUrl ? (
+                          <img
+                            src={event.imageUrl}
+                            alt=""
+                            className="h-3.5 w-3.5 shrink-0 rounded-sm object-cover"
+                          />
+                        ) : (
+                          <span
+                            className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-sm text-xs ${
+                              darkMode ? "bg-gray-700 text-gray-500" : "bg-gray-100 text-gray-400"
+                            }`}
+                            style={{ fontSize: "7px" }}
+                          >
+                            {event.title.charAt(0)}
+                          </span>
+                        )}
+                        <span
+                          className={`truncate text-xs font-medium ${
+                            darkMode ? "text-gray-300" : "text-gray-700"
+                          }`}
+                          style={{ fontSize: "10px" }}
+                        >
+                          {event.title}
+                        </span>
+                      </button>
+                    ))}
+                    {dayEvents.length > 2 && (
+                      <p className={`px-1 text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+                        +{dayEvents.length - 2} more
+                      </p>
+                    )}
+                  </>
+                ) : cardStyle === "minimal" ? (
+                  <>
+                    {dayEvents.slice(0, 2).map((event) => (
+                      <button
+                        key={event.id}
+                        onClick={() => onEventClick(event)}
+                        className={`w-full truncate text-left ${
+                          darkMode ? "text-gray-400" : "text-gray-500"
+                        }`}
+                        style={{ fontSize: "10px" }}
+                      >
+                        {event.title}
+                      </button>
+                    ))}
+                    {dayEvents.length > 2 && (
+                      <p className={`text-xs ${darkMode ? "text-gray-600" : "text-gray-300"}`}>
+                        +{dayEvents.length - 2}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {dayEvents.slice(0, 3).map((event) => (
+                      <button
+                        key={event.id}
+                        onClick={() => onEventClick(event)}
+                        className="w-full truncate rounded px-1.5 py-0.5 text-left text-xs font-medium text-white"
+                        style={{ backgroundColor: event.category?.color ?? accent }}
+                      >
+                        {format(new Date(event.startAt), "h:mma")} {event.title}
+                      </button>
+                    ))}
+                    {dayEvents.length > 3 && (
+                      <p className={`px-1 text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+                        +{dayEvents.length - 3} more
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </div>

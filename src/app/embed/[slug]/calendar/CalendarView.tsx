@@ -46,6 +46,7 @@ export default function CalendarView({
   hideSubmit = false,
   showBadge = true,
   darkMode = false,
+  cardStyle = "modern",
 }: {
   events: CalendarEvent[];
   categories: Category[];
@@ -57,6 +58,7 @@ export default function CalendarView({
   hideSubmit?: boolean;
   showBadge?: boolean;
   darkMode?: boolean;
+  cardStyle?: "modern" | "compact" | "image" | "minimal";
 }) {
   const [view, setView] = useState<ViewMode>(defaultView);
   const [search, setSearch] = useState("");
@@ -175,6 +177,7 @@ export default function CalendarView({
           primaryColor={primaryColor}
           darkMode={darkMode}
           onEventClick={(event) => setModalEvent(event)}
+          cardStyle={cardStyle}
         />
       ) : (
         <div className="space-y-3">
@@ -183,19 +186,53 @@ export default function CalendarView({
               No events match your search.
             </p>
           ) : (
-            filtered.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                expanded={expandedId === event.id}
-                onToggle={() =>
-                  setExpandedId(expandedId === event.id ? null : event.id)
-                }
-                accent={accent}
-                tenantSlug={tenantSlug}
-                darkMode={darkMode}
-              />
-            ))
+            filtered.map((event) => {
+              if (cardStyle === "compact") {
+                return (
+                  <CompactEventRow
+                    key={event.id}
+                    event={event}
+                    accent={accent}
+                    tenantSlug={tenantSlug}
+                    darkMode={darkMode}
+                  />
+                );
+              }
+              if (cardStyle === "image") {
+                return (
+                  <ImageEventCard
+                    key={event.id}
+                    event={event}
+                    accent={accent}
+                    tenantSlug={tenantSlug}
+                    darkMode={darkMode}
+                  />
+                );
+              }
+              if (cardStyle === "minimal") {
+                return (
+                  <MinimalEventRow
+                    key={event.id}
+                    event={event}
+                    tenantSlug={tenantSlug}
+                    darkMode={darkMode}
+                  />
+                );
+              }
+              return (
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  expanded={expandedId === event.id}
+                  onToggle={() =>
+                    setExpandedId(expandedId === event.id ? null : event.id)
+                  }
+                  accent={accent}
+                  tenantSlug={tenantSlug}
+                  darkMode={darkMode}
+                />
+              );
+            })
           )}
         </div>
       )}
@@ -376,5 +413,147 @@ function EventCard({
         />
       )}
     </Card>
+  );
+}
+
+function CompactEventRow({
+  event,
+  accent,
+  tenantSlug,
+  darkMode,
+}: {
+  event: CalendarEvent;
+  accent: string;
+  tenantSlug: string;
+  darkMode: boolean;
+}) {
+  return (
+    <a
+      href={`/embed/${tenantSlug}/event/${event.id}`}
+      className={`flex items-center justify-between gap-3 rounded-md px-3 py-2 transition-colors ${
+        darkMode ? "hover:bg-gray-800" : "hover:bg-gray-50"
+      }`}
+      style={{ borderBottom: `1px solid ${darkMode ? "#374151" : "#f3f4f6"}` }}
+    >
+      <div className="flex min-w-0 items-center gap-2">
+        {event.category?.color && (
+          <span
+            className="inline-block h-2 w-2 shrink-0 rounded-full"
+            style={{ backgroundColor: event.category.color }}
+          />
+        )}
+        <span className={`truncate text-sm font-medium ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
+          {event.title}
+        </span>
+        {event.locationName && (
+          <span className={`hidden truncate text-xs sm:inline ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+            · {event.locationName}
+          </span>
+        )}
+      </div>
+      <span className={`shrink-0 text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+        {format(new Date(event.startAt), "MMM d, h:mm a")}
+      </span>
+    </a>
+  );
+}
+
+function ImageEventCard({
+  event,
+  accent,
+  tenantSlug,
+  darkMode,
+}: {
+  event: CalendarEvent;
+  accent: string;
+  tenantSlug: string;
+  darkMode: boolean;
+}) {
+  return (
+    <a
+      href={`/embed/${tenantSlug}/event/${event.id}`}
+      className={`flex gap-3 rounded-lg border p-3 transition-shadow hover:shadow-md ${
+        darkMode ? "border-gray-700 bg-gray-800" : "bg-white"
+      }`}
+    >
+      {event.imageUrl ? (
+        <img
+          src={event.imageUrl}
+          alt={event.title}
+          className="h-20 w-20 shrink-0 rounded-lg object-cover"
+        />
+      ) : (
+        <div
+          className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-lg text-2xl ${
+            darkMode ? "bg-gray-700 text-gray-500" : "bg-gray-100 text-gray-300"
+          }`}
+        >
+          {event.title.charAt(0)}
+        </div>
+      )}
+      <div className="min-w-0 flex-1">
+        <h3 className={`truncate text-sm font-medium ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
+          {event.title}
+        </h3>
+        <p className={`mt-0.5 text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+          {format(new Date(event.startAt), "MMM d · h:mm a")}
+          {event.endAt && ` - ${format(new Date(event.endAt), "h:mm a")}`}
+        </p>
+        {event.locationName && (
+          <p className={`text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+            {event.locationName}
+          </p>
+        )}
+        <div className="mt-1 flex items-center gap-2">
+          {event.cost && (
+            <span className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+              {event.cost}
+            </span>
+          )}
+          {event.category && (
+            <span
+              className="rounded-full px-2 py-0.5 text-xs font-medium"
+              style={
+                event.category.color
+                  ? { backgroundColor: `${event.category.color}22`, color: event.category.color }
+                  : {}
+              }
+            >
+              {event.category.name}
+            </span>
+          )}
+        </div>
+      </div>
+    </a>
+  );
+}
+
+function MinimalEventRow({
+  event,
+  tenantSlug,
+  darkMode,
+}: {
+  event: CalendarEvent;
+  tenantSlug: string;
+  darkMode: boolean;
+}) {
+  return (
+    <a
+      href={`/embed/${tenantSlug}/event/${event.id}`}
+      className={`block py-2 ${darkMode ? "hover:text-gray-200" : "hover:text-gray-700"}`}
+      style={{ borderBottom: `1px solid ${darkMode ? "#1f2937" : "#f3f4f6"}` }}
+    >
+      <p className={`text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+        {format(new Date(event.startAt), "EEEE, MMMM d · h:mm a")}
+      </p>
+      <p className={`text-sm ${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+        {event.title}
+        {event.locationName && (
+          <span className={darkMode ? "text-gray-500" : "text-gray-400"}>
+            {" "}- {event.locationName}
+          </span>
+        )}
+      </p>
+    </a>
   );
 }

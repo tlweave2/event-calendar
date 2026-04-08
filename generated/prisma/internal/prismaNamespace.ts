@@ -1209,6 +1209,7 @@ export const TenantScalarFieldEnum = {
   embedHideSubmit: 'embedHideSubmit',
   embedBgColor: 'embedBgColor',
   embedDarkMode: 'embedDarkMode',
+  embedCardStyle: 'embedCardStyle',
   stripeCustomerId: 'stripeCustomerId',
   stripeSubscriptionId: 'stripeSubscriptionId',
   planExpiresAt: 'planExpiresAt',

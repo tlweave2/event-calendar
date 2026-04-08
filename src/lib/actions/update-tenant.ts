@@ -116,6 +116,7 @@ const embedSettingsSchema = z.object({
   tenantId: z.string().uuid(),
   embedFontFamily: z.string().max(100).optional().nullable(),
   embedDefaultView: z.enum(["list", "grid"]).default("grid"),
+  embedCardStyle: z.enum(["modern", "compact", "image", "minimal"]).optional(),
   embedHideSearch: z.boolean().default(false),
   embedHideCategories: z.boolean().default(false),
   embedHideSubmit: z.boolean().default(false),
@@ -148,7 +149,10 @@ export async function updateEmbedSettings(
 
   await prisma.tenant.update({
     where: { id: tenantId },
-    data,
+    data: {
+      ...data,
+      embedCardStyle: parsed.data.embedCardStyle ?? "modern",
+    },
   });
 
   revalidatePath("/admin/embed");

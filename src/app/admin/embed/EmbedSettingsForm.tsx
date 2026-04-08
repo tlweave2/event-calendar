@@ -30,6 +30,7 @@ type Props = {
   tenantId: string;
   embedFontFamily: string | null;
   embedDefaultView: string;
+  embedCardStyle: string;
   embedHideSearch: boolean;
   embedHideCategories: boolean;
   embedHideSubmit: boolean;
@@ -40,6 +41,7 @@ type Props = {
 export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
   const [fontFamily, setFontFamily] = useState(initial.embedFontFamily ?? "system-ui");
   const [defaultView, setDefaultView] = useState(initial.embedDefaultView);
+  const [cardStyle, setCardStyle] = useState(initial.embedCardStyle ?? "modern");
   const [hideSearch, setHideSearch] = useState(initial.embedHideSearch);
   const [hideCategories, setHideCategories] = useState(initial.embedHideCategories);
   const [hideSubmit, setHideSubmit] = useState(initial.embedHideSubmit);
@@ -54,6 +56,7 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
       tenantId,
       embedFontFamily: fontFamily === "system-ui" ? null : fontFamily,
       embedDefaultView: defaultView as "list" | "grid",
+      embedCardStyle: cardStyle as "modern" | "compact" | "image" | "minimal",
       embedHideSearch: hideSearch,
       embedHideCategories: hideCategories,
       embedHideSubmit: hideSubmit,
@@ -99,6 +102,19 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
             <SelectContent>
               <SelectItem value="list">List</SelectItem>
               <SelectItem value="grid">Calendar Grid</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-1">
+          <Label>Calendar Style</Label>
+          <Select value={cardStyle} onValueChange={(value) => setCardStyle(value ?? "modern")}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="modern">Modern - colored date blocks, expandable cards</SelectItem>
+              <SelectItem value="compact">Compact - dense single-line, colored dots</SelectItem>
+              <SelectItem value="image">Image Forward - thumbnail images, visual</SelectItem>
+              <SelectItem value="minimal">Minimal - plain text, no cards</SelectItem>
             </SelectContent>
           </Select>
         </div>
