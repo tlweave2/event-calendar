@@ -234,24 +234,13 @@ export default function SubmitEventForm({
     <Card className={darkMode ? "border-gray-700 bg-gray-800" : ""}>
       <CardContent className="py-8">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-1">
-            <Label htmlFor="title" className={darkMode ? "text-gray-200" : ""}>
-              Event Title *
-            </Label>
-            <Input
-              id="title"
-              {...register("title")}
-              className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
-            />
-            {errors.title && (
-              <p className="text-xs text-red-500">{errors.title.message}</p>
-            )}
-          </div>
-
           <div className="space-y-2">
             <Label htmlFor="image" className={darkMode ? "text-gray-200" : ""}>
-              Event Flyer / Image
+              Upload a Flyer
             </Label>
+            <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+              Upload your event flyer and AI will fill in the details automatically.
+            </p>
             <Input
               id="image"
               type="file"
@@ -325,6 +314,20 @@ export default function SubmitEventForm({
             <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-400"}`}>
               JPG, PNG, WebP, GIF up to 5MB - AI will auto-fill event details
             </p>
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="title" className={darkMode ? "text-gray-200" : ""}>
+              Event Title *
+            </Label>
+            <Input
+              id="title"
+              {...register("title")}
+              className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
+            />
+            {errors.title && (
+              <p className="text-xs text-red-500">{errors.title.message}</p>
+            )}
           </div>
 
           <div className="space-y-1">

@@ -12,7 +12,7 @@ const NAV_ITEMS = [
   { href: "/admin/categories", label: "Categories" },
   { href: "/admin/analytics", label: "Analytics" },
   { href: "/admin/embed", label: "Embed" },
-  { href: "/admin/import", label: "Import Flyers" },
+  { href: "/admin/import", label: "Create Event" },
   { href: "/admin/settings", label: "Settings" },
 ];
 
