@@ -23,7 +23,7 @@ export async function GET(
   if (!tenant) return notFound();
 
   const events = await getApprovedEvents(tenant.id);
-  const baseUrl = process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app";
+  const baseUrl = process.env.NEXTAUTH_URL ?? "https://www.useventful.com";
 
   const lines: string[] = [
     "BEGIN:VCALENDAR",

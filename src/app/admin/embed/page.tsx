@@ -18,7 +18,7 @@ export default async function EmbedPage() {
   if (!tenant) redirect("/admin");
 
   const baseUrl =
-    process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app";
+    process.env.NEXTAUTH_URL ?? "https://www.useventful.com";
 
   return (
     <div className="max-w-3xl px-8 py-8">

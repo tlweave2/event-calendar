@@ -25,7 +25,7 @@ export async function GET(
   const event = await getEventById(tenant.id, id);
   if (!event) return notFound();
 
-  const baseUrl = process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app";
+  const baseUrl = process.env.NEXTAUTH_URL ?? "https://www.useventful.com";
   const url = `${baseUrl}/embed/${slug}/event/${id}`;
   const end = event.endAt
     ? new Date(event.endAt)

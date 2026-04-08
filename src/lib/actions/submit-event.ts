@@ -125,7 +125,7 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
         select: { email: true },
       });
 
-      const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app"}/admin`;
+      const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://www.useventful.com"}/admin`;
 
       admins.forEach(({ email }) => {
         sendAdminNotification({
@@ -180,7 +180,7 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       select: { email: true },
     });
 
-    const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app"}/admin`;
+    const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://www.useventful.com"}/admin`;
 
     admins.forEach(({ email }) => {
       sendAdminNotification({

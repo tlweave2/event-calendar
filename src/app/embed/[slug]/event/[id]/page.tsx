@@ -76,7 +76,7 @@ export default async function EventPage({ params, searchParams }: Props) {
 
   const accent = tenant.primaryColor ?? "#2563eb";
   const calendarUrl = `/embed/${slug}/calendar`;
-  const baseUrl = process.env.NEXTAUTH_URL ?? "https://event-calendar-oglq.vercel.app";
+  const baseUrl = process.env.NEXTAUTH_URL ?? "https://www.useventful.com";
   const eventUrl = `${baseUrl}/embed/${slug}/event/${id}`;
 
   return (
