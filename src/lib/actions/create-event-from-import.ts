@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { isDemoTenant } from "@/lib/demo-guard";
+import { checkEventLimit } from "@/lib/plan-limits";
 
 export async function createEventFromImport(input: {
   tenantId: string;
@@ -29,6 +30,13 @@ export async function createEventFromImport(input: {
   });
   if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
     throw new Error("Demo mode is read-only");
+  }
+
+  const limitCheck = await checkEventLimit(input.tenantId);
+  if (!limitCheck.allowed) {
+    throw new Error(
+      `Monthly event limit reached (${limitCheck.current}/${limitCheck.limit}). Upgrade to Pro for unlimited events.`
+    );
   }
 
   await prisma.event.create({

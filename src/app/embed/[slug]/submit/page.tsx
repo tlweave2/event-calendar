@@ -62,10 +62,10 @@ export default async function SubmitPage({
             />
           )}
           <h1 className={`text-2xl font-semibold ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
-            Submit an Event
+            {tenant.submitHeading || "Submit an Event"}
           </h1>
           <p className={`mt-1 text-sm ${darkMode ? "text-gray-300" : "text-gray-500"}`}>
-            to {tenant.name}
+            {tenant.submitSubheading || `to ${tenant.name}`}
           </p>
         </div>
         <SubmitEventForm

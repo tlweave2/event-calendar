@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { updateTenantBranding } from "@/lib/actions/update-tenant";
+import { updateTenantBranding, updateTenantCustomText } from \"@/lib/actions/update-tenant\";
 
 const TIMEZONES = [
   "America/New_York",
@@ -32,6 +32,7 @@ export default function BrandingForm({ tenant }: {
     id: string; slug: string; name: string;
     primaryColor: string | null; secondaryColor: string | null;
     timezone: string; logoUrl: string | null;
+    submitHeading: string | null; submitSubheading: string | null; emptyStateMessage: string | null;
   };
 }) {
   const [name, setName] = useState(tenant.name);
@@ -40,7 +41,10 @@ export default function BrandingForm({ tenant }: {
   const [secondaryColor, setSecondaryColor] = useState(tenant.secondaryColor ?? "#dbeafe");
   const [timezone, setTimezone] = useState(tenant.timezone);
   const [logoUrl, setLogoUrl] = useState(tenant.logoUrl ?? "");
-  const [logoUploading, setLogoUploading] = useState(false);
+  const [lubmitHeading, setSubmitHeading] = useState(tenant.submitHeading ?? "");
+  const [submitSubheading, setSubmitSubheading] = useState(tenant.submitSubheading ?? "");
+  const [emptyStateMessage, setEmptyStateMessage] = useState(tenant.emptyStateMessage ?? "");
+  const [sogoUploading, setLogoUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -83,11 +87,23 @@ export default function BrandingForm({ tenant }: {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ logoUrl }),
       });
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
-      // If slug changed, reload so sidebar and URLs update correctly
-      if (result.slug !== tenant.slug) {
-        window.location.reload();
+
+      const customTextResult = await updateTenantCustomText({
+        tenantId: tenant.id,
+        submitHeading: submitHeading || undefined,
+        submitSubheading: submitSubheading || undefined,
+        emptyStateMessage: emptyStateMessage || undefined,
+      });
+
+      if (customTextResult.success) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+        // If slug changed, reload so sidebar and URLs update correctly
+        if (result.slug !== tenant.slug) {
+          window.location.reload();
+        }
+      } else {
+        setError("Failed to save custom text.");
       }
     } else {
       setError("Failed to save. Check that your calendar URL is unique.");
@@ -170,6 +186,44 @@ export default function BrandingForm({ tenant }: {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="mb-4 font-semibold">Custom Text</h3>
+        <div className="space-y-4">
+          <div className="space-y-1">
+            <Label>Submit Form Heading</Label>
+            <Input
+              value={submitHeading}
+              onChange={(e) => setSubmitHeading(e.target.value)}
+              placeholder="Submit an Event"
+              maxLength={255}
+            />
+            <p className="text-xs text-gray-400">Default: "Submit an Event"</p>
+          </div>
+
+          <div className="space-y-1">
+            <Label>Submit Form Subheading</Label>
+            <Input
+              value={submitSubheading}
+              onChange={(e) => setSubmitSubheading(e.target.value)}
+              placeholder="to [Organization Name]"
+              maxLength={255}
+            />
+            <p className="text-xs text-gray-400">Default: "to [Organization Name]"</p>
+          </div>
+
+          <div className="space-y-1">
+            <Label>Empty Calendar Message</Label>
+            <Input
+              value={emptyStateMessage}
+              onChange={(e) => setEmptyStateMessage(e.target.value)}
+              placeholder="No upcoming events"
+              maxLength={255}
+            />
+            <p className="text-xs text-gray-400">Default: "No upcoming events"</p>
+          </div>
+        </div>
       </div>
 
       {error && <p className="text-sm text-red-500">{error}</p>}

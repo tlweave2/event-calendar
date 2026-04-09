@@ -121,6 +121,7 @@ export default async function CalendarPage({
           darkMode={darkMode}
           cardStyle={cardStyle}
           showFlyerGallery={showFlyerGallery}
+          emptyStateMessage={tenant.emptyStateMessage}
         />
       </div>
     </div>

@@ -61,6 +61,41 @@ export async function updateTenantBranding(
   return { success: true, slug };
 }
 
+const customTextSchema = z.object({
+  tenantId: z.string().uuid(),
+  submitHeading: z.string().max(255).optional(),
+  submitSubheading: z.string().max(255).optional(),
+  emptyStateMessage: z.string().max(255).optional(),
+});
+
+export async function updateTenantCustomText(
+  input: z.infer<typeof customTextSchema>
+) {
+  const session = await auth();
+  if (!session || session.user.tenantId !== input.tenantId) {
+    return { success: false, errors: { _form: ["Unauthorized"] } };
+  }
+
+  const tenant = await prisma.tenant.findUnique({
+    where: { id: session.user.tenantId },
+    select: { id: true, slug: true },
+  });
+  if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
+    return demoFormError();
+  }
+
+  await prisma.tenant.update({
+    where: { id: input.tenantId },
+    data: {
+      submitHeading: input.submitHeading || null,
+      submitSubheading: input.submitSubheading || null,
+      emptyStateMessage: input.emptyStateMessage || null,
+    },
+  });
+
+  return { success: true };
+}
+
 const categoriesSchema = z.object({
   tenantId: z.string().uuid(),
   categories: z.array(

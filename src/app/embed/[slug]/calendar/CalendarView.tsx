@@ -49,6 +49,7 @@ export default function CalendarView({
   darkMode = false,
   cardStyle = "modern",
   showFlyerGallery = false,
+  emptyStateMessage,
 }: {
   events: CalendarEvent[];
   categories: Category[];
@@ -62,6 +63,7 @@ export default function CalendarView({
   darkMode?: boolean;
   cardStyle?: "modern" | "compact" | "image" | "minimal";
   showFlyerGallery?: boolean;
+  emptyStateMessage?: string | null;
 }) {
   const [view, setView] = useState<ViewMode>(defaultView);
   const [search, setSearch] = useState("");
@@ -90,7 +92,7 @@ export default function CalendarView({
   if (events.length === 0) {
     return (
       <div className={`py-20 text-center ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
-        <p className="text-lg">No upcoming events</p>
+        <p className="text-lg">{emptyStateMessage || "No upcoming events"}</p>
         {!hideSubmit && (
           <a
             href={`/embed/${tenantSlug}/submit`}
