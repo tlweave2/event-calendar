@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { updateTenantBranding, updateTenantCustomText } from \"@/lib/actions/update-tenant\";
+import { updateTenantBranding, updateTenantCustomText } from "@/lib/actions/update-tenant";
 
 const TIMEZONES = [
   "America/New_York",
@@ -41,10 +41,10 @@ export default function BrandingForm({ tenant }: {
   const [secondaryColor, setSecondaryColor] = useState(tenant.secondaryColor ?? "#dbeafe");
   const [timezone, setTimezone] = useState(tenant.timezone);
   const [logoUrl, setLogoUrl] = useState(tenant.logoUrl ?? "");
-  const [lubmitHeading, setSubmitHeading] = useState(tenant.submitHeading ?? "");
+  const [submitHeading, setSubmitHeading] = useState(tenant.submitHeading ?? "");
   const [submitSubheading, setSubmitSubheading] = useState(tenant.submitSubheading ?? "");
   const [emptyStateMessage, setEmptyStateMessage] = useState(tenant.emptyStateMessage ?? "");
-  const [sogoUploading, setLogoUploading] = useState(false);
+  const [logoUploading, setLogoUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
