@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Tenant: 'Tenant',
   Category: 'Category',
+  CalendarView: 'CalendarView',
   Event: 'Event',
   User: 'User',
   Account: 'Account',
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "category" | "event" | "user" | "account" | "session" | "verificationToken" | "auditLog" | "pageView" | "eventSeries"
+    modelProps: "tenant" | "category" | "calendarView" | "event" | "user" | "account" | "session" | "verificationToken" | "auditLog" | "pageView" | "eventSeries"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -558,6 +559,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CategoryCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CategoryCountAggregateOutputType> | number
+        }
+      }
+    }
+    CalendarView: {
+      payload: Prisma.$CalendarViewPayload<ExtArgs>
+      fields: Prisma.CalendarViewFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CalendarViewFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarViewPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CalendarViewFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarViewPayload>
+        }
+        findFirst: {
+          args: Prisma.CalendarViewFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarViewPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CalendarViewFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarViewPayload>
+        }
+        findMany: {
+          args: Prisma.CalendarViewFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarViewPayload>[]
+        }
+        create: {
+          args: Prisma.CalendarViewCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarViewPayload>
+        }
+        createMany: {
+          args: Prisma.CalendarViewCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CalendarViewCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarViewPayload>[]
+        }
+        delete: {
+          args: Prisma.CalendarViewDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarViewPayload>
+        }
+        update: {
+          args: Prisma.CalendarViewUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarViewPayload>
+        }
+        deleteMany: {
+          args: Prisma.CalendarViewDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CalendarViewUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CalendarViewUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarViewPayload>[]
+        }
+        upsert: {
+          args: Prisma.CalendarViewUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CalendarViewPayload>
+        }
+        aggregate: {
+          args: Prisma.CalendarViewAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCalendarView>
+        }
+        groupBy: {
+          args: Prisma.CalendarViewGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CalendarViewGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CalendarViewCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CalendarViewCountAggregateOutputType> | number
         }
       }
     }
@@ -1233,6 +1308,18 @@ export const CategoryScalarFieldEnum = {
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
 
 
+export const CalendarViewScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  slug: 'slug',
+  categoryIds: 'categoryIds',
+  createdAt: 'createdAt'
+} as const
+
+export type CalendarViewScalarFieldEnum = (typeof CalendarViewScalarFieldEnum)[keyof typeof CalendarViewScalarFieldEnum]
+
+
 export const EventScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -1621,6 +1708,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   tenant?: Prisma.TenantOmit
   category?: Prisma.CategoryOmit
+  calendarView?: Prisma.CalendarViewOmit
   event?: Prisma.EventOmit
   user?: Prisma.UserOmit
   account?: Prisma.AccountOmit

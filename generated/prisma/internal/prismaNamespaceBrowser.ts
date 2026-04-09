@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Tenant: 'Tenant',
   Category: 'Category',
+  CalendarView: 'CalendarView',
   Event: 'Event',
   User: 'User',
   Account: 'Account',
@@ -118,6 +119,18 @@ export const CategoryScalarFieldEnum = {
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const CalendarViewScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  slug: 'slug',
+  categoryIds: 'categoryIds',
+  createdAt: 'createdAt'
+} as const
+
+export type CalendarViewScalarFieldEnum = (typeof CalendarViewScalarFieldEnum)[keyof typeof CalendarViewScalarFieldEnum]
 
 
 export const EventScalarFieldEnum = {

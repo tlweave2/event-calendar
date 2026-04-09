@@ -40,6 +40,7 @@ model Tenant {
   events     Event[]
   eventSeries EventSeries[]
   categories Category[]
+  calendarViews CalendarView[]
   users      User[]
   pageViews  PageView[]
   auditLogs  AuditLog[]
@@ -67,6 +68,23 @@ model Category {
 
   @@index([tenantId])
   @@map("categories")
+}
+
+// ─── Calendar Views ────────────────────────────────────────────────────────
+
+model CalendarView {
+  id          String   @id @default(uuid())
+  tenantId    String
+  name        String   @db.VarChar(100)
+  slug        String   @db.VarChar(100)
+  categoryIds String[] @default([])
+  createdAt   DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@map("calendar_views")
 }
 
 // ─── Events ────────────────────────────────────────────────────────────────

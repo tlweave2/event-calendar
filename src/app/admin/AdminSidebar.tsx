@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { href: "/admin", label: "Queue", exact: true },
   { href: "/admin/events", label: "All Events" },
   { href: "/admin/events/new", label: "Create Event" },
+  { href: "/admin/views", label: "Views" },
   { href: "/admin/branding", label: "Branding" },
   { href: "/admin/categories", label: "Categories" },
   { href: "/admin/analytics", label: "Analytics" },

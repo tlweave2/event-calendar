@@ -52,6 +52,11 @@ export type Tenant = Prisma.TenantModel
  */
 export type Category = Prisma.CategoryModel
 /**
+ * Model CalendarView
+ * 
+ */
+export type CalendarView = Prisma.CalendarViewModel
+/**
  * Model Event
  * 
  */
