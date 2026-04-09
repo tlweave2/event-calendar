@@ -23,6 +23,26 @@ type Category = {
   color: string | null;
 };
 
+function getActionError(result: unknown, fallback: string) {
+  if (result && typeof result === "object") {
+    if ("error" in result && typeof result.error === "string") {
+      return result.error;
+    }
+    if (
+      "errors" in result &&
+      result.errors &&
+      typeof result.errors === "object" &&
+      "_form" in result.errors &&
+      Array.isArray(result.errors._form) &&
+      typeof result.errors._form[0] === "string"
+    ) {
+      return result.errors._form[0];
+    }
+  }
+
+  return fallback;
+}
+
 export default function ViewsManager({
   views: initialViews,
   categories,
@@ -80,7 +100,7 @@ export default function ViewsManager({
         categoryIds: selectedCategories,
       });
       if (!result.success) {
-        setError(result.error ?? "Failed to update");
+        setError(getActionError(result, "Failed to update"));
         setSaving(false);
         return;
       }
@@ -98,7 +118,7 @@ export default function ViewsManager({
         categoryIds: selectedCategories,
       });
       if (!result.success) {
-        setError(result.error ?? "Failed to create");
+        setError(getActionError(result, "Failed to create"));
         setSaving(false);
         return;
       }
