@@ -284,14 +284,19 @@ export default function HomePage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer style={{ borderTop: `2px solid ${C.border}`, padding: "1.35rem 2.25rem", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem" }}>
-        <span style={{ fontSize: "1.125rem", letterSpacing: "-0.03em" }}>
-          Event<span style={{ color: C.red }}>ful</span>
-        </span>
-        <div style={{ display: "flex", gap: "2rem", fontSize: "0.8125rem", color: C.muted, fontFamily: "system-ui, sans-serif" }}>
-          <Link href="/signup" style={{ color: C.muted, textDecoration: "none" }}>Get started</Link>
-          <Link href="/admin/login" style={{ color: C.muted, textDecoration: "none" }}>Sign in</Link>
+      <footer style={{ borderTop: `2px solid ${C.border}`, padding: "1.75rem 2.25rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1.5rem", marginBottom: "1.5rem" }}>
+          <span style={{ fontSize: "1.125rem", letterSpacing: "-0.03em" }}>
+            Event<span style={{ color: C.red }}>ful</span>
+          </span>
+          <div style={{ display: "flex", gap: "2.5rem", fontSize: "0.8125rem", color: C.muted, fontFamily: "system-ui, sans-serif", flexWrap: "wrap" }}>
+            <Link href="/signup" style={{ color: C.muted, textDecoration: "none" }}>Get started</Link>
+            <Link href="/admin/login" style={{ color: C.muted, textDecoration: "none" }}>Sign in</Link>
+            <Link href="/privacy" style={{ color: C.muted, textDecoration: "none" }}>Privacy</Link>
+            <Link href="/terms" style={{ color: C.muted, textDecoration: "none" }}>Terms</Link>
+          </div>
         </div>
+        <p style={{ fontSize: "0.75rem", color: "#999", fontFamily: "system-ui, sans-serif", margin: 0 }}>© 2026 Eventful. Community event calendars made simple.</p>
       </footer>
 
     </div>
