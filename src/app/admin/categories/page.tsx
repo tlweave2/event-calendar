@@ -14,7 +14,9 @@ export default async function CategoriesPage() {
       <div className="mb-6">
         <h1 className="text-xl font-semibold text-gray-900">Categories</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Manage the categories available when submitting events.
+          Categories help organize your events and let visitors filter by type.
+          Submitters pick one when they add an event, and each category color
+          appears as a badge on event listings.
         </p>
       </div>
       <CategoriesForm

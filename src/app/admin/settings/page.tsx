@@ -38,6 +38,10 @@ export default async function SettingsPage() {
 
       {tenant && (
         <div className="mt-6 max-w-2xl">
+          <p className="mb-2 text-sm text-gray-500">
+            Your plan determines how many events you can receive each month and
+            which features are available.
+          </p>
           <BillingSection plan={tenant.plan} hasStripeCustomer={!!tenant.stripeCustomerId} />
         </div>
       )}

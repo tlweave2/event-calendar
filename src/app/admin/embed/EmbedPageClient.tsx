@@ -72,21 +72,30 @@ export default function EmbedPageClient({
       </div>
 
       <div>
-        <h2 className="mb-3 text-sm font-medium uppercase tracking-wide text-gray-400">
-          Embed on Your Website (iframe)
-        </h2>
-        <p className="mb-4 text-sm text-gray-500">
-          Paste this HTML anywhere on your website to embed the calendar or submission form inline.
+        <h2 className="text-base font-medium text-gray-900">Embed Code</h2>
+        <p className="mt-1 mb-4 text-sm text-gray-500">
+          Copy and paste these code snippets into your website to display your
+          calendar or submission form. Works with WordPress, Squarespace, Wix,
+          or plain HTML.
         </p>
         <div className="space-y-3">
+          <p className="mb-1 text-xs text-gray-400">
+            Shows your full event calendar with search, category filters, and list/grid toggle.
+          </p>
           <CopyBlock
             label="Calendar iframe"
             snippet={`<iframe\n  src="${calendarUrl}"\n  width="100%"\n  height="700"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`}
           />
+          <p className="mb-1 text-xs text-gray-400">
+            Same calendar but without the logo and header, for tighter layouts or sidebars.
+          </p>
           <CopyBlock
             label="Calendar Only iframe (no header/logo)"
             snippet={`<iframe\n  src="${calendarOnlyUrl}"\n  width="100%"\n  height="600"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`}
           />
+          <p className="mb-1 text-xs text-gray-400">
+            The form where community members submit events for your review.
+          </p>
           <CopyBlock
             label="Submission Form iframe"
             snippet={`<iframe\n  src="${submitUrl}"\n  width="100%"\n  height="900"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`}
@@ -102,10 +111,11 @@ export default function EmbedPageClient({
       </div>
 
       <div className="rounded-lg border border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
-        <p className="mb-1 font-medium text-gray-900">Query Parameter Overrides</p>
+        <p className="mb-1 font-medium text-gray-900">URL Parameters</p>
         <p className="mb-4 text-gray-500">
-          Append these to any embed URL to customize the look without changing your saved defaults.
-          You can combine multiple parameters together.
+          Add these to the end of any embed URL to customize that specific embed
+          without changing your saved defaults. Useful when the same calendar
+          appears on multiple pages with different looks.
         </p>
 
         <div className="space-y-3">

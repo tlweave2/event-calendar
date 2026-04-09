@@ -115,6 +115,10 @@ export default function BrandingForm({ tenant }: {
     <div className="space-y-6 rounded-lg border bg-white p-6">
       <div className="space-y-2">
         <Label>Logo</Label>
+        <p className="text-xs text-gray-400">
+          Appears at the top of your calendar and submission form. PNG or SVG
+          recommended, at least 200px wide.
+        </p>
         {logoUrl && (
           <div className="mb-2">
             <img src={logoUrl} alt="Logo" className="h-12 object-contain" />
@@ -130,12 +134,19 @@ export default function BrandingForm({ tenant }: {
       </div>
 
       <div className="space-y-1">
-        <Label>Organization name</Label>
+        <Label>Organization Name</Label>
+        <p className="text-xs text-gray-400">
+          Displayed at the top of your calendar and in email notifications to submitters.
+        </p>
         <Input value={name} onChange={(e) => setName(e.target.value)} />
       </div>
 
       <div className="space-y-1">
         <Label>Calendar URL</Label>
+        <p className="text-xs text-gray-400">
+          This is the web address people use to find your calendar. Keep it short
+          and recognizable, like your organization name or city.
+        </p>
         <div className="flex items-center gap-1">
           <span className="shrink-0 text-sm text-gray-400">/embed/</span>
           <Input
@@ -149,7 +160,11 @@ export default function BrandingForm({ tenant }: {
 
       <div className="flex gap-6">
         <div className="space-y-1">
-          <Label>Primary color</Label>
+          <Label>Primary Color</Label>
+          <p className="text-xs text-gray-400">
+            Used for buttons, the calendar header, date blocks, and accent elements
+            throughout your embed.
+          </p>
           <div className="flex items-center gap-2">
             <input
               type="color"
@@ -161,7 +176,11 @@ export default function BrandingForm({ tenant }: {
           </div>
         </div>
         <div className="space-y-1">
-          <Label>Secondary color</Label>
+          <Label>Secondary Color</Label>
+          <p className="text-xs text-gray-400">
+            Used for subtle backgrounds and highlights. Usually a lighter shade of
+            your primary color works well.
+          </p>
           <div className="flex items-center gap-2">
             <input
               type="color"
@@ -176,6 +195,10 @@ export default function BrandingForm({ tenant }: {
 
       <div className="space-y-1">
         <Label>Timezone</Label>
+        <p className="text-xs text-gray-400">
+          All event times are displayed in this timezone. Make sure it matches
+          where your events take place.
+        </p>
         <Select value={timezone} onValueChange={(value) => setTimezone(value ?? timezone)}>
           <SelectTrigger className="max-w-xs">
             <SelectValue />
@@ -188,40 +211,54 @@ export default function BrandingForm({ tenant }: {
         </Select>
       </div>
 
-      <div className="border-t pt-6">
-        <h3 className="mb-4 font-semibold">Custom Text</h3>
+      <div className="space-y-1 border-t pt-5">
+        <h3 className="text-sm font-medium text-gray-700">Custom Text</h3>
+        <p className="text-xs text-gray-400">
+          Personalize the wording on your public-facing calendar and submission form.
+          Leave blank to use the defaults.
+        </p>
         <div className="space-y-4">
           <div className="space-y-1">
             <Label>Submit Form Heading</Label>
+            <p className="text-xs text-gray-400">
+              The main title visitors see when they open your submission form.
+              Default: "Submit an Event"
+            </p>
             <Input
               value={submitHeading}
               onChange={(e) => setSubmitHeading(e.target.value)}
               placeholder="Submit an Event"
               maxLength={255}
             />
-            <p className="text-xs text-gray-400">Default: "Submit an Event"</p>
           </div>
 
           <div className="space-y-1">
             <Label>Submit Form Subheading</Label>
+            <p className="text-xs text-gray-400">
+              A short line below the heading, usually your organization name.
+              Default: "to [your organization name]"
+            </p>
             <Input
               value={submitSubheading}
               onChange={(e) => setSubmitSubheading(e.target.value)}
               placeholder="to [Organization Name]"
               maxLength={255}
             />
-            <p className="text-xs text-gray-400">Default: "to [Organization Name]"</p>
           </div>
 
           <div className="space-y-1">
             <Label>Empty Calendar Message</Label>
+            <p className="text-xs text-gray-400">
+              What visitors see when there are no upcoming events. Use this to set
+              expectations, for example "Check back soon for upcoming downtown events!"
+              Default: "No upcoming events"
+            </p>
             <Input
               value={emptyStateMessage}
               onChange={(e) => setEmptyStateMessage(e.target.value)}
               placeholder="No upcoming events"
               maxLength={255}
             />
-            <p className="text-xs text-gray-400">Default: "No upcoming events"</p>
           </div>
         </div>
       </div>

@@ -18,7 +18,8 @@ export default async function BrandingPage() {
       <div>
         <h1 className="text-xl font-semibold text-gray-900">Branding</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Update your organization name, colors, and calendar URL.
+          Control how your calendar looks to the public. These settings apply to
+          your embedded calendar, submission form, and hosted pages.
         </p>
       </div>
       <BrandingForm tenant={tenant} />

@@ -76,14 +76,20 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
           Embed Appearance
         </h2>
         <p className="mt-1 text-sm text-gray-500">
-          These are the defaults for your embedded calendar. They can also be
-          overridden per-embed with URL query params.
+          These settings control how your calendar looks when embedded on a website.
+          They are the defaults and can be overridden per-embed using URL parameters
+          on the iframe.
         </p>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-1">
           <Label>Font Family</Label>
+          <p className="text-xs text-gray-400">
+            The typeface used in your embedded calendar. &quot;System Default&quot; uses
+            the visitor&apos;s browser default font. Google Fonts like Poppins or
+            Merriweather give a more branded look.
+          </p>
           <Select value={fontFamily} onValueChange={(value) => setFontFamily(value ?? "system-ui")}>
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -96,6 +102,10 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
 
         <div className="space-y-1">
           <Label>Default View</Label>
+          <p className="text-xs text-gray-400">
+            Which layout visitors see first, a scrollable list of events or a
+            monthly calendar grid. Visitors can always switch between the two.
+          </p>
           <Select value={defaultView} onValueChange={(value) => setDefaultView(value ?? "list")}>
             <SelectTrigger className="h-12 text-base"><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -107,6 +117,10 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
 
         <div className="space-y-1">
           <Label>Background Color</Label>
+          <p className="text-xs text-gray-400">
+            The background behind your calendar embed. Use &quot;transparent&quot; to match
+            your website background, or enter a hex color like #f9fafb.
+          </p>
           <div className="flex items-center gap-2">
             <Input
               value={bgColor}
@@ -133,22 +147,53 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
       </div>
 
       <div className="space-y-3">
-        <Label className="text-xs uppercase tracking-wide text-gray-400">Toggle Elements</Label>
+        <Label className="text-xs uppercase tracking-wide text-gray-400">Show / Hide Elements</Label>
+        <p className="text-xs text-gray-400 mb-2">
+          Control which parts of the calendar are visible to visitors.
+        </p>
         {[
-          { label: "Hide search bar", value: hideSearch, set: setHideSearch },
-          { label: "Hide category filter", value: hideCategories, set: setHideCategories },
-          { label: 'Hide "Submit an Event" link', value: hideSubmit, set: setHideSubmit },
-          { label: "Dark mode", value: darkMode, set: setDarkMode },
-          { label: "Show flyer gallery at bottom", value: showFlyerGallery, set: setShowFlyerGallery },
+          {
+            label: "Hide search bar",
+            value: hideSearch,
+            set: setHideSearch,
+            hint: "Remove the text search box from the top of the calendar",
+          },
+          {
+            label: "Hide category filter",
+            value: hideCategories,
+            set: setHideCategories,
+            hint: "Remove the category dropdown so visitors see all events",
+          },
+          {
+            label: 'Hide "Submit an Event" link',
+            value: hideSubmit,
+            set: setHideSubmit,
+            hint: "Remove the link that lets visitors submit new events from the calendar",
+          },
+          {
+            label: "Dark mode",
+            value: darkMode,
+            set: setDarkMode,
+            hint: "Use a dark background, useful if your website has a dark theme",
+          },
+          {
+            label: "Show flyer gallery",
+            value: showFlyerGallery,
+            set: setShowFlyerGallery,
+            hint: "Display a row of event flyer thumbnails at the bottom of the calendar",
+          },
         ].map((item) => (
-          <label key={item.label} className="flex cursor-pointer items-center gap-3">
+          <label key={item.label} className="flex cursor-pointer items-start gap-3">
             <input
               type="checkbox"
               checked={item.value}
               onChange={(e) => item.set(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300"
+              className="mt-0.5 h-4 w-4 rounded border-gray-300"
             />
-            <span className="text-sm text-gray-700">{item.label}</span>
+            <div>
+              <span className="text-sm text-gray-700">{item.label}</span>
+              <p className="text-xs text-gray-400">{item.hint}</p>
+            </div>
           </label>
         ))}
       </div>

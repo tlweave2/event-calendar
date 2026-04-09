@@ -29,8 +29,9 @@ export default async function ViewsPage() {
       <div className="mb-6">
         <h1 className="text-xl font-semibold text-gray-900">Calendar Views</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Create filtered versions of your calendar to embed on different pages.
-          Each view shows only the categories you select.
+          Views let you embed a filtered version of your calendar on different pages.
+          For example, create a &quot;Music Events&quot; view and embed it on your music
+          page so visitors only see selected categories.
         </p>
       </div>
       <ViewsManager

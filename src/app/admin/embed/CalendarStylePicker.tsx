@@ -10,22 +10,22 @@ const STYLES: StyleOption[] = [
   {
     value: "modern",
     label: "Modern",
-    description: "Colored date blocks, expandable cards",
+    description: "Colored date blocks with expandable event cards. The default and works great for most calendars.",
   },
   {
     value: "compact",
     label: "Compact",
-    description: "Dense single-line, fits more events",
+    description: "One line per event and fits more on screen. Best when you have lots of events each month.",
   },
   {
     value: "image",
     label: "Image Forward",
-    description: "Thumbnail images, visual and bold",
+    description: "Shows event flyer thumbnails next to each listing. Great if your submitters upload images.",
   },
   {
     value: "minimal",
     label: "Minimal",
-    description: "Plain text, blends into any site",
+    description: "Clean plain text with no colored cards or blocks. Blends into any website design.",
   },
 ];
 
@@ -41,6 +41,10 @@ export default function CalendarStylePicker({
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium text-gray-700">Calendar Style</label>
+      <p className="mb-2 text-xs text-gray-400">
+        Choose how event listings look. This affects both list view and
+        calendar grid layouts.
+      </p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {STYLES.map((style) => (
           <button

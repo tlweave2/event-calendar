@@ -159,7 +159,10 @@ export default function ViewsManager({
               <div>
                 <p className="font-medium text-gray-900">{view.name}</p>
                 <p className="mt-0.5 text-xs text-gray-400">
-                  /embed/{tenantSlug}/view/{view.slug}
+                  Embed URL: /embed/{tenantSlug}/view/{view.slug}
+                </p>
+                <p className="mt-1 text-xs text-gray-400">
+                  Click &quot;Copy Embed&quot; to get the iframe code for your website.
                 </p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {view.categoryIds.map((catId) => {
@@ -218,6 +221,10 @@ export default function ViewsManager({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <Label>View Name</Label>
+              <p className="text-xs text-gray-400">
+                A descriptive name for this filtered calendar, like &quot;Music Events&quot;
+                or &quot;Downtown Happenings&quot;.
+              </p>
               <Input
                 value={name}
                 onChange={(e) => {
@@ -236,6 +243,10 @@ export default function ViewsManager({
             </div>
             <div className="space-y-1">
               <Label>URL Slug</Label>
+              <p className="text-xs text-gray-400">
+                The web address for this view. Letters, numbers, and hyphens only.
+                Example: &quot;music-events&quot; creates /embed/{tenantSlug}/view/music-events
+              </p>
               <div className="flex items-center gap-1">
                 <span className="shrink-0 text-xs text-gray-400">/view/</span>
                 <Input
@@ -254,7 +265,11 @@ export default function ViewsManager({
           </div>
 
           <div className="space-y-2">
-            <Label>Show events from these categories:</Label>
+            <Label>Show events from these categories</Label>
+            <p className="mb-2 text-xs text-gray-400">
+              Click to select which categories this view includes. Only events in
+              selected categories will appear on this embed.
+            </p>
             <div className="flex flex-wrap gap-2">
               {categories.map((cat) => {
                 const isSelected = selectedCategories.includes(cat.id);
@@ -300,7 +315,7 @@ export default function ViewsManager({
         </div>
       )}
 
-      {!isEditing && (
+      {!isEditing && views.length > 0 && (
         <Button
           variant="outline"
           onClick={() => {
@@ -314,10 +329,22 @@ export default function ViewsManager({
       )}
 
       {views.length === 0 && !isEditing && (
-        <div className="rounded-lg border-2 border-dashed border-gray-200 py-8 text-center">
-          <p className="text-sm text-gray-500">
-            No views yet. Create one to embed a filtered calendar.
+        <div className="rounded-lg border-2 border-dashed border-gray-200 py-12 text-center">
+          <p className="text-lg font-medium text-gray-700">No views yet</p>
+          <p className="mt-2 text-sm text-gray-500">
+            Your main calendar already shows all events. Create a view when you
+            want to embed a filtered calendar that only shows certain categories,
+            like &quot;Youth Events&quot; or &quot;Music&quot;.
           </p>
+          <button
+            onClick={() => {
+              resetForm();
+              setCreating(true);
+            }}
+            className="mt-4 inline-block rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          >
+            + Create Your First View
+          </button>
         </div>
       )}
     </div>
