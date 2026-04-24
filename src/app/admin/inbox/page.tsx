@@ -1,10 +1,13 @@
 import { PageHeader } from "@/components/ui/page-header";
 import { ComingSoon } from "@/components/ui/coming-soon";
 
-export default function SettingsPage() {
+export default function InboxPage() {
   return (
     <main className="max-w-5xl px-8 py-8">
-      <PageHeader title="Settings" description="Manage your account and organization." />
+      <PageHeader
+        title="Inbox"
+        description="Everything new, in one place."
+      />
       <div className="mt-8">
         <ComingSoon />
       </div>
