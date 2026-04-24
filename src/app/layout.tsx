@@ -13,9 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Eventful - Community Event Calendar",
-  description: "Discover local events, submit your own, and stay connected with what's happening around you.",
-  manifest: "/manifest.json",
+  title: "Hub",
+  description: "Community management platform",
 };
 
 export default function RootLayout({

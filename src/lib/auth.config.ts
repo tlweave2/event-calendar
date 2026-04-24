@@ -3,11 +3,17 @@ import type { NextAuthConfig } from "next-auth";
 export const authConfig: NextAuthConfig = {
   pages: {
     signIn: "/admin/login",
-    verifyRequest: "/admin/login?verify=1",
   },
   callbacks: {
-    // Let src/proxy.ts be the single source of route protection logic.
-    authorized: () => true,
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isPublicAdminRoute =
+        nextUrl.pathname.startsWith("/admin/login") ||
+        nextUrl.pathname.startsWith("/admin/register");
+      const isAdminRoute = nextUrl.pathname.startsWith("/admin");
+      if (isAdminRoute && !isPublicAdminRoute) return isLoggedIn;
+      return true;
+    },
   },
   providers: [],
 };

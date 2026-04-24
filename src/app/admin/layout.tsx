@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
-import Link from "next/link";
-import AdminSidebar from "./AdminSidebar";
+import { redirect } from "next/navigation";
+import HubSidebar from "./HubSidebar";
 
 export default async function AdminLayout({
   children,
@@ -12,48 +12,34 @@ export default async function AdminLayout({
   const hdrs = await headers();
   const pathname = hdrs.get("x-pathname") ?? "";
 
-  // Never render admin chrome on the login or accept-invite pages.
-  // The proxy sets x-pathname on every request so this check is reliable.
   if (
     pathname.startsWith("/admin/login") ||
-    pathname.startsWith("/admin/accept-invite")
+    pathname.startsWith("/admin/register") ||
+    pathname.startsWith("/admin/onboarding")
   ) {
     return <>{children}</>;
   }
 
   const session = await auth();
-  if (!session) {
-    return <>{children}</>;
+  if (!session?.user) {
+    redirect("/admin/login");
   }
 
-  const [pendingCount, tenant] = await Promise.all([
-    prisma.event.count({
-      where: { tenantId: session.user.tenantId, status: "PENDING" },
-    }),
-    prisma.tenant.findUnique({
-      where: { id: session.user.tenantId },
-      select: { slug: true, name: true, isDemoSandbox: true, plan: true },
-    }),
-  ]);
+  const tenant = session.user.tenantId
+    ? await prisma.tenant.findUnique({
+        where: { id: session.user.tenantId },
+        select: { name: true, plan: true },
+      })
+    : null;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <AdminSidebar
-        tenantName={tenant?.name ?? "Event Calendar"}
-        tenantSlug={tenant?.slug ?? ""}
+      <HubSidebar
+        orgName={tenant?.name ?? "Hub"}
         plan={tenant?.plan ?? "FREE"}
         email={session.user.email ?? ""}
-        pendingCount={pendingCount}
       />
       <main className="min-h-screen pt-14 md:pt-0 md:pl-56">
-        {tenant?.isDemoSandbox && (
-          <div className="bg-violet-600 px-4 py-2 text-center text-sm text-white">
-            You&apos;re in a demo sandbox - changes are yours but expire in 1 hour.{" "}
-            <Link href="/signup" className="font-medium underline">
-              Create a permanent calendar →
-            </Link>
-          </div>
-        )}
         {children}
       </main>
     </div>
