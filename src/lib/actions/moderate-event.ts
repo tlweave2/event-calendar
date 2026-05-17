@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { sendModerationNotice } from "@/lib/email";
 import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
+import { deliverWebhook } from "@/lib/webhook";
 
 const moderateSchema = z.object({
   eventId: z.string().uuid(),
@@ -59,6 +60,21 @@ export async function moderateEvent(input: {
     where: { id: eventId },
     include: { tenant: true },
   });
+
+  // Fire webhook for event.approved — non-blocking
+  if (action === "APPROVED" && updatedEvent) {
+    deliverWebhook(tenantId, {
+      type: "event.approved",
+      payload: {
+        eventId: updatedEvent.id,
+        title: updatedEvent.title,
+        startAt: updatedEvent.startAt.toISOString(),
+        endAt: updatedEvent.endAt?.toISOString() ?? null,
+        status: updatedEvent.status,
+        submitterEmail: updatedEvent.submitterEmail,
+      },
+    }).catch((err) => console.error("[webhook] event.approved failed:", err));
+  }
 
   if (updatedEvent?.submitterEmail && action !== "PENDING") {
     const calendarUrl = `${process.env.NEXTAUTH_URL}/embed/${updatedEvent.tenant.slug}/calendar`;

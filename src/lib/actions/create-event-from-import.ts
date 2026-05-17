@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { isDemoTenant } from "@/lib/demo-guard";
 import { checkEventLimit } from "@/lib/plan-limits";
+import { deliverWebhook } from "@/lib/webhook";
 
 export async function createEventFromImport(input: {
   tenantId: string;
@@ -39,7 +40,7 @@ export async function createEventFromImport(input: {
     );
   }
 
-  await prisma.event.create({
+  const event = await prisma.event.create({
     data: {
       tenantId: input.tenantId,
       title: input.title,
@@ -56,6 +57,17 @@ export async function createEventFromImport(input: {
     },
   });
 
+  // Fire webhook for event.created (imported/approved) — non-blocking
+  deliverWebhook(input.tenantId, {
+    type: "event.approved",
+    payload: {
+      eventId: event.id,
+      title: event.title,
+      startAt: event.startAt.toISOString(),
+      endAt: event.endAt?.toISOString() ?? null,
+      status: event.status,
+    },
+  }).catch((err) => console.error("[webhook] event.approved (import) failed:", err));
   revalidatePath("/admin");
   revalidatePath("/admin/events");
 }

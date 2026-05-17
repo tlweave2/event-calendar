@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
+import { deliverWebhook } from "@/lib/webhook";
 
 const updateEventSchema = z.object({
   eventId: z.string().uuid(),
@@ -66,6 +67,17 @@ export async function updateEvent(input: z.infer<typeof updateEventSchema>) {
       action: "event.edited",
     },
   });
+
+  // Fire webhook for event.updated — non-blocking
+  deliverWebhook(session.user.tenantId, {
+    type: "event.updated",
+    payload: {
+      eventId,
+      title: data.title,
+      startAt: new Date(data.startAt).toISOString(),
+      endAt: data.endAt ? new Date(data.endAt).toISOString() : null,
+    },
+  }).catch((err) => console.error("[webhook] event.updated failed:", err));
 
   revalidatePath("/admin/events");
   revalidatePath(`/admin/events/${eventId}`);

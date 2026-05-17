@@ -72,3 +72,8 @@ export type PageView = Prisma.PageViewModel
  * 
  */
 export type EventSeries = Prisma.EventSeriesModel
+/**
+ * Model WebhookConfig
+ * 
+ */
+export type WebhookConfig = Prisma.WebhookConfigModel

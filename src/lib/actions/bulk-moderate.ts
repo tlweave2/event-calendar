@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { sendModerationNotice } from "@/lib/email";
 import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
+import { deliverWebhook } from "@/lib/webhook";
 
 type EventWithTenant = {
   id: string;
@@ -59,6 +60,26 @@ export async function bulkModerateEvents(input: {
       })
     ),
   ]);
+
+  // Fire webhook for each approved event — non-blocking
+  if (action === "APPROVED") {
+    const approvedEvents = await prisma.event.findMany({
+      where: { id: { in: eventIds }, tenantId },
+      select: { id: true, title: true, startAt: true, endAt: true, submitterEmail: true },
+    });
+    approvedEvents.forEach((evt) => {
+      deliverWebhook(tenantId, {
+        type: "event.approved",
+        payload: {
+          eventId: evt.id,
+          title: evt.title,
+          startAt: evt.startAt.toISOString(),
+          endAt: evt.endAt?.toISOString() ?? null,
+          submitterEmail: evt.submitterEmail,
+        },
+      }).catch((err) => console.error("[webhook] bulk event.approved failed:", err));
+    });
+  }
 
   if (action !== "PENDING") {
     await Promise.all(

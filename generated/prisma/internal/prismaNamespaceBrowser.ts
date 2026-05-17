@@ -61,7 +61,8 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   AuditLog: 'AuditLog',
   PageView: 'PageView',
-  EventSeries: 'EventSeries'
+  EventSeries: 'EventSeries',
+  WebhookConfig: 'WebhookConfig'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -246,6 +247,19 @@ export const EventSeriesScalarFieldEnum = {
 } as const
 
 export type EventSeriesScalarFieldEnum = (typeof EventSeriesScalarFieldEnum)[keyof typeof EventSeriesScalarFieldEnum]
+
+
+export const WebhookConfigScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  url: 'url',
+  secret: 'secret',
+  enabled: 'enabled',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WebhookConfigScalarFieldEnum = (typeof WebhookConfigScalarFieldEnum)[keyof typeof WebhookConfigScalarFieldEnum]
 
 
 export const SortOrder = {

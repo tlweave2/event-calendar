@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getTenantUsers } from "@/lib/prisma-tenant";
 import InviteForm from "./InviteForm";
 import BillingSection from "./BillingSection";
+import WebhookSettingsForm from "./WebhookSettingsForm";
 
 export default async function SettingsPage() {
   const session = await auth();
@@ -11,6 +12,10 @@ export default async function SettingsPage() {
 
   const tenant = await prisma.tenant.findUnique({ where: { id: session.user.tenantId } });
   const users: Array<{ id: string; email: string; role: string }> = await getTenantUsers(session.user.tenantId);
+
+  const webhookConfig = await prisma.webhookConfig.findUnique({
+    where: { tenantId: session.user.tenantId },
+  });
 
   return (
     <div className="max-w-5xl px-8 py-8">
@@ -45,6 +50,13 @@ export default async function SettingsPage() {
           <BillingSection plan={tenant.plan} hasStripeCustomer={!!tenant.stripeCustomerId} />
         </div>
       )}
+
+      <div className="mt-6 max-w-2xl">
+        <WebhookSettingsForm
+          initialUrl={webhookConfig?.url ?? ""}
+          initialEnabled={webhookConfig?.enabled ?? false}
+        />
+      </div>
     </div>
   );
 }

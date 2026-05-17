@@ -40,13 +40,14 @@ model Tenant {
   createdAt      DateTime @default(now())
 
   // Relations
-  events     Event[]
-  eventSeries EventSeries[]
-  categories Category[]
+  events        Event[]
+  eventSeries   EventSeries[]
+  categories    Category[]
   calendarViews CalendarView[]
-  users      User[]
-  pageViews  PageView[]
-  auditLogs  AuditLog[]
+  users         User[]
+  pageViews     PageView[]
+  auditLogs     AuditLog[]
+  webhookConfig WebhookConfig?
 
   @@map("tenants")
 }
@@ -254,4 +255,20 @@ model EventSeries {
 
   @@index([tenantId])
   @@map("event_series")
+}
+
+// ─── Webhook Configs ─────────────────────────────────────────────────────
+
+model WebhookConfig {
+  id        String   @id @default(uuid())
+  tenantId  String   @unique
+  url       String   @db.VarChar(500)
+  secret    String   @db.Text
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("webhook_configs")
 }

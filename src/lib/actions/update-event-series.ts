@@ -5,6 +5,7 @@ import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
+import { deliverWebhook } from "@/lib/webhook";
 
 const schema = z.object({
   eventId: z.string().uuid(),
@@ -92,6 +93,17 @@ export async function updateEventSeries(input: z.infer<typeof schema>) {
     },
   });
 
+  // Fire webhook for event.updated (series) — non-blocking
+  deliverWebhook(session.user.tenantId, {
+    type: "event.updated",
+    payload: {
+      eventId,
+      title: data.title,
+      startAt: new Date(data.startAt).toISOString(),
+      endAt: data.endAt ? new Date(data.endAt).toISOString() : null,
+      scope,
+    },
+  }).catch((err) => console.error("[webhook] event.updated (series) failed:", err));
   revalidatePath("/admin/events");
   revalidatePath(`/admin/events/${eventId}`);
 

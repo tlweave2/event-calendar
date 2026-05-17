@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { isDemoTenant } from "@/lib/demo-guard";
+import { deliverWebhook } from "@/lib/webhook";
 
 export async function deleteEvent(
   eventId: string,
@@ -45,6 +46,12 @@ export async function deleteEvent(
   } else {
     await prisma.eventSeries.delete({ where: { id: event.seriesId } });
   }
+
+  // Fire webhook for event.deleted — non-blocking
+  deliverWebhook(session.user.tenantId, {
+    type: "event.deleted",
+    payload: { eventId, scope },
+  }).catch((err) => console.error("[webhook] event.deleted failed:", err));
 
   revalidatePath("/admin/events");
   revalidatePath("/admin");

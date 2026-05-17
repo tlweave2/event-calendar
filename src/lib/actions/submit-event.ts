@@ -7,6 +7,7 @@ import { sendAdminNotification, sendSubmissionConfirmation } from "@/lib/email";
 import { checkEventLimit } from "@/lib/plan-limits";
 import { createEventSeries } from "./create-event-series";
 import { demoFormError, isDemoTenant } from "@/lib/demo-guard";
+import { deliverWebhook } from "@/lib/webhook";
 
 const submitEventSchema = z.object({
   tenantSlug: z.string(),
@@ -140,6 +141,19 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       });
     }
 
+    // Fire webhook for event.created (series) — non-blocking
+    if (firstEvent?.id) {
+      deliverWebhook(tenant.id, {
+        type: "event.created",
+        payload: {
+          eventId: firstEvent.id,
+          title: data.title,
+          occurrences: data.occurrences,
+          recurrence: data.recurrence,
+        },
+      }).catch((err) => console.error("[webhook] event.created (series) failed:", err));
+    }
+
     revalidatePath(`/embed/${tenantSlug}/calendar`);
     return { success: true, eventId: firstEvent?.id ?? "" };
   }
@@ -194,6 +208,18 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       );
     });
   }
+
+  // Fire webhook for event.created — non-blocking
+  deliverWebhook(tenant.id, {
+    type: "event.created",
+    payload: {
+      eventId: event.id,
+      title: event.title,
+      startAt: event.startAt.toISOString(),
+      endAt: event.endAt?.toISOString() ?? null,
+      status: event.status,
+    },
+  }).catch((err) => console.error("[webhook] event.created failed:", err));
 
   revalidatePath(`/embed/${tenantSlug}/calendar`);
 
