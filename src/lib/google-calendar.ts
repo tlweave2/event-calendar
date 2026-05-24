@@ -1,4 +1,4 @@
-import ical from "node-ical";
+import type * as ical from "node-ical";
 import type { EventWithCategory } from "@/lib/prisma-tenant";
 
 const EXPANSION_MONTHS = 12;
@@ -76,9 +76,10 @@ export async function getGoogleCalendarEvents(
     return [];
   }
 
+  const icalLib = await import("node-ical");
   let parsed: ical.CalendarResponse;
   try {
-    parsed = ical.parseICS(raw);
+    parsed = icalLib.parseICS(raw);
   } catch (err) {
     console.error("[gcal] parse failed:", err);
     return [];

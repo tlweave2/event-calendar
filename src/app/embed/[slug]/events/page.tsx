@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getTenantBySlug } from "@/lib/tenant";
 import { getMergedApprovedEvents } from "@/lib/merged-events";
 import { recordPageView } from "@/lib/page-views";
