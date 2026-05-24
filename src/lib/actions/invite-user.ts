@@ -35,18 +35,20 @@ export async function inviteUser(
 
   const parsed = inviteSchema.safeParse(payload);
   if (!parsed.success) {
-    return;
+    redirect("/admin/settings?invite_error=Invalid+email+or+role.");
   }
 
   const tenant = await prisma.tenant.findUnique({
     where: { id: session.user.tenantId },
   });
   if (!tenant) return;
-  if (isDemoTenant(tenant.id, tenant.slug)) return;
+  if (isDemoTenant(tenant.id, tenant.slug)) {
+    redirect("/admin/settings?invite_error=Invites+are+disabled+in+demo+mode.");
+  }
 
   const userLimit = await checkAdminUserLimit(tenant.id);
   if (!userLimit.allowed) {
-    return;
+    redirect("/admin/settings?invite_error=User+limit+reached+for+your+plan.");
   }
 
   const email = parsed.data.email.toLowerCase();

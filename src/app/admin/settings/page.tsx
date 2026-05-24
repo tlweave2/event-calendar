@@ -7,16 +7,23 @@ import BillingSection from "./BillingSection";
 import WebhookSettingsForm from "./WebhookSettingsForm";
 import GoogleCalendarForm from "./GoogleCalendarForm";
 
-export default async function SettingsPage() {
+export default async function SettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const session = await auth();
   if (!session) redirect("/admin/login");
 
-  const tenant = await prisma.tenant.findUnique({ where: { id: session.user.tenantId } });
-  const users: Array<{ id: string; email: string; role: string }> = await getTenantUsers(session.user.tenantId);
+  const [tenant, users, webhookConfig, sp] = await Promise.all([
+    prisma.tenant.findUnique({ where: { id: session.user.tenantId } }),
+    getTenantUsers(session.user.tenantId) as Promise<Array<{ id: string; email: string; role: string }>>,
+    prisma.webhookConfig.findUnique({ where: { tenantId: session.user.tenantId } }),
+    searchParams,
+  ]);
 
-  const webhookConfig = await prisma.webhookConfig.findUnique({
-    where: { tenantId: session.user.tenantId },
-  });
+  const inviteSuccess = sp.invited === "1";
+  const inviteError = typeof sp.invite_error === "string" ? sp.invite_error : null;
 
   return (
     <div className="max-w-5xl px-8 py-8">
@@ -24,6 +31,17 @@ export default async function SettingsPage() {
         <h1 className="text-xl font-semibold text-gray-900">Settings</h1>
         <p className="mt-1 text-sm text-gray-500">Invite collaborators and review access.</p>
       </div>
+
+      {inviteSuccess && (
+        <div className="mb-4 rounded-md bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-800">
+          Invite sent successfully.
+        </div>
+      )}
+      {inviteError && (
+        <div className="mb-4 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-800">
+          {inviteError}
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <InviteForm />
