@@ -1369,7 +1369,8 @@ export const TenantScalarFieldEnum = {
   planExpiresAt: 'planExpiresAt',
   isDemoSandbox: 'isDemoSandbox',
   demoExpiresAt: 'demoExpiresAt',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  googleCalendarIcsUrl: 'googleCalendarIcsUrl'
 } as const
 
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]

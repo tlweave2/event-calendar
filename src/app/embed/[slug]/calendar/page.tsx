@@ -1,5 +1,5 @@
 import { getTenantBySlug } from "@/lib/tenant";
-import { getApprovedEvents } from "@/lib/prisma-tenant";
+import { getMergedApprovedEvents } from "@/lib/merged-events";
 import { recordPageView } from "@/lib/page-views";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -20,7 +20,7 @@ export default async function CalendarPage({
 
   void recordPageView(tenant.id, "calendar");
 
-  const events = await getApprovedEvents(tenant.id);
+  const events = await getMergedApprovedEvents(tenant);
 
   const param = (key: string) => {
     const value = sp[key];

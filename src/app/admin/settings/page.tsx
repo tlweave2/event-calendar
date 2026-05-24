@@ -5,6 +5,7 @@ import { getTenantUsers } from "@/lib/prisma-tenant";
 import InviteForm from "./InviteForm";
 import BillingSection from "./BillingSection";
 import WebhookSettingsForm from "./WebhookSettingsForm";
+import GoogleCalendarForm from "./GoogleCalendarForm";
 
 export default async function SettingsPage() {
   const session = await auth();
@@ -50,6 +51,10 @@ export default async function SettingsPage() {
           <BillingSection plan={tenant.plan} hasStripeCustomer={!!tenant.stripeCustomerId} />
         </div>
       )}
+
+      <div className="mt-6 max-w-2xl">
+        <GoogleCalendarForm initialIcsUrl={tenant?.googleCalendarIcsUrl ?? ""} />
+      </div>
 
       <div className="mt-6 max-w-2xl">
         <WebhookSettingsForm

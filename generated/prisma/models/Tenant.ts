@@ -52,6 +52,7 @@ export type TenantMinAggregateOutputType = {
   isDemoSandbox: boolean | null
   demoExpiresAt: Date | null
   createdAt: Date | null
+  googleCalendarIcsUrl: string | null
 }
 
 export type TenantMaxAggregateOutputType = {
@@ -82,6 +83,7 @@ export type TenantMaxAggregateOutputType = {
   isDemoSandbox: boolean | null
   demoExpiresAt: Date | null
   createdAt: Date | null
+  googleCalendarIcsUrl: string | null
 }
 
 export type TenantCountAggregateOutputType = {
@@ -112,6 +114,7 @@ export type TenantCountAggregateOutputType = {
   isDemoSandbox: number
   demoExpiresAt: number
   createdAt: number
+  googleCalendarIcsUrl: number
   _all: number
 }
 
@@ -144,6 +147,7 @@ export type TenantMinAggregateInputType = {
   isDemoSandbox?: true
   demoExpiresAt?: true
   createdAt?: true
+  googleCalendarIcsUrl?: true
 }
 
 export type TenantMaxAggregateInputType = {
@@ -174,6 +178,7 @@ export type TenantMaxAggregateInputType = {
   isDemoSandbox?: true
   demoExpiresAt?: true
   createdAt?: true
+  googleCalendarIcsUrl?: true
 }
 
 export type TenantCountAggregateInputType = {
@@ -204,6 +209,7 @@ export type TenantCountAggregateInputType = {
   isDemoSandbox?: true
   demoExpiresAt?: true
   createdAt?: true
+  googleCalendarIcsUrl?: true
   _all?: true
 }
 
@@ -307,6 +313,7 @@ export type TenantGroupByOutputType = {
   isDemoSandbox: boolean
   demoExpiresAt: Date | null
   createdAt: Date
+  googleCalendarIcsUrl: string | null
   _count: TenantCountAggregateOutputType | null
   _min: TenantMinAggregateOutputType | null
   _max: TenantMaxAggregateOutputType | null
@@ -358,6 +365,7 @@ export type TenantWhereInput = {
   isDemoSandbox?: Prisma.BoolFilter<"Tenant"> | boolean
   demoExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
+  googleCalendarIcsUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
   events?: Prisma.EventListRelationFilter
   eventSeries?: Prisma.EventSeriesListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
@@ -396,6 +404,7 @@ export type TenantOrderByWithRelationInput = {
   isDemoSandbox?: Prisma.SortOrder
   demoExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  googleCalendarIcsUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   events?: Prisma.EventOrderByRelationAggregateInput
   eventSeries?: Prisma.EventSeriesOrderByRelationAggregateInput
   categories?: Prisma.CategoryOrderByRelationAggregateInput
@@ -437,6 +446,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   isDemoSandbox?: Prisma.BoolFilter<"Tenant"> | boolean
   demoExpiresAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
+  googleCalendarIcsUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
   events?: Prisma.EventListRelationFilter
   eventSeries?: Prisma.EventSeriesListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
@@ -475,6 +485,7 @@ export type TenantOrderByWithAggregationInput = {
   isDemoSandbox?: Prisma.SortOrder
   demoExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  googleCalendarIcsUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TenantCountOrderByAggregateInput
   _max?: Prisma.TenantMaxOrderByAggregateInput
   _min?: Prisma.TenantMinOrderByAggregateInput
@@ -511,6 +522,7 @@ export type TenantScalarWhereWithAggregatesInput = {
   isDemoSandbox?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   demoExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Tenant"> | Date | string
+  googleCalendarIcsUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
 }
 
 export type TenantCreateInput = {
@@ -541,6 +553,7 @@ export type TenantCreateInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
@@ -579,6 +592,7 @@ export type TenantUncheckedCreateInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
@@ -617,6 +631,7 @@ export type TenantUpdateInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
@@ -655,6 +670,7 @@ export type TenantUncheckedUpdateInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
@@ -693,6 +709,7 @@ export type TenantCreateManyInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
 }
 
 export type TenantUpdateManyMutationInput = {
@@ -723,6 +740,7 @@ export type TenantUpdateManyMutationInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TenantUncheckedUpdateManyInput = {
@@ -753,6 +771,7 @@ export type TenantUncheckedUpdateManyInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TenantCountOrderByAggregateInput = {
@@ -783,6 +802,7 @@ export type TenantCountOrderByAggregateInput = {
   isDemoSandbox?: Prisma.SortOrder
   demoExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  googleCalendarIcsUrl?: Prisma.SortOrder
 }
 
 export type TenantMaxOrderByAggregateInput = {
@@ -813,6 +833,7 @@ export type TenantMaxOrderByAggregateInput = {
   isDemoSandbox?: Prisma.SortOrder
   demoExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  googleCalendarIcsUrl?: Prisma.SortOrder
 }
 
 export type TenantMinOrderByAggregateInput = {
@@ -843,6 +864,7 @@ export type TenantMinOrderByAggregateInput = {
   isDemoSandbox?: Prisma.SortOrder
   demoExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  googleCalendarIcsUrl?: Prisma.SortOrder
 }
 
 export type TenantScalarRelationFilter = {
@@ -1014,6 +1036,7 @@ export type TenantCreateWithoutCategoriesInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   calendarViews?: Prisma.CalendarViewCreateNestedManyWithoutTenantInput
@@ -1051,6 +1074,7 @@ export type TenantUncheckedCreateWithoutCategoriesInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   calendarViews?: Prisma.CalendarViewUncheckedCreateNestedManyWithoutTenantInput
@@ -1104,6 +1128,7 @@ export type TenantUpdateWithoutCategoriesInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   calendarViews?: Prisma.CalendarViewUpdateManyWithoutTenantNestedInput
@@ -1141,6 +1166,7 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   calendarViews?: Prisma.CalendarViewUncheckedUpdateManyWithoutTenantNestedInput
@@ -1178,6 +1204,7 @@ export type TenantCreateWithoutCalendarViewsInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
@@ -1215,6 +1242,7 @@ export type TenantUncheckedCreateWithoutCalendarViewsInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
@@ -1268,6 +1296,7 @@ export type TenantUpdateWithoutCalendarViewsInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
@@ -1305,6 +1334,7 @@ export type TenantUncheckedUpdateWithoutCalendarViewsInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
@@ -1342,6 +1372,7 @@ export type TenantCreateWithoutEventsInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
   calendarViews?: Prisma.CalendarViewCreateNestedManyWithoutTenantInput
@@ -1379,6 +1410,7 @@ export type TenantUncheckedCreateWithoutEventsInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
   calendarViews?: Prisma.CalendarViewUncheckedCreateNestedManyWithoutTenantInput
@@ -1432,6 +1464,7 @@ export type TenantUpdateWithoutEventsInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
   calendarViews?: Prisma.CalendarViewUpdateManyWithoutTenantNestedInput
@@ -1469,6 +1502,7 @@ export type TenantUncheckedUpdateWithoutEventsInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
   calendarViews?: Prisma.CalendarViewUncheckedUpdateManyWithoutTenantNestedInput
@@ -1506,6 +1540,7 @@ export type TenantCreateWithoutUsersInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
@@ -1543,6 +1578,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
@@ -1596,6 +1632,7 @@ export type TenantUpdateWithoutUsersInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
@@ -1633,6 +1670,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
@@ -1670,6 +1708,7 @@ export type TenantCreateWithoutAuditLogsInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
@@ -1707,6 +1746,7 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
@@ -1760,6 +1800,7 @@ export type TenantUpdateWithoutAuditLogsInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
@@ -1797,6 +1838,7 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
@@ -1834,6 +1876,7 @@ export type TenantCreateWithoutPageViewsInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
@@ -1871,6 +1914,7 @@ export type TenantUncheckedCreateWithoutPageViewsInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
@@ -1924,6 +1968,7 @@ export type TenantUpdateWithoutPageViewsInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
@@ -1961,6 +2006,7 @@ export type TenantUncheckedUpdateWithoutPageViewsInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
@@ -1998,6 +2044,7 @@ export type TenantCreateWithoutEventSeriesInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
   calendarViews?: Prisma.CalendarViewCreateNestedManyWithoutTenantInput
@@ -2035,6 +2082,7 @@ export type TenantUncheckedCreateWithoutEventSeriesInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
   calendarViews?: Prisma.CalendarViewUncheckedCreateNestedManyWithoutTenantInput
@@ -2088,6 +2136,7 @@ export type TenantUpdateWithoutEventSeriesInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
   calendarViews?: Prisma.CalendarViewUpdateManyWithoutTenantNestedInput
@@ -2125,6 +2174,7 @@ export type TenantUncheckedUpdateWithoutEventSeriesInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
   calendarViews?: Prisma.CalendarViewUncheckedUpdateManyWithoutTenantNestedInput
@@ -2162,6 +2212,7 @@ export type TenantCreateWithoutWebhookConfigInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
@@ -2199,6 +2250,7 @@ export type TenantUncheckedCreateWithoutWebhookConfigInput = {
   isDemoSandbox?: boolean
   demoExpiresAt?: Date | string | null
   createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
   events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
   eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
@@ -2252,6 +2304,7 @@ export type TenantUpdateWithoutWebhookConfigInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
@@ -2289,6 +2342,7 @@ export type TenantUncheckedUpdateWithoutWebhookConfigInput = {
   isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
   demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
   eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
@@ -2411,6 +2465,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   isDemoSandbox?: boolean
   demoExpiresAt?: boolean
   createdAt?: boolean
+  googleCalendarIcsUrl?: boolean
   events?: boolean | Prisma.Tenant$eventsArgs<ExtArgs>
   eventSeries?: boolean | Prisma.Tenant$eventSeriesArgs<ExtArgs>
   categories?: boolean | Prisma.Tenant$categoriesArgs<ExtArgs>
@@ -2450,6 +2505,7 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   isDemoSandbox?: boolean
   demoExpiresAt?: boolean
   createdAt?: boolean
+  googleCalendarIcsUrl?: boolean
 }, ExtArgs["result"]["tenant"]>
 
 export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2480,6 +2536,7 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   isDemoSandbox?: boolean
   demoExpiresAt?: boolean
   createdAt?: boolean
+  googleCalendarIcsUrl?: boolean
 }, ExtArgs["result"]["tenant"]>
 
 export type TenantSelectScalar = {
@@ -2510,9 +2567,10 @@ export type TenantSelectScalar = {
   isDemoSandbox?: boolean
   demoExpiresAt?: boolean
   createdAt?: boolean
+  googleCalendarIcsUrl?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "logoUrl" | "primaryColor" | "secondaryColor" | "plan" | "customDomain" | "timezone" | "embedFontFamily" | "embedDefaultView" | "embedHideSearch" | "embedHideCategories" | "embedHideSubmit" | "embedBgColor" | "embedDarkMode" | "embedCardStyle" | "embedShowFlyerGallery" | "submitHeading" | "submitSubheading" | "emptyStateMessage" | "stripeCustomerId" | "stripeSubscriptionId" | "planExpiresAt" | "isDemoSandbox" | "demoExpiresAt" | "createdAt", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "logoUrl" | "primaryColor" | "secondaryColor" | "plan" | "customDomain" | "timezone" | "embedFontFamily" | "embedDefaultView" | "embedHideSearch" | "embedHideCategories" | "embedHideSubmit" | "embedBgColor" | "embedDarkMode" | "embedCardStyle" | "embedShowFlyerGallery" | "submitHeading" | "submitSubheading" | "emptyStateMessage" | "stripeCustomerId" | "stripeSubscriptionId" | "planExpiresAt" | "isDemoSandbox" | "demoExpiresAt" | "createdAt" | "googleCalendarIcsUrl", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   events?: boolean | Prisma.Tenant$eventsArgs<ExtArgs>
   eventSeries?: boolean | Prisma.Tenant$eventSeriesArgs<ExtArgs>
@@ -2567,6 +2625,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     isDemoSandbox: boolean
     demoExpiresAt: Date | null
     createdAt: Date
+    googleCalendarIcsUrl: string | null
   }, ExtArgs["result"]["tenant"]>
   composites: {}
 }
@@ -3025,6 +3084,7 @@ export interface TenantFieldRefs {
   readonly isDemoSandbox: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly demoExpiresAt: Prisma.FieldRef<"Tenant", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Tenant", 'DateTime'>
+  readonly googleCalendarIcsUrl: Prisma.FieldRef<"Tenant", 'String'>
 }
     
 

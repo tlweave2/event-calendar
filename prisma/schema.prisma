@@ -47,7 +47,8 @@ model Tenant {
   users         User[]
   pageViews     PageView[]
   auditLogs     AuditLog[]
-  webhookConfig WebhookConfig?
+  webhookConfig        WebhookConfig?
+  googleCalendarIcsUrl String?       @db.VarChar(500)
 
   @@map("tenants")
 }
