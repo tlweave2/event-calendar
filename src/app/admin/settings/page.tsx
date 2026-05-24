@@ -4,8 +4,7 @@ import { redirect } from "next/navigation";
 import { getTenantUsers } from "@/lib/prisma-tenant";
 import InviteForm from "./InviteForm";
 import BillingSection from "./BillingSection";
-import WebhookSettingsForm from "./WebhookSettingsForm";
-import GoogleCalendarForm from "./GoogleCalendarForm";
+import { GoogleCalendarFormClient, WebhookSettingsFormClient } from "./SettingsFormsSsr";
 
 export default async function SettingsPage({
   searchParams,
@@ -78,11 +77,11 @@ export default async function SettingsPage({
       )}
 
       <div className="mt-6 max-w-2xl">
-        <GoogleCalendarForm initialIcsUrl={tenant?.googleCalendarIcsUrl ?? ""} />
+        <GoogleCalendarFormClient initialIcsUrl={tenant?.googleCalendarIcsUrl ?? ""} />
       </div>
 
       <div className="mt-6 max-w-2xl">
-        <WebhookSettingsForm
+        <WebhookSettingsFormClient
           initialUrl={webhookConfig?.url ?? ""}
           initialEnabled={webhookConfig?.enabled ?? false}
         />
