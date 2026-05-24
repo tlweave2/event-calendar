@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 
 export function recordPageView(
   tenantId: string,
-  page: "calendar" | "event" | "submit",
+  page: "calendar" | "event" | "submit" | "events",
   eventId?: string
 ): void {
   void prisma.pageView.create({

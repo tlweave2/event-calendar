@@ -53,6 +53,7 @@ export default function EmbedPageClient({
 }) {
   const calendarUrl = `${baseUrl}/embed/${slug}/calendar`;
   const calendarOnlyUrl = `${baseUrl}/embed/${slug}/calendar?minimal=true`;
+  const eventsOnlyUrl = `${baseUrl}/embed/${slug}/events`;
   const submitUrl = `${baseUrl}/embed/${slug}/submit`;
 
   return (
@@ -67,6 +68,7 @@ export default function EmbedPageClient({
         <div className="space-y-3">
           <CopyBlock label="Public Calendar" snippet={calendarUrl} />
           <CopyBlock label="Calendar Only (no header)" snippet={calendarOnlyUrl} />
+          <CopyBlock label="Events Only (no controls)" snippet={eventsOnlyUrl} />
           <CopyBlock label="Event Submission Form" snippet={submitUrl} />
         </div>
       </div>
@@ -92,6 +94,14 @@ export default function EmbedPageClient({
           <CopyBlock
             label="Calendar Only iframe (no header/logo)"
             snippet={`<iframe\n  src="${calendarOnlyUrl}"\n  width="100%"\n  height="600"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`}
+          />
+          <p className="mb-1 text-xs text-gray-400">
+            A clean, date-grouped list of all events — no search, filters, or controls.
+            Great for sidebars, widgets, or pages where you just want to show what&apos;s happening.
+          </p>
+          <CopyBlock
+            label="Events Only iframe"
+            snippet={`<iframe\n  src="${eventsOnlyUrl}"\n  width="100%"\n  height="600"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`}
           />
           <p className="mb-1 text-xs text-gray-400">
             The form where community members submit events for your review.
