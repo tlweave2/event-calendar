@@ -85,7 +85,7 @@ function ToggleRow({
 
 // ── main component ────────────────────────────────────────────────────────────
 
-type WidgetType = "calendar" | "events" | "submit";
+type WidgetType = "calendar" | "events" | "flyers" | "submit";
 type CalView = "list" | "grid";
 type CardStyle = "modern" | "compact" | "image" | "minimal";
 type BgMode = "default" | "transparent" | "dark" | "custom";
@@ -103,6 +103,7 @@ export default function EmbedPageClient({
   // ── calendar options ─────────────────────────────────────────────────────
   const [calView, setCalView] = useState<CalView>("list");
   const [cardStyle, setCardStyle] = useState<CardStyle>("modern");
+  const [showFlyers, setShowFlyers] = useState(false);
   const [hideHeader, setHideHeader] = useState(false);
   const [hideSearch, setHideSearch] = useState(false);
   const [hideCategories, setHideCategories] = useState(false);
@@ -121,6 +122,7 @@ export default function EmbedPageClient({
     if (widget === "calendar") {
       if (calView !== "list") params.set("view", calView);
       if (cardStyle !== "modern") params.set("style", cardStyle);
+      if (showFlyers) params.set("flyers", "true");
       if (hideHeader) params.set("minimal", "true");
       if (hideSearch) params.set("hideSearch", "true");
       if (hideCategories) params.set("hideCategories", "true");
@@ -136,15 +138,17 @@ export default function EmbedPageClient({
     const path =
       widget === "events"
         ? `/embed/${slug}/events`
-        : widget === "submit"
-          ? `/embed/${slug}/submit`
-          : `/embed/${slug}/calendar`;
+        : widget === "flyers"
+          ? `/embed/${slug}/flyers`
+          : widget === "submit"
+            ? `/embed/${slug}/submit`
+            : `/embed/${slug}/calendar`;
 
     const qs = params.toString();
     return `${baseUrl}${path}${qs ? `?${qs}` : ""}`;
   }, [widget, calView, cardStyle, hideHeader, hideSearch, hideCategories, hideSubmit, bgMode, customBg, darkMode, font, slug, baseUrl]);
 
-  const iframeHeight = widget === "submit" ? 900 : 700;
+  const iframeHeight = widget === "submit" ? 900 : widget === "flyers" ? 500 : 700;
 
   const snippet = `<iframe\n  src="${iframeUrl}"\n  width="100%"\n  height="${iframeHeight}"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`;
 
@@ -158,13 +162,15 @@ export default function EmbedPageClient({
           onChange={setWidget}
           options={[
             { label: "Full Calendar", value: "calendar" },
-            { label: "Events Only", value: "events" },
-            { label: "Submission Form", value: "submit" },
+            { label: "Events List", value: "events" },
+            { label: "Flyer Gallery", value: "flyers" },
+            { label: "Submit Form", value: "submit" },
           ]}
         />
         <p className="text-xs text-gray-400">
-          {widget === "calendar" && "Your full calendar with search, category filter, and list/grid toggle."}
+          {widget === "calendar" && "Your full calendar with search, category filter, and list/grid toggle. Can include a flyer gallery."}
           {widget === "events" && "A clean date-grouped list of upcoming events with no controls. Great for sidebars."}
+          {widget === "flyers" && "A photo grid of event flyers for events that have images uploaded."}
           {widget === "submit" && "The form visitors use to propose events for your review."}
         </p>
       </div>
@@ -201,6 +207,13 @@ export default function EmbedPageClient({
           </div>
 
           <div className="space-y-3">
+            <ToggleRow
+              id="show-flyers"
+              label="Include flyer gallery"
+              description="Shows a scrollable strip of event flyers below the calendar."
+              checked={showFlyers}
+              onChange={setShowFlyers}
+            />
             <ToggleRow
               id="hide-header"
               label="Hide header & logo"
