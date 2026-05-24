@@ -15,12 +15,10 @@ export default async function SettingsPage({
   const session = await auth();
   if (!session) redirect("/admin/login");
 
-  const [tenant, users, webhookConfig, sp] = await Promise.all([
-    prisma.tenant.findUnique({ where: { id: session.user.tenantId } }),
-    getTenantUsers(session.user.tenantId) as Promise<Array<{ id: string; email: string; role: string }>>,
-    prisma.webhookConfig.findUnique({ where: { tenantId: session.user.tenantId } }),
-    searchParams,
-  ]);
+  const sp = await searchParams;
+  const tenant = await prisma.tenant.findUnique({ where: { id: session.user.tenantId } });
+  const users: Array<{ id: string; email: string; role: string }> = await getTenantUsers(session.user.tenantId);
+  const webhookConfig = await prisma.webhookConfig.findUnique({ where: { tenantId: session.user.tenantId } });
 
   const inviteSuccess = sp.invited === "1";
   const inviteError = typeof sp.invite_error === "string" ? sp.invite_error : null;
