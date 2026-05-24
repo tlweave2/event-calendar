@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,8 @@ export default function LoginPage() {
     e.preventDefault();
     setCredLoading(true);
     try {
+      // Clear any existing session (e.g. a demo sandbox) before signing in.
+      await signOut({ redirect: false });
       await signIn("credentials", {
         email: credEmail,
         password: credPassword,

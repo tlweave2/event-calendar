@@ -31,8 +31,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const password = credentials?.password as string | undefined;
         if (!email || !password) return null;
 
-        const user = await prisma.user.findFirst({
-          where: { email },
+        // Prefer accounts with a real password (owner-created) over seeded/invited accounts.
+        // If the same email exists on multiple tenants, this ensures the real account wins.
+        let user = await prisma.user.findFirst({
+          where: { email, password: { not: null } },
           select: {
             id: true,
             email: true,
@@ -42,6 +44,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             password: true,
           },
         });
+
+        if (!user) {
+          user = await prisma.user.findFirst({
+            where: { email },
+            select: {
+              id: true,
+              email: true,
+              name: true,
+              tenantId: true,
+              role: true,
+              password: true,
+            },
+          });
+        }
 
         if (!user) {
           console.log("[auth] no user found for:", email);

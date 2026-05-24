@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
 import Link from "next/link";
 import AdminSidebar from "./AdminSidebar";
+import DemoBanner from "./DemoBanner";
 
 export default async function AdminLayout({
   children,
@@ -46,14 +47,7 @@ export default async function AdminLayout({
         pendingCount={pendingCount}
       />
       <main className="min-h-screen pt-14 md:pt-0 md:pl-56">
-        {tenant?.isDemoSandbox && (
-          <div className="bg-violet-600 px-4 py-2 text-center text-sm text-white">
-            You&apos;re in a demo sandbox - changes are yours but expire in 1 hour.{" "}
-            <Link href="/signup" className="font-medium underline">
-              Create a permanent calendar →
-            </Link>
-          </div>
-        )}
+        {tenant?.isDemoSandbox && <DemoBanner />}
         {children}
       </main>
     </div>
