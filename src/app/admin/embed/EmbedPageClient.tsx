@@ -1,35 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
-function CopyBlock({ label, snippet }: { label: string; snippet: string }) {
+// ── tiny copy button ─────────────────────────────────────────────────────────
+
+function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false);
-
-  const copy = async () => {
-    await navigator.clipboard.writeText(snippet);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <div className="space-y-2 rounded-lg border bg-white p-5">
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-gray-900">{label}</p>
-        <Button size="sm" variant="outline" onClick={copy}>
-          {copied ? "Copied!" : "Copy"}
-        </Button>
-      </div>
-      <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 whitespace-pre-wrap break-all text-xs text-gray-600">
-        {snippet}
-      </pre>
-    </div>
-  );
-}
-
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
-
   return (
     <button
       onClick={async () => {
@@ -37,12 +17,78 @@ function CopyButton({ text }: { text: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }}
-      className="shrink-0 rounded border border-gray-200 px-2 py-1 text-xs text-gray-500 hover:bg-gray-50"
+      className="shrink-0 rounded border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
     >
-      {copied ? "Copied!" : "Copy"}
+      {copied ? "Copied!" : label}
     </button>
   );
 }
+
+// ── option pill group ─────────────────────────────────────────────────────────
+
+function Pills<T extends string>({
+  value,
+  onChange,
+  options,
+}: {
+  value: T;
+  onChange: (v: T) => void;
+  options: { label: string; value: T }[];
+}) {
+  return (
+    <div className="flex overflow-hidden rounded-md border border-gray-200 text-sm">
+      {options.map((opt) => (
+        <button
+          key={opt.value}
+          type="button"
+          onClick={() => onChange(opt.value)}
+          className={`flex-1 px-3 py-1.5 font-medium transition-colors ${
+            value === opt.value
+              ? "bg-gray-900 text-white"
+              : "bg-white text-gray-600 hover:bg-gray-50"
+          } border-r border-gray-200 last:border-r-0`}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ── toggle row ────────────────────────────────────────────────────────────────
+
+function ToggleRow({
+  id,
+  label,
+  description,
+  checked,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  description?: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <div>
+        <Label htmlFor={id} className="cursor-pointer">
+          {label}
+        </Label>
+        {description && <p className="text-xs text-gray-400">{description}</p>}
+      </div>
+      <Switch id={id} checked={checked} onCheckedChange={onChange} />
+    </div>
+  );
+}
+
+// ── main component ────────────────────────────────────────────────────────────
+
+type WidgetType = "calendar" | "events" | "submit";
+type CalView = "list" | "grid";
+type CardStyle = "modern" | "compact" | "image" | "minimal";
+type BgMode = "default" | "transparent" | "dark" | "custom";
 
 export default function EmbedPageClient({
   slug,
@@ -51,165 +97,238 @@ export default function EmbedPageClient({
   slug: string;
   baseUrl: string;
 }) {
-  const calendarUrl = `${baseUrl}/embed/${slug}/calendar`;
-  const calendarOnlyUrl = `${baseUrl}/embed/${slug}/calendar?minimal=true`;
-  const eventsOnlyUrl = `${baseUrl}/embed/${slug}/events`;
-  const submitUrl = `${baseUrl}/embed/${slug}/submit`;
+  // ── widget type ──────────────────────────────────────────────────────────
+  const [widget, setWidget] = useState<WidgetType>("calendar");
+
+  // ── calendar options ─────────────────────────────────────────────────────
+  const [calView, setCalView] = useState<CalView>("list");
+  const [cardStyle, setCardStyle] = useState<CardStyle>("modern");
+  const [hideHeader, setHideHeader] = useState(false);
+  const [hideSearch, setHideSearch] = useState(false);
+  const [hideCategories, setHideCategories] = useState(false);
+  const [hideSubmit, setHideSubmit] = useState(false);
+
+  // ── shared appearance ────────────────────────────────────────────────────
+  const [bgMode, setBgMode] = useState<BgMode>("default");
+  const [customBg, setCustomBg] = useState("#ffffff");
+  const [darkMode, setDarkMode] = useState(false);
+  const [font, setFont] = useState("");
+
+  // ── derived iframe URL ────────────────────────────────────────────────────
+  const iframeUrl = useMemo(() => {
+    const params = new URLSearchParams();
+
+    if (widget === "calendar") {
+      if (calView !== "list") params.set("view", calView);
+      if (cardStyle !== "modern") params.set("style", cardStyle);
+      if (hideHeader) params.set("minimal", "true");
+      if (hideSearch) params.set("hideSearch", "true");
+      if (hideCategories) params.set("hideCategories", "true");
+      if (hideSubmit) params.set("hideSubmit", "true");
+    }
+
+    if (bgMode === "transparent") params.set("bg", "transparent");
+    else if (bgMode === "dark") { params.set("bg", "#111827"); params.set("dark", "true"); }
+    else if (bgMode === "custom") params.set("bg", customBg);
+    if (darkMode && bgMode !== "dark") params.set("dark", "true");
+    if (font.trim()) params.set("font", font.trim());
+
+    const path =
+      widget === "events"
+        ? `/embed/${slug}/events`
+        : widget === "submit"
+          ? `/embed/${slug}/submit`
+          : `/embed/${slug}/calendar`;
+
+    const qs = params.toString();
+    return `${baseUrl}${path}${qs ? `?${qs}` : ""}`;
+  }, [widget, calView, cardStyle, hideHeader, hideSearch, hideCategories, hideSubmit, bgMode, customBg, darkMode, font, slug, baseUrl]);
+
+  const iframeHeight = widget === "submit" ? 900 : 700;
+
+  const snippet = `<iframe\n  src="${iframeUrl}"\n  width="100%"\n  height="${iframeHeight}"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`;
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="mb-3 text-sm font-medium uppercase tracking-wide text-gray-400">
-          Hosted Pages
-        </h2>
-        <p className="mb-4 text-sm text-gray-500">
-          Share these URLs directly - no embedding needed. Works great for email newsletters, social media, or linking from a menu.
+      {/* ── widget picker ─────────────────────────────────────────────── */}
+      <div className="space-y-2">
+        <Label className="text-sm font-semibold text-gray-700">What do you want to embed?</Label>
+        <Pills
+          value={widget}
+          onChange={setWidget}
+          options={[
+            { label: "Full Calendar", value: "calendar" },
+            { label: "Events Only", value: "events" },
+            { label: "Submission Form", value: "submit" },
+          ]}
+        />
+        <p className="text-xs text-gray-400">
+          {widget === "calendar" && "Your full calendar with search, category filter, and list/grid toggle."}
+          {widget === "events" && "A clean date-grouped list of upcoming events with no controls. Great for sidebars."}
+          {widget === "submit" && "The form visitors use to propose events for your review."}
         </p>
-        <div className="space-y-3">
-          <CopyBlock label="Public Calendar" snippet={calendarUrl} />
-          <CopyBlock label="Calendar Only (no header)" snippet={calendarOnlyUrl} />
-          <CopyBlock label="Events Only (no controls)" snippet={eventsOnlyUrl} />
-          <CopyBlock label="Event Submission Form" snippet={submitUrl} />
+      </div>
+
+      {/* ── calendar-specific options ─────────────────────────────────── */}
+      {widget === "calendar" && (
+        <div className="space-y-5 rounded-lg border bg-gray-50 p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">Calendar options</p>
+
+          <div className="space-y-1">
+            <Label>Default view</Label>
+            <Pills
+              value={calView}
+              onChange={setCalView}
+              options={[
+                { label: "List", value: "list" },
+                { label: "Month grid", value: "grid" },
+              ]}
+            />
+          </div>
+
+          <div className="space-y-1">
+            <Label>Card style</Label>
+            <Pills
+              value={cardStyle}
+              onChange={setCardStyle}
+              options={[
+                { label: "Modern", value: "modern" },
+                { label: "Compact", value: "compact" },
+                { label: "Image", value: "image" },
+                { label: "Minimal", value: "minimal" },
+              ]}
+            />
+          </div>
+
+          <div className="space-y-3">
+            <ToggleRow
+              id="hide-header"
+              label="Hide header & logo"
+              description="Good for tight layouts where you don't need the title."
+              checked={hideHeader}
+              onChange={setHideHeader}
+            />
+            <ToggleRow
+              id="hide-search"
+              label="Hide search bar"
+              checked={hideSearch}
+              onChange={setHideSearch}
+            />
+            <ToggleRow
+              id="hide-categories"
+              label="Hide category filter"
+              checked={hideCategories}
+              onChange={setHideCategories}
+            />
+            <ToggleRow
+              id="hide-submit"
+              label="Hide submit link"
+              description="Remove the 'Submit an Event' link from the calendar."
+              checked={hideSubmit}
+              onChange={setHideSubmit}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ── appearance ────────────────────────────────────────────────── */}
+      <div className="space-y-5 rounded-lg border bg-gray-50 p-5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">Appearance</p>
+
+        <div className="space-y-1">
+          <Label>Background</Label>
+          <Pills
+            value={bgMode}
+            onChange={setBgMode}
+            options={[
+              { label: "Default", value: "default" },
+              { label: "Transparent", value: "transparent" },
+              { label: "Dark", value: "dark" },
+              { label: "Custom", value: "custom" },
+            ]}
+          />
+          {bgMode === "custom" && (
+            <div className="mt-2 flex items-center gap-2">
+              <input
+                type="color"
+                value={customBg}
+                onChange={(e) => setCustomBg(e.target.value)}
+                className="h-9 w-9 cursor-pointer rounded border"
+              />
+              <span className="font-mono text-sm text-gray-500">{customBg}</span>
+            </div>
+          )}
+        </div>
+
+        {bgMode !== "dark" && (
+          <ToggleRow
+            id="dark-mode"
+            label="Dark mode"
+            description="Inverts text and card colors for dark-themed sites."
+            checked={darkMode}
+            onChange={setDarkMode}
+          />
+        )}
+
+        <div className="space-y-1">
+          <Label htmlFor="font-input">Font</Label>
+          <p className="text-xs text-gray-400">
+            Any Google Font name, e.g. <span className="font-mono">Roboto Slab</span> or{" "}
+            <span className="font-mono">Poppins</span>. Leave blank to inherit the site font.
+          </p>
+          <Input
+            id="font-input"
+            placeholder="e.g. Poppins"
+            value={font}
+            onChange={(e) => setFont(e.target.value)}
+            className="max-w-xs bg-white"
+          />
         </div>
       </div>
 
-      <div>
-        <h2 className="text-base font-medium text-gray-900">Embed Code</h2>
-        <p className="mt-1 mb-4 text-sm text-gray-500">
-          Copy and paste these code snippets into your website to display your
-          calendar or submission form. Works with WordPress, Squarespace, Wix,
-          or plain HTML.
+      {/* ── generated code ────────────────────────────────────────────── */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <Label className="text-sm font-semibold text-gray-700">Your embed code</Label>
+          <CopyButton text={snippet} label="Copy iframe code" />
+        </div>
+        <pre className="overflow-x-auto rounded-lg border bg-gray-900 p-4 text-xs text-gray-100 whitespace-pre-wrap break-all">
+          {snippet}
+        </pre>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-400">Hosted URL:</span>
+          <code className="flex-1 truncate rounded bg-gray-100 px-2 py-1 text-xs text-gray-600">
+            {iframeUrl}
+          </code>
+          <CopyButton text={iframeUrl} label="Copy URL" />
+        </div>
+      </div>
+
+      {/* ── live preview ──────────────────────────────────────────────── */}
+      <div className="space-y-2">
+        <Label className="text-sm font-semibold text-gray-700">Live preview</Label>
+        <p className="text-xs text-gray-400">
+          This is exactly what visitors will see. Changes above update the preview instantly.
         </p>
-        <div className="space-y-3">
-          <p className="mb-1 text-xs text-gray-400">
-            Shows your full event calendar with search, category filters, and list/grid toggle.
-          </p>
-          <CopyBlock
-            label="Calendar iframe"
-            snippet={`<iframe\n  src="${calendarUrl}"\n  width="100%"\n  height="700"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`}
-          />
-          <p className="mb-1 text-xs text-gray-400">
-            Same calendar but without the logo and header, for tighter layouts or sidebars.
-          </p>
-          <CopyBlock
-            label="Calendar Only iframe (no header/logo)"
-            snippet={`<iframe\n  src="${calendarOnlyUrl}"\n  width="100%"\n  height="600"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`}
-          />
-          <p className="mb-1 text-xs text-gray-400">
-            A clean, date-grouped list of all events — no search, filters, or controls.
-            Great for sidebars, widgets, or pages where you just want to show what&apos;s happening.
-          </p>
-          <CopyBlock
-            label="Events Only iframe"
-            snippet={`<iframe\n  src="${eventsOnlyUrl}"\n  width="100%"\n  height="600"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`}
-          />
-          <p className="mb-1 text-xs text-gray-400">
-            The form where community members submit events for your review.
-          </p>
-          <CopyBlock
-            label="Submission Form iframe"
-            snippet={`<iframe\n  src="${submitUrl}"\n  width="100%"\n  height="900"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`}
+        <div className="overflow-hidden rounded-xl border shadow-sm">
+          <iframe
+            key={iframeUrl}
+            src={iframeUrl}
+            width="100%"
+            height={iframeHeight}
+            frameBorder="0"
+            title="Embed preview"
           />
         </div>
       </div>
 
+      {/* ── WordPress tip ─────────────────────────────────────────────── */}
       <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 text-sm text-blue-700">
         <p className="font-medium">Using WordPress?</p>
         <p className="mt-1 text-blue-600">
-          Add an HTML block to any page or post and paste the iframe code above. Works with any page builder including Elementor, Divi, and Gutenberg.
+          Add an HTML block to any page or post and paste the iframe code above. Works with
+          Elementor, Divi, Gutenberg, and plain HTML sites.
         </p>
-      </div>
-
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
-        <p className="mb-1 font-medium text-gray-900">URL Parameters</p>
-        <p className="mb-4 text-gray-500">
-          Add these to the end of any embed URL to customize that specific embed
-          without changing your saved defaults. Useful when the same calendar
-          appears on multiple pages with different looks.
-        </p>
-
-        <div className="space-y-3">
-          {[
-            {
-              param: "?minimal=true",
-              desc: "Hide the header and logo - great for tight embeds",
-              example: `/embed/${slug}/calendar?minimal=true`,
-            },
-            {
-              param: "&font=Poppins",
-              desc: "Use any Google Font by name",
-              example: `/embed/${slug}/calendar?font=Poppins`,
-            },
-            {
-              param: "&view=grid",
-              desc: "Default to the calendar grid instead of list view",
-              example: `/embed/${slug}/calendar?view=grid`,
-            },
-            {
-              param: "&style=compact",
-              desc: "Calendar style: modern, compact, image, or minimal",
-              example: `/embed/${slug}/calendar?style=compact`,
-            },
-            {
-              param: "&dark=true",
-              desc: "Enable dark mode - useful for dark-themed websites",
-              example: `/embed/${slug}/calendar?dark=true`,
-            },
-            {
-              param: "&bg=transparent",
-              desc: "Transparent background so it blends into your site",
-              example: `/embed/${slug}/calendar?bg=transparent`,
-            },
-            {
-              param: "&bg=%23ff0000",
-              desc: "Custom background color (use %23 instead of # in URLs)",
-              example: `/embed/${slug}/calendar?bg=%23f3f4f6`,
-            },
-            {
-              param: "&hideSearch=true",
-              desc: "Hide the search bar",
-              example: `/embed/${slug}/calendar?hideSearch=true`,
-            },
-            {
-              param: "&hideCategories=true",
-              desc: "Hide the category filter",
-              example: `/embed/${slug}/calendar?hideCategories=true`,
-            },
-            {
-              param: "&hideSubmit=true",
-              desc: "Hide the submit an event link",
-              example: `/embed/${slug}/calendar?hideSubmit=true`,
-            },
-            {
-              param: "&flyers=true",
-              desc: "Show or hide the flyer gallery strip at the bottom",
-              example: `/embed/${slug}/calendar?flyers=true`,
-            },
-          ].map(({ param, desc, example }) => (
-            <div key={param} className="space-y-1 rounded-md border bg-white p-3">
-              <div className="flex items-center gap-2">
-                <code className="text-xs font-mono font-semibold text-violet-600">{param}</code>
-                <span className="text-xs text-gray-500">{desc}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <code className="flex-1 truncate rounded bg-gray-50 px-2 py-1 text-xs text-gray-500">
-                  {baseUrl}{example}
-                </code>
-                <CopyButton text={`${baseUrl}${example}`} />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-4 space-y-1 rounded-md border bg-white p-3">
-          <p className="text-xs font-medium text-gray-700">Combining multiple params</p>
-          <div className="flex items-center gap-2">
-            <code className="flex-1 truncate rounded bg-gray-50 px-2 py-1 text-xs text-gray-500">
-              {baseUrl}/embed/{slug}/calendar?minimal=true&dark=true&font=Inter&hideSubmit=true
-            </code>
-            <CopyButton text={`${baseUrl}/embed/${slug}/calendar?minimal=true&dark=true&font=Inter&hideSubmit=true`} />
-          </div>
-        </div>
       </div>
     </div>
   );
