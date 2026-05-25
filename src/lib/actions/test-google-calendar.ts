@@ -28,7 +28,16 @@ export async function testGoogleCalendar(input: {
         error: `Feed returned HTTP ${res.status}. Make sure the calendar is public and the URL is correct.`,
       };
     }
+    const contentType = res.headers.get("content-type") ?? "";
     raw = await res.text();
+
+    if (contentType.includes("text/html") || raw.trimStart().startsWith("<")) {
+      return {
+        success: false,
+        error:
+          "The URL returned an HTML page instead of a calendar file. Make sure the calendar is set to Public in Google Calendar → Settings → Access permissions.",
+      };
+    }
   } catch {
     return {
       success: false,
@@ -42,6 +51,6 @@ export async function testGoogleCalendar(input: {
     const count = Object.values(parsed2).filter((c) => c?.type === "VEVENT").length;
     return { success: true, count };
   } catch {
-    return { success: false, error: "Could not parse the ICS file." };
+    return { success: false, error: "Could not parse the ICS file. The feed may be empty or malformed." };
   }
 }
