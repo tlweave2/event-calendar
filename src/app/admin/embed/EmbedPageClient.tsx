@@ -317,24 +317,6 @@ export default function EmbedPageClient({
         </div>
       </div>
 
-      {/* ── live preview ──────────────────────────────────────────────── */}
-      <div className="space-y-2">
-        <Label className="text-sm font-semibold text-gray-700">Live preview</Label>
-        <p className="text-xs text-gray-400">
-          This is exactly what visitors will see. Changes above update the preview instantly.
-        </p>
-        <div className="overflow-hidden rounded-xl border shadow-sm">
-          <iframe
-            key={iframeUrl}
-            src={iframeUrl}
-            width="100%"
-            height={iframeHeight}
-            frameBorder="0"
-            title="Embed preview"
-          />
-        </div>
-      </div>
-
       {/* ── WordPress tip ─────────────────────────────────────────────── */}
       <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 text-sm text-blue-700">
         <p className="font-medium">Using WordPress?</p>
