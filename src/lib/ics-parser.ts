@@ -35,6 +35,21 @@ function unescape(s: string): string {
     .replace(/\\\\/g, "\\");
 }
 
+function stripHtml(s: string): string {
+  return s
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 // Convert a local date string in a named timezone to a UTC Date using Intl.
 function tzLocalToUTC(str: string, tzid: string): Date {
   const m = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$/.exec(str);
@@ -136,7 +151,7 @@ export function parseICS(raw: string): ParsedEvent[] {
       switch (prop) {
         case "UID":          ev.uid = rawVal; break;
         case "SUMMARY":      ev.summary = unescape(rawVal); break;
-        case "DESCRIPTION":  ev.description = unescape(rawVal) || null; break;
+        case "DESCRIPTION":  ev.description = stripHtml(unescape(rawVal)) || null; break;
         case "LOCATION":     ev.location = unescape(rawVal) || null; break;
         case "URL":          ev.url = rawVal || null; break;
         case "DTSTART":      ev.start = parseDate(rawVal, tzid) ?? undefined; break;
