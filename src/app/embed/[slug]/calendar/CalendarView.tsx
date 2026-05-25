@@ -66,7 +66,7 @@ export default function CalendarView({
   showFlyerGallery?: boolean;
   emptyStateMessage?: string | null;
 }) {
-  const [view, setView] = useState<ViewMode>(defaultView);
+  const view = defaultView;
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -137,29 +137,6 @@ export default function CalendarView({
             </SelectContent>
           </Select>
         )}
-
-        <div className={`ml-auto flex overflow-hidden rounded-md border ${darkMode ? "border-gray-700 bg-gray-800" : "bg-white"}`}>
-          <button
-            type="button"
-            onClick={() => setView("list")}
-            className={`px-3 py-1.5 text-sm font-medium transition-colors ${
-              view === "list" ? "text-white" : "text-gray-500 hover:text-gray-700"
-            }`}
-            style={view === "list" ? { backgroundColor: accent } : undefined}
-          >
-            List
-          </button>
-          <button
-            type="button"
-            onClick={() => setView("grid")}
-            className={`border-l px-3 py-1.5 text-sm font-medium transition-colors ${
-              view === "grid" ? "text-white" : "text-gray-500 hover:text-gray-700"
-            }`}
-            style={view === "grid" ? { backgroundColor: accent } : undefined}
-          >
-            Calendar
-          </button>
-        </div>
 
         {!hideSubmit && (
           <a
