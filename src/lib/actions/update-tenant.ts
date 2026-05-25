@@ -156,6 +156,7 @@ const embedSettingsSchema = z.object({
   embedHideSearch: z.boolean().default(false),
   embedHideCategories: z.boolean().default(false),
   embedHideSubmit: z.boolean().default(false),
+  embedHideHeader: z.boolean().default(false),
   embedBgColor: z.string().max(20).optional().nullable(),
   embedDarkMode: z.boolean().default(false),
 });

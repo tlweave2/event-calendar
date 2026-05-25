@@ -22,6 +22,7 @@ model Tenant {
   // Embed customization defaults
   embedFontFamily     String? @db.VarChar(100)
   embedDefaultView    String  @default("grid") @db.VarChar(10)
+  embedHideHeader     Boolean @default(false)
   embedHideSearch     Boolean @default(false)
   embedHideCategories Boolean @default(false)
   embedHideSubmit     Boolean @default(false)

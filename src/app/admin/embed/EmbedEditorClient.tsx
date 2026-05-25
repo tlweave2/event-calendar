@@ -13,6 +13,7 @@ type Props = {
   embedDefaultView: string;
   embedCardStyle: string;
   embedShowFlyerGallery: boolean;
+  embedHideHeader: boolean;
   embedHideSearch: boolean;
   embedHideCategories: boolean;
   embedHideSubmit: boolean;
@@ -29,6 +30,7 @@ function buildPreviewUrl(slug: string, baseUrl: string, s: EmbedPreviewSettings)
   if (s.darkMode) params.set("dark", "true");
   if (s.hideSearch) params.set("hideSearch", "true");
   if (s.hideCategories) params.set("hideCategories", "true");
+  if (s.hideHeader) params.set("minimal", "true");
   if (s.hideSubmit) params.set("hideSubmit", "true");
   if (s.showFlyerGallery) params.set("flyers", "true");
   const qs = params.toString();
@@ -38,7 +40,7 @@ function buildPreviewUrl(slug: string, baseUrl: string, s: EmbedPreviewSettings)
 export default function EmbedEditorClient({
   tenantId, slug, baseUrl, primaryColor,
   embedFontFamily, embedDefaultView, embedCardStyle,
-  embedShowFlyerGallery, embedHideSearch, embedHideCategories, embedHideSubmit,
+  embedShowFlyerGallery, embedHideHeader, embedHideSearch, embedHideCategories, embedHideSubmit,
   embedBgColor, embedDarkMode,
 }: Props) {
   const initialSettings: EmbedPreviewSettings = {
@@ -46,6 +48,7 @@ export default function EmbedEditorClient({
     defaultView: embedDefaultView,
     cardStyle: embedCardStyle,
     showFlyerGallery: embedShowFlyerGallery,
+    hideHeader: embedHideHeader,
     hideSearch: embedHideSearch,
     hideCategories: embedHideCategories,
     hideSubmit: embedHideSubmit,
@@ -80,6 +83,7 @@ export default function EmbedEditorClient({
           embedShowFlyerGallery={embedShowFlyerGallery}
           embedHideSearch={embedHideSearch}
           embedHideCategories={embedHideCategories}
+          embedHideHeader={embedHideHeader}
           embedHideSubmit={embedHideSubmit}
           embedBgColor={embedBgColor}
           embedDarkMode={embedDarkMode}

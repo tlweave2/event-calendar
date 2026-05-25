@@ -21,6 +21,7 @@ export default async function EmbedPage() {
       embedHideSearch: true,
       embedHideCategories: true,
       embedHideSubmit: true,
+      embedHideHeader: true,
       embedBgColor: true,
       embedDarkMode: true,
     },
@@ -51,6 +52,7 @@ export default async function EmbedPage() {
         embedHideSearch={tenant.embedHideSearch ?? false}
         embedHideCategories={tenant.embedHideCategories ?? false}
         embedHideSubmit={tenant.embedHideSubmit ?? false}
+        embedHideHeader={tenant.embedHideHeader ?? false}
         embedBgColor={tenant.embedBgColor}
         embedDarkMode={tenant.embedDarkMode ?? false}
       />

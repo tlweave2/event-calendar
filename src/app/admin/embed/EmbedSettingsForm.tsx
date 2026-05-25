@@ -26,6 +26,7 @@ export type EmbedPreviewSettings = {
   defaultView: string;
   cardStyle: string;
   showFlyerGallery: boolean;
+  hideHeader: boolean;
   hideSearch: boolean;
   hideCategories: boolean;
   hideSubmit: boolean;
@@ -43,6 +44,7 @@ type Props = {
   embedHideSearch: boolean;
   embedHideCategories: boolean;
   embedHideSubmit: boolean;
+  embedHideHeader: boolean;
   embedBgColor: string | null;
   embedDarkMode: boolean;
   onPreviewChange?: (settings: EmbedPreviewSettings) => void;
@@ -56,16 +58,17 @@ export default function EmbedSettingsForm({ tenantId, onPreviewChange, ...initia
   const [hideSearch, setHideSearch] = useState(initial.embedHideSearch);
   const [hideCategories, setHideCategories] = useState(initial.embedHideCategories);
   const [hideSubmit, setHideSubmit] = useState(initial.embedHideSubmit);
+  const [hideHeader, setHideHeader] = useState(initial.embedHideHeader);
   const [bgColor, setBgColor] = useState(initial.embedBgColor ?? "");
   const [darkMode, setDarkMode] = useState(initial.embedDarkMode);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    onPreviewChange?.({ fontFamily, defaultView, cardStyle, showFlyerGallery, hideSearch, hideCategories, hideSubmit, bgColor, darkMode });
+    onPreviewChange?.({ fontFamily, defaultView, cardStyle, showFlyerGallery, hideHeader, hideSearch, hideCategories, hideSubmit, bgColor, darkMode });
   // onPreviewChange is a stable callback ref — omitting it is intentional
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fontFamily, defaultView, cardStyle, showFlyerGallery, hideSearch, hideCategories, hideSubmit, bgColor, darkMode]);
+  }, [fontFamily, defaultView, cardStyle, showFlyerGallery, hideHeader, hideSearch, hideCategories, hideSubmit, bgColor, darkMode]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -78,6 +81,7 @@ export default function EmbedSettingsForm({ tenantId, onPreviewChange, ...initia
       embedHideSearch: hideSearch,
       embedHideCategories: hideCategories,
       embedHideSubmit: hideSubmit,
+      embedHideHeader: hideHeader,
       embedBgColor: bgColor || null,
       embedDarkMode: darkMode,
     });
@@ -166,6 +170,12 @@ export default function EmbedSettingsForm({ tenantId, onPreviewChange, ...initia
           Control which parts of the calendar are visible to visitors.
         </p>
         {[
+          {
+            label: "Hide header & name",
+            value: hideHeader,
+            set: setHideHeader,
+            hint: "Remove the organization name and logo from the top of the calendar",
+          },
           {
             label: "Hide search bar",
             value: hideSearch,

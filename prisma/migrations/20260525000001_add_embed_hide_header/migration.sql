@@ -1,0 +1,1 @@
+ALTER TABLE "tenants" ADD COLUMN "embedHideHeader" BOOLEAN NOT NULL DEFAULT false;

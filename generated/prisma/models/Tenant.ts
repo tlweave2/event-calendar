@@ -36,6 +36,7 @@ export type TenantMinAggregateOutputType = {
   timezone: string | null
   embedFontFamily: string | null
   embedDefaultView: string | null
+  embedHideHeader: boolean | null
   embedHideSearch: boolean | null
   embedHideCategories: boolean | null
   embedHideSubmit: boolean | null
@@ -67,6 +68,7 @@ export type TenantMaxAggregateOutputType = {
   timezone: string | null
   embedFontFamily: string | null
   embedDefaultView: string | null
+  embedHideHeader: boolean | null
   embedHideSearch: boolean | null
   embedHideCategories: boolean | null
   embedHideSubmit: boolean | null
@@ -98,6 +100,7 @@ export type TenantCountAggregateOutputType = {
   timezone: number
   embedFontFamily: number
   embedDefaultView: number
+  embedHideHeader: number
   embedHideSearch: number
   embedHideCategories: number
   embedHideSubmit: number
@@ -131,6 +134,7 @@ export type TenantMinAggregateInputType = {
   timezone?: true
   embedFontFamily?: true
   embedDefaultView?: true
+  embedHideHeader?: true
   embedHideSearch?: true
   embedHideCategories?: true
   embedHideSubmit?: true
@@ -162,6 +166,7 @@ export type TenantMaxAggregateInputType = {
   timezone?: true
   embedFontFamily?: true
   embedDefaultView?: true
+  embedHideHeader?: true
   embedHideSearch?: true
   embedHideCategories?: true
   embedHideSubmit?: true
@@ -193,6 +198,7 @@ export type TenantCountAggregateInputType = {
   timezone?: true
   embedFontFamily?: true
   embedDefaultView?: true
+  embedHideHeader?: true
   embedHideSearch?: true
   embedHideCategories?: true
   embedHideSubmit?: true
@@ -297,6 +303,7 @@ export type TenantGroupByOutputType = {
   timezone: string
   embedFontFamily: string | null
   embedDefaultView: string
+  embedHideHeader: boolean
   embedHideSearch: boolean
   embedHideCategories: boolean
   embedHideSubmit: boolean
@@ -349,6 +356,7 @@ export type TenantWhereInput = {
   timezone?: Prisma.StringFilter<"Tenant"> | string
   embedFontFamily?: Prisma.StringNullableFilter<"Tenant"> | string | null
   embedDefaultView?: Prisma.StringFilter<"Tenant"> | string
+  embedHideHeader?: Prisma.BoolFilter<"Tenant"> | boolean
   embedHideSearch?: Prisma.BoolFilter<"Tenant"> | boolean
   embedHideCategories?: Prisma.BoolFilter<"Tenant"> | boolean
   embedHideSubmit?: Prisma.BoolFilter<"Tenant"> | boolean
@@ -388,6 +396,7 @@ export type TenantOrderByWithRelationInput = {
   timezone?: Prisma.SortOrder
   embedFontFamily?: Prisma.SortOrderInput | Prisma.SortOrder
   embedDefaultView?: Prisma.SortOrder
+  embedHideHeader?: Prisma.SortOrder
   embedHideSearch?: Prisma.SortOrder
   embedHideCategories?: Prisma.SortOrder
   embedHideSubmit?: Prisma.SortOrder
@@ -430,6 +439,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   timezone?: Prisma.StringFilter<"Tenant"> | string
   embedFontFamily?: Prisma.StringNullableFilter<"Tenant"> | string | null
   embedDefaultView?: Prisma.StringFilter<"Tenant"> | string
+  embedHideHeader?: Prisma.BoolFilter<"Tenant"> | boolean
   embedHideSearch?: Prisma.BoolFilter<"Tenant"> | boolean
   embedHideCategories?: Prisma.BoolFilter<"Tenant"> | boolean
   embedHideSubmit?: Prisma.BoolFilter<"Tenant"> | boolean
@@ -469,6 +479,7 @@ export type TenantOrderByWithAggregationInput = {
   timezone?: Prisma.SortOrder
   embedFontFamily?: Prisma.SortOrderInput | Prisma.SortOrder
   embedDefaultView?: Prisma.SortOrder
+  embedHideHeader?: Prisma.SortOrder
   embedHideSearch?: Prisma.SortOrder
   embedHideCategories?: Prisma.SortOrder
   embedHideSubmit?: Prisma.SortOrder
@@ -506,6 +517,7 @@ export type TenantScalarWhereWithAggregatesInput = {
   timezone?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   embedFontFamily?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   embedDefaultView?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  embedHideHeader?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   embedHideSearch?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   embedHideCategories?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   embedHideSubmit?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
@@ -537,6 +549,7 @@ export type TenantCreateInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -576,6 +589,7 @@ export type TenantUncheckedCreateInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -615,6 +629,7 @@ export type TenantUpdateInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -654,6 +669,7 @@ export type TenantUncheckedUpdateInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -693,6 +709,7 @@ export type TenantCreateManyInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -724,6 +741,7 @@ export type TenantUpdateManyMutationInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -755,6 +773,7 @@ export type TenantUncheckedUpdateManyInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -786,6 +805,7 @@ export type TenantCountOrderByAggregateInput = {
   timezone?: Prisma.SortOrder
   embedFontFamily?: Prisma.SortOrder
   embedDefaultView?: Prisma.SortOrder
+  embedHideHeader?: Prisma.SortOrder
   embedHideSearch?: Prisma.SortOrder
   embedHideCategories?: Prisma.SortOrder
   embedHideSubmit?: Prisma.SortOrder
@@ -817,6 +837,7 @@ export type TenantMaxOrderByAggregateInput = {
   timezone?: Prisma.SortOrder
   embedFontFamily?: Prisma.SortOrder
   embedDefaultView?: Prisma.SortOrder
+  embedHideHeader?: Prisma.SortOrder
   embedHideSearch?: Prisma.SortOrder
   embedHideCategories?: Prisma.SortOrder
   embedHideSubmit?: Prisma.SortOrder
@@ -848,6 +869,7 @@ export type TenantMinOrderByAggregateInput = {
   timezone?: Prisma.SortOrder
   embedFontFamily?: Prisma.SortOrder
   embedDefaultView?: Prisma.SortOrder
+  embedHideHeader?: Prisma.SortOrder
   embedHideSearch?: Prisma.SortOrder
   embedHideCategories?: Prisma.SortOrder
   embedHideSubmit?: Prisma.SortOrder
@@ -1020,6 +1042,7 @@ export type TenantCreateWithoutCategoriesInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1058,6 +1081,7 @@ export type TenantUncheckedCreateWithoutCategoriesInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1112,6 +1136,7 @@ export type TenantUpdateWithoutCategoriesInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1150,6 +1175,7 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1188,6 +1214,7 @@ export type TenantCreateWithoutCalendarViewsInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1226,6 +1253,7 @@ export type TenantUncheckedCreateWithoutCalendarViewsInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1280,6 +1308,7 @@ export type TenantUpdateWithoutCalendarViewsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1318,6 +1347,7 @@ export type TenantUncheckedUpdateWithoutCalendarViewsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1356,6 +1386,7 @@ export type TenantCreateWithoutEventsInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1394,6 +1425,7 @@ export type TenantUncheckedCreateWithoutEventsInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1448,6 +1480,7 @@ export type TenantUpdateWithoutEventsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1486,6 +1519,7 @@ export type TenantUncheckedUpdateWithoutEventsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1524,6 +1558,7 @@ export type TenantCreateWithoutUsersInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1562,6 +1597,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1616,6 +1652,7 @@ export type TenantUpdateWithoutUsersInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1654,6 +1691,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1692,6 +1730,7 @@ export type TenantCreateWithoutAuditLogsInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1730,6 +1769,7 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1784,6 +1824,7 @@ export type TenantUpdateWithoutAuditLogsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1822,6 +1863,7 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1860,6 +1902,7 @@ export type TenantCreateWithoutPageViewsInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1898,6 +1941,7 @@ export type TenantUncheckedCreateWithoutPageViewsInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -1952,6 +1996,7 @@ export type TenantUpdateWithoutPageViewsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1990,6 +2035,7 @@ export type TenantUncheckedUpdateWithoutPageViewsInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2028,6 +2074,7 @@ export type TenantCreateWithoutEventSeriesInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -2066,6 +2113,7 @@ export type TenantUncheckedCreateWithoutEventSeriesInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -2120,6 +2168,7 @@ export type TenantUpdateWithoutEventSeriesInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2158,6 +2207,7 @@ export type TenantUncheckedUpdateWithoutEventSeriesInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2196,6 +2246,7 @@ export type TenantCreateWithoutWebhookConfigInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -2234,6 +2285,7 @@ export type TenantUncheckedCreateWithoutWebhookConfigInput = {
   timezone?: string
   embedFontFamily?: string | null
   embedDefaultView?: string
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -2288,6 +2340,7 @@ export type TenantUpdateWithoutWebhookConfigInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2326,6 +2379,7 @@ export type TenantUncheckedUpdateWithoutWebhookConfigInput = {
   timezone?: Prisma.StringFieldUpdateOperationsInput | string
   embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
   embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2449,6 +2503,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   timezone?: boolean
   embedFontFamily?: boolean
   embedDefaultView?: boolean
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -2489,6 +2544,7 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   timezone?: boolean
   embedFontFamily?: boolean
   embedDefaultView?: boolean
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -2520,6 +2576,7 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   timezone?: boolean
   embedFontFamily?: boolean
   embedDefaultView?: boolean
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -2551,6 +2608,7 @@ export type TenantSelectScalar = {
   timezone?: boolean
   embedFontFamily?: boolean
   embedDefaultView?: boolean
+  embedHideHeader?: boolean
   embedHideSearch?: boolean
   embedHideCategories?: boolean
   embedHideSubmit?: boolean
@@ -2570,7 +2628,7 @@ export type TenantSelectScalar = {
   googleCalendarIcsUrl?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "logoUrl" | "primaryColor" | "secondaryColor" | "plan" | "customDomain" | "timezone" | "embedFontFamily" | "embedDefaultView" | "embedHideSearch" | "embedHideCategories" | "embedHideSubmit" | "embedBgColor" | "embedDarkMode" | "embedCardStyle" | "embedShowFlyerGallery" | "submitHeading" | "submitSubheading" | "emptyStateMessage" | "stripeCustomerId" | "stripeSubscriptionId" | "planExpiresAt" | "isDemoSandbox" | "demoExpiresAt" | "createdAt" | "googleCalendarIcsUrl", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "logoUrl" | "primaryColor" | "secondaryColor" | "plan" | "customDomain" | "timezone" | "embedFontFamily" | "embedDefaultView" | "embedHideHeader" | "embedHideSearch" | "embedHideCategories" | "embedHideSubmit" | "embedBgColor" | "embedDarkMode" | "embedCardStyle" | "embedShowFlyerGallery" | "submitHeading" | "submitSubheading" | "emptyStateMessage" | "stripeCustomerId" | "stripeSubscriptionId" | "planExpiresAt" | "isDemoSandbox" | "demoExpiresAt" | "createdAt" | "googleCalendarIcsUrl", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   events?: boolean | Prisma.Tenant$eventsArgs<ExtArgs>
   eventSeries?: boolean | Prisma.Tenant$eventSeriesArgs<ExtArgs>
@@ -2609,6 +2667,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     timezone: string
     embedFontFamily: string | null
     embedDefaultView: string
+    embedHideHeader: boolean
     embedHideSearch: boolean
     embedHideCategories: boolean
     embedHideSubmit: boolean
@@ -3068,6 +3127,7 @@ export interface TenantFieldRefs {
   readonly timezone: Prisma.FieldRef<"Tenant", 'String'>
   readonly embedFontFamily: Prisma.FieldRef<"Tenant", 'String'>
   readonly embedDefaultView: Prisma.FieldRef<"Tenant", 'String'>
+  readonly embedHideHeader: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly embedHideSearch: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly embedHideCategories: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly embedHideSubmit: Prisma.FieldRef<"Tenant", 'Boolean'>

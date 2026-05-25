@@ -93,6 +93,7 @@ export const TenantScalarFieldEnum = {
   timezone: 'timezone',
   embedFontFamily: 'embedFontFamily',
   embedDefaultView: 'embedDefaultView',
+  embedHideHeader: 'embedHideHeader',
   embedHideSearch: 'embedHideSearch',
   embedHideCategories: 'embedHideCategories',
   embedHideSubmit: 'embedHideSubmit',
