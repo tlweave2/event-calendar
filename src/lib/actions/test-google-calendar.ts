@@ -54,7 +54,7 @@ export async function testGoogleCalendar(input: {
 
   try {
     const icalLib = await import("node-ical");
-    const parsed2 = await icalLib.async.parseICS(raw);
+    const parsed2 = icalLib.parseICS(raw);
     const count = Object.values(parsed2).filter((c) => c?.type === "VEVENT").length;
     return { success: true, count };
   } catch (err) {
