@@ -19,13 +19,26 @@ export default async function SettingsPage({
   if (!tenantId) redirect("/admin/login");
 
   const sp = await searchParams;
-  const tenant = await prisma.tenant.findUnique({ where: { id: tenantId } });
-  const users: Array<{ id: string; email: string; role: string }> = await getTenantUsers(tenantId);
+
+  let tenant = null;
+  try {
+    tenant = await prisma.tenant.findUnique({ where: { id: tenantId } });
+  } catch (err) {
+    console.error("[settings] tenant query failed:", err);
+  }
+
+  let users: Array<{ id: string; email: string; role: string }> = [];
+  try {
+    users = await getTenantUsers(tenantId);
+  } catch (err) {
+    console.error("[settings] users query failed:", err);
+  }
+
   let webhookConfig = null;
   try {
     webhookConfig = await prisma.webhookConfig.findUnique({ where: { tenantId } });
   } catch {
-    // Gracefully handle if webhook_configs table doesn't exist yet
+    // Table may not exist yet or other transient error
   }
 
   const inviteSuccess = sp.invited === "1";

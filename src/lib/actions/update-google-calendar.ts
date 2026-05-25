@@ -20,6 +20,7 @@ export async function updateGoogleCalendar(input: { icsUrl: string }) {
   }
 
   const tenantId = session.user.tenantId;
+  if (!tenantId) return { success: false, error: "Session missing tenant." };
 
   const tenant = await prisma.tenant.findUnique({
     where: { id: tenantId },
