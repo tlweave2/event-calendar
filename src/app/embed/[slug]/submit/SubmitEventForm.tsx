@@ -474,11 +474,11 @@ export default function SubmitEventForm({
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1">
               <Label htmlFor="cost" className={darkMode ? "text-gray-200" : ""}>
-                Cost
+                Cost <span className="font-normal text-xs text-gray-400">(optional)</span>
               </Label>
               <Input
                 id="cost"
-                placeholder="Free, $10, Varies..."
+                placeholder="Free, $10, Varies... (leave blank if in ticket link)"
                 {...register("cost")}
                 className={darkMode ? "border-gray-600 bg-gray-700 text-gray-100" : ""}
               />

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { formatCost } from "@/lib/format";
 import { useMemo, useState } from "react";
 import { format, isToday } from "date-fns";
 import { Badge } from "@/components/ui/badge";
@@ -361,8 +362,8 @@ function EventCard({
                     ` - ${format(new Date(event.endAt), "h:mm a")}`}
                   {event.locationName && ` · ${event.locationName}`}
                 </p>
-                {event.cost && (
-                  <p className={`mt-0.5 text-xs ${darkMode ? "text-gray-400" : "text-gray-400"}`}>{event.cost}</p>
+                {formatCost(event.cost) && (
+                  <p className={`mt-0.5 text-xs ${darkMode ? "text-gray-400" : "text-gray-400"}`}>{formatCost(event.cost)}</p>
                 )}
               </div>
             </div>
@@ -543,9 +544,9 @@ function ImageEventCard({
           </p>
         )}
         <div className="mt-1 flex items-center gap-2">
-          {event.cost && (
+          {formatCost(event.cost) && (
             <span className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-              {event.cost}
+              {formatCost(event.cost)}
             </span>
           )}
           {event.category && (

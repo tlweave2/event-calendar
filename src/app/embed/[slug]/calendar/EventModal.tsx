@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import { useState } from "react";
+import { formatCost } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import ImageLightbox from "./ImageLightbox";
 import LinkifiedText from "@/components/LinkifiedText";
@@ -100,10 +101,10 @@ export default function EventModal({
                 </div>
               )}
 
-              {event.cost && (
+              {formatCost(event.cost) && (
                 <div className={`flex gap-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
                   <span>💰</span>
-                  <span>{event.cost}</span>
+                  <span>{formatCost(event.cost)}</span>
                 </div>
               )}
 

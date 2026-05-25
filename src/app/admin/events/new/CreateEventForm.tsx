@@ -166,7 +166,7 @@ export default function CreateEventForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <Label htmlFor="cost">Cost</Label>
+          <Label htmlFor="cost">Cost <span className="font-normal text-gray-400 text-xs">(optional)</span></Label>
           <Input
             id="cost"
             {...register("cost")}

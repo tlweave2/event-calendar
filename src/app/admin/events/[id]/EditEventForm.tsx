@@ -211,8 +211,8 @@ export default function EditEventForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <Label htmlFor="cost">Cost</Label>
-          <Input id="cost" {...register("cost")} placeholder="Free, $10, Varies..." />
+          <Label htmlFor="cost">Cost <span className="font-normal text-gray-400 text-xs">(optional)</span></Label>
+          <Input id="cost" {...register("cost")} placeholder="Free, $10, Varies... (leave blank if in ticket link)" />
         </div>
         <div className="space-y-1">
           <Label>Category</Label>

@@ -7,6 +7,7 @@ import { getEventById } from "@/lib/prisma-tenant";
 import { getGoogleCalendarEvents } from "@/lib/google-calendar";
 import { recordPageView } from "@/lib/page-views";
 import LinkifiedText from "@/components/LinkifiedText";
+import { formatCost } from "@/lib/format";
 
 async function resolveEvent(tenantId: string, icsUrl: string | null | undefined, id: string) {
   if (id.startsWith("gcal_")) {
@@ -190,11 +191,11 @@ export default async function EventPage({ params, searchParams }: Props) {
                 </div>
               )}
 
-              {event.cost && (
+              {formatCost(event.cost) && (
                 <div className="flex gap-3">
                   <span className="text-lg">💰</span>
                   <p className={`font-medium ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
-                    {event.cost}
+                    {formatCost(event.cost)}
                   </p>
                 </div>
               )}

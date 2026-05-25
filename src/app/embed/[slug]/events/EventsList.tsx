@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { format, isToday, isTomorrow } from "date-fns";
+import { formatCost } from "@/lib/format";
 
 type CalendarEvent = {
   id: string;
@@ -128,9 +129,9 @@ export default function EventsList({
                           📍 {event.address}
                         </p>
                       )}
-                      {event.cost && (
+                      {formatCost(event.cost) && (
                         <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-                          {event.cost}
+                          {formatCost(event.cost)}
                         </p>
                       )}
                       {event.ticketUrl && (
