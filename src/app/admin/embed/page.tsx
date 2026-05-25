@@ -45,7 +45,7 @@ export default async function EmbedPage() {
         baseUrl={baseUrl}
         primaryColor={tenant.primaryColor}
         embedFontFamily={tenant.embedFontFamily}
-        embedDefaultView={tenant.embedDefaultView ?? "list"}
+        embedDefaultView={tenant.embedDefaultView ?? "grid"}
         embedCardStyle={tenant.embedCardStyle ?? "modern"}
         embedShowFlyerGallery={tenant.embedShowFlyerGallery ?? false}
         embedHideSearch={tenant.embedHideSearch ?? false}

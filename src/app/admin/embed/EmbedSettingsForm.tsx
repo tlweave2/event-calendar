@@ -125,7 +125,7 @@ export default function EmbedSettingsForm({ tenantId, onPreviewChange, ...initia
             Which layout visitors see first, a scrollable list of events or a
             monthly calendar grid. Visitors can always switch between the two.
           </p>
-          <Select value={defaultView} onValueChange={(value) => setDefaultView(value ?? "list")}>
+          <Select value={defaultView} onValueChange={(value) => setDefaultView(value ?? "grid")}>
             <SelectTrigger className="h-12 text-base"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="list">List</SelectItem>

@@ -28,7 +28,7 @@ export default async function BrandingPage() {
         tenantId={tenant.id}
         primaryColor={tenant.primaryColor}
         embedFontFamily={tenant.embedFontFamily}
-        embedDefaultView={tenant.embedDefaultView}
+        embedDefaultView={tenant.embedDefaultView ?? "grid"}
         embedCardStyle={tenant.embedCardStyle}
         embedShowFlyerGallery={tenant.embedShowFlyerGallery}
         embedHideSearch={tenant.embedHideSearch}

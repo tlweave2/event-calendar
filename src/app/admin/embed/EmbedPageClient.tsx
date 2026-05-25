@@ -101,7 +101,7 @@ export default function EmbedPageClient({
   const [widget, setWidget] = useState<WidgetType>("calendar");
 
   // ── calendar options ─────────────────────────────────────────────────────
-  const [calView, setCalView] = useState<CalView>("list");
+  const [calView, setCalView] = useState<CalView>("grid");
   const [cardStyle, setCardStyle] = useState<CardStyle>("modern");
   const [showFlyers, setShowFlyers] = useState(false);
   const [hideHeader, setHideHeader] = useState(false);
@@ -120,7 +120,7 @@ export default function EmbedPageClient({
     const params = new URLSearchParams();
 
     if (widget === "calendar") {
-      if (calView !== "list") params.set("view", calView);
+      if (calView !== "grid") params.set("view", calView);
       if (cardStyle !== "modern") params.set("style", cardStyle);
       if (showFlyers) params.set("flyers", "true");
       if (hideHeader) params.set("minimal", "true");

@@ -23,7 +23,7 @@ type Props = {
 function buildPreviewUrl(slug: string, baseUrl: string, s: EmbedPreviewSettings): string {
   const params = new URLSearchParams();
   if (s.fontFamily && s.fontFamily !== "system-ui") params.set("font", s.fontFamily);
-  if (s.defaultView && s.defaultView !== "list") params.set("view", s.defaultView);
+  if (s.defaultView) params.set("view", s.defaultView);
   if (s.cardStyle && s.cardStyle !== "modern") params.set("style", s.cardStyle);
   if (s.bgColor) params.set("bg", s.bgColor);
   if (s.darkMode) params.set("dark", "true");
