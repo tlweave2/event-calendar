@@ -81,9 +81,10 @@ function tzLocalToUTC(str: string, tzid: string): Date {
 
 function parseDate(value: string, tzid?: string): Date | null {
   const v = value.trim();
-  // DATE only: YYYYMMDD → midnight UTC
+  // DATE only (all-day): YYYYMMDD → noon UTC so it lands on the correct calendar day
+  // in all common timezones (midnight UTC = previous day in UTC-1..UTC-12)
   if (/^\d{8}$/.test(v)) {
-    return new Date(Date.UTC(+v.slice(0, 4), +v.slice(4, 6) - 1, +v.slice(6, 8)));
+    return new Date(Date.UTC(+v.slice(0, 4), +v.slice(4, 6) - 1, +v.slice(6, 8), 12, 0, 0));
   }
   // DATE-TIME UTC: ...Z
   if (/^\d{8}T\d{6}Z$/i.test(v)) {
@@ -176,6 +177,24 @@ const DAY_MAP: Record<string, number> = {
   SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6,
 };
 
+// Returns the Nth occurrence (positive = from start, negative = from end) of a
+// weekday within the given UTC year/month, at the given UTC time-of-day offset.
+function nthWeekdayInMonth(
+  year: number, month: number, dayNum: number, n: number, timeMs: number,
+): Date | null {
+  const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  let targetDay: number;
+  if (n > 0) {
+    const firstDow = new Date(Date.UTC(year, month, 1)).getUTCDay();
+    targetDay = 1 + ((dayNum - firstDow + 7) % 7) + (n - 1) * 7;
+  } else {
+    const lastDow = new Date(Date.UTC(year, month, daysInMonth)).getUTCDay();
+    targetDay = daysInMonth - ((lastDow - dayNum + 7) % 7) + (n + 1) * 7;
+  }
+  if (targetDay < 1 || targetDay > daysInMonth) return null;
+  return new Date(Date.UTC(year, month, targetDay) + timeMs);
+}
+
 export function expandEvents(
   events: ParsedEvent[],
   windowStart: Date,
@@ -209,6 +228,29 @@ export function expandEvents(
             const occ = new Date(sunday);
             occ.setUTCDate(sunday.getUTCDate() + dayNum);
             if (occ >= windowStart && occ <= windowEnd && !ev.exdates.has(occ.toDateString())) {
+              out.push({
+                ...ev,
+                start: occ,
+                end: duration > 0 ? new Date(occ.getTime() + duration) : null,
+              });
+            }
+          }
+        } else if (freq === "MONTHLY" && byday && byday.length > 0) {
+          // BYDAY with ordinal prefix, e.g. "4TU" = 4th Tuesday, "-1FR" = last Friday
+          const timeMs =
+            cursor.getUTCHours() * 3600000 +
+            cursor.getUTCMinutes() * 60000 +
+            cursor.getUTCSeconds() * 1000;
+          for (const day of byday) {
+            const m = /^(-?\d+)([A-Z]{2})$/i.exec(day);
+            if (!m) continue;
+            const ordinal = parseInt(m[1]);
+            const dayNum = DAY_MAP[m[2].toUpperCase()];
+            if (dayNum === undefined) continue;
+            const occ = nthWeekdayInMonth(
+              cursor.getUTCFullYear(), cursor.getUTCMonth(), dayNum, ordinal, timeMs,
+            );
+            if (occ && occ >= windowStart && occ <= windowEnd && !ev.exdates.has(occ.toDateString())) {
               out.push({
                 ...ev,
                 start: occ,

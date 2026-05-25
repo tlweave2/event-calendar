@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import ImageLightbox from "./ImageLightbox";
+import LinkifiedText from "@/components/LinkifiedText";
 
 type CalendarEvent = {
   id: string;
@@ -118,8 +119,8 @@ export default function EventModal({
             </div>
 
             {event.description && (
-              <p className={`border-t pt-3 text-sm leading-relaxed ${darkMode ? "border-gray-700 text-gray-300" : "text-gray-600"}`}>
-                {event.description}
+              <p className={`border-t pt-3 text-sm leading-relaxed whitespace-pre-wrap ${darkMode ? "border-gray-700 text-gray-300" : "text-gray-600"}`}>
+                <LinkifiedText text={event.description} linkClassName={`underline break-all ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
               </p>
             )}
 

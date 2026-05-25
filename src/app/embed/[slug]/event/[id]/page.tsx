@@ -6,6 +6,7 @@ import { getTenantBySlug } from "@/lib/tenant";
 import { getEventById } from "@/lib/prisma-tenant";
 import { getGoogleCalendarEvents } from "@/lib/google-calendar";
 import { recordPageView } from "@/lib/page-views";
+import LinkifiedText from "@/components/LinkifiedText";
 
 async function resolveEvent(tenantId: string, icsUrl: string | null | undefined, id: string) {
   if (id.startsWith("gcal_")) {
@@ -204,7 +205,10 @@ export default async function EventPage({ params, searchParams }: Props) {
                 <p
                   className={`whitespace-pre-wrap text-sm leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-600"}`}
                 >
-                  {event.description}
+                  <LinkifiedText
+                    text={event.description}
+                    linkClassName={`underline break-all ${darkMode ? "text-blue-400" : "text-blue-600"}`}
+                  />
                 </p>
               </div>
             )}
