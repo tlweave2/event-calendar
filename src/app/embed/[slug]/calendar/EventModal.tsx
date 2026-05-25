@@ -35,6 +35,7 @@ export default function EventModal({
 }) {
   const accent = primaryColor ?? "#2563eb";
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const isGoogleEvent = event.id.startsWith("gcal_");
 
   return (
     <>
@@ -130,18 +131,20 @@ export default function EventModal({
                 className="block"
               >
                 <Button className="w-full" style={{ backgroundColor: accent }}>
-                  Tickets / Register →
+                  {isGoogleEvent ? "View in Google Calendar →" : "Tickets / Register →"}
                 </Button>
               </a>
             )}
 
-            <Link
-              href={`/embed/${tenantSlug}/event/${event.id}`}
-              className="block text-center text-sm underline"
-              style={{ color: accent }}
-            >
-              View full details & share →
-            </Link>
+            {!isGoogleEvent && (
+              <Link
+                href={`/embed/${tenantSlug}/event/${event.id}`}
+                className="block text-center text-sm underline"
+                style={{ color: accent }}
+              >
+                View full details & share →
+              </Link>
+            )}
           </div>
         </div>
       </div>

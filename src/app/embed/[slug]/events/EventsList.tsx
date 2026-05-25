@@ -141,7 +141,7 @@ export default function EventsList({
                           className="inline-block text-sm font-medium underline"
                           style={{ color: accent }}
                         >
-                          More info / Register →
+                          {event.id.startsWith("gcal_") ? "View in Google Calendar →" : "More info / Register →"}
                         </a>
                       )}
                     </div>
