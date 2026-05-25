@@ -396,7 +396,7 @@ function EventCard({
                 {event.address && (
                   <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>{`Location: ${event.address}`}</p>
                 )}
-                {event.ticketUrl && (
+                {event.ticketUrl && !event.id.startsWith("gcal_") && (
                   <a
                     href={event.ticketUrl}
                     target="_blank"
@@ -407,14 +407,29 @@ function EventCard({
                     Tickets / Register {">"}
                   </a>
                 )}
-                <Link
-                  href={`/embed/${tenantSlug}/event/${event.id}`}
-                  className="mt-2 inline-block text-sm font-medium underline"
-                  style={{ color: accent }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  View full details & share →
-                </Link>
+                {event.id.startsWith("gcal_") ? (
+                  event.ticketUrl && (
+                    <a
+                      href={event.ticketUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-block text-sm font-medium underline"
+                      style={{ color: accent }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      View in Google Calendar →
+                    </a>
+                  )
+                ) : (
+                  <Link
+                    href={`/embed/${tenantSlug}/event/${event.id}`}
+                    className="mt-2 inline-block text-sm font-medium underline"
+                    style={{ color: accent }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    View full details & share →
+                  </Link>
+                )}
               </div>
             )}
           </div>
@@ -443,11 +458,15 @@ function CompactEventRow({
   tenantSlug: string;
   darkMode: boolean;
 }) {
+  const href = event.id.startsWith("gcal_") ? (event.ticketUrl ?? undefined) : `/embed/${tenantSlug}/event/${event.id}`;
+  const Tag = href ? "a" : "div";
   return (
-    <a
-      href={`/embed/${tenantSlug}/event/${event.id}`}
+    <Tag
+      href={href}
+      target={event.id.startsWith("gcal_") ? "_blank" : undefined}
+      rel={event.id.startsWith("gcal_") ? "noopener noreferrer" : undefined}
       className={`flex items-center justify-between gap-3 rounded-md px-3 py-2 transition-colors ${
-        darkMode ? "hover:bg-gray-800" : "hover:bg-gray-50"
+        href ? (darkMode ? "hover:bg-gray-800" : "hover:bg-gray-50") : ""
       }`}
       style={{ borderBottom: `1px solid ${darkMode ? "#374151" : "#f3f4f6"}` }}
     >
@@ -470,7 +489,7 @@ function CompactEventRow({
       <span className={`shrink-0 text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
         {format(new Date(event.startAt), "MMM d, h:mm a")}
       </span>
-    </a>
+    </Tag>
   );
 }
 
@@ -485,9 +504,12 @@ function ImageEventCard({
   tenantSlug: string;
   darkMode: boolean;
 }) {
+  const href = event.id.startsWith("gcal_") ? (event.ticketUrl ?? undefined) : `/embed/${tenantSlug}/event/${event.id}`;
   return (
     <a
-      href={`/embed/${tenantSlug}/event/${event.id}`}
+      href={href}
+      target={event.id.startsWith("gcal_") ? "_blank" : undefined}
+      rel={event.id.startsWith("gcal_") ? "noopener noreferrer" : undefined}
       className={`flex gap-3 rounded-lg border p-3 transition-shadow hover:shadow-md ${
         darkMode ? "border-gray-700 bg-gray-800" : "bg-white"
       }`}
@@ -553,9 +575,12 @@ function MinimalEventRow({
   tenantSlug: string;
   darkMode: boolean;
 }) {
+  const href = event.id.startsWith("gcal_") ? (event.ticketUrl ?? undefined) : `/embed/${tenantSlug}/event/${event.id}`;
   return (
     <a
-      href={`/embed/${tenantSlug}/event/${event.id}`}
+      href={href}
+      target={event.id.startsWith("gcal_") ? "_blank" : undefined}
+      rel={event.id.startsWith("gcal_") ? "noopener noreferrer" : undefined}
       className={`block py-2 ${darkMode ? "hover:text-gray-200" : "hover:text-gray-700"}`}
       style={{ borderBottom: `1px solid ${darkMode ? "#1f2937" : "#f3f4f6"}` }}
     >
