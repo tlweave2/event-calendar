@@ -72,6 +72,7 @@ export default function CalendarView({
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [modalEvent, setModalEvent] = useState<CalendarEvent | null>(null);
   const [displayedMonth, setDisplayedMonth] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState<{ date: Date; events: CalendarEvent[] } | null>(null);
 
   const filtered = useMemo(() => {
     return events.filter((e) => {
@@ -156,14 +157,65 @@ export default function CalendarView({
       ) : null}
 
       {view === "grid" ? (
-        <CalendarGrid
-          events={filtered}
-          primaryColor={primaryColor}
-          darkMode={darkMode}
-          onEventClick={(event) => setModalEvent(event)}
-          cardStyle={cardStyle}
-          onMonthChange={setDisplayedMonth}
-        />
+        <>
+          <CalendarGrid
+            events={filtered}
+            primaryColor={primaryColor}
+            darkMode={darkMode}
+            onEventClick={(event) => setModalEvent(event)}
+            onDayClick={(dayEvents, date) => {
+              if (dayEvents.length === 1) {
+                setModalEvent(dayEvents[0]);
+              } else {
+                setSelectedDay((prev) =>
+                  prev && format(prev.date, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
+                    ? null
+                    : { date, events: dayEvents }
+                );
+              }
+            }}
+            cardStyle={cardStyle}
+            onMonthChange={(m) => { setDisplayedMonth(m); setSelectedDay(null); }}
+          />
+
+          {selectedDay && (
+            <div className={`rounded-lg border p-4 ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-gray-50"}`}>
+              <div className="mb-3 flex items-center justify-between">
+                <h3 className={`text-sm font-semibold ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
+                  {format(selectedDay.date, "EEEE, MMMM d")}
+                </h3>
+                <button
+                  onClick={() => setSelectedDay(null)}
+                  className={`text-xs ${darkMode ? "text-gray-400 hover:text-gray-200" : "text-gray-400 hover:text-gray-600"}`}
+                >
+                  ✕
+                </button>
+              </div>
+              <div className="space-y-2">
+                {selectedDay.events.map((event) => (
+                  <button
+                    key={event.id}
+                    onClick={() => { setModalEvent(event); setSelectedDay(null); }}
+                    className={`w-full rounded-lg border p-3 text-left transition-colors ${darkMode ? "border-gray-700 bg-gray-900 hover:bg-gray-700" : "border-gray-200 bg-white hover:bg-gray-50"}`}
+                  >
+                    <div className="flex items-start gap-2">
+                      {event.category?.color && (
+                        <span className="mt-1 h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: event.category.color }} />
+                      )}
+                      <div className="min-w-0">
+                        <p className={`truncate text-sm font-medium ${darkMode ? "text-gray-100" : "text-gray-900"}`}>{event.title}</p>
+                        <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                          {format(new Date(event.startAt), "h:mm a")}
+                          {event.locationName && ` · ${event.locationName}`}
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
       ) : (
         <div className="space-y-3">
           {filtered.length === 0 ? (

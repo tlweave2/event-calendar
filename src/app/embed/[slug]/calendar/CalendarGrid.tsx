@@ -34,6 +34,7 @@ export default function CalendarGrid({
   events,
   primaryColor,
   onEventClick,
+  onDayClick,
   darkMode = false,
   cardStyle = "modern",
   onMonthChange,
@@ -41,6 +42,7 @@ export default function CalendarGrid({
   events: CalendarEvent[];
   primaryColor: string | null;
   onEventClick: (event: CalendarEvent) => void;
+  onDayClick?: (events: CalendarEvent[], date: Date) => void;
   darkMode?: boolean;
   cardStyle?: "modern" | "compact" | "image" | "minimal";
   onMonthChange?: (month: Date) => void;
@@ -159,14 +161,17 @@ export default function CalendarGrid({
           const inMonth = isSameMonth(day, current);
           const today = isToday(day);
 
+          const hasEvents = dayEvents.length > 0;
+
           return (
             <div
               key={key}
+              onClick={hasEvents && onDayClick ? () => onDayClick(dayEvents, day) : undefined}
               className={`min-h-24 border-b border-r p-1.5 ${index % 7 === 6 ? "border-r-0" : ""} ${
                 !inMonth
                   ? darkMode ? "bg-gray-800" : "bg-gray-50"
                   : darkMode ? "bg-gray-900" : "bg-white"
-              }`}
+              } ${hasEvents && onDayClick ? "cursor-pointer" : ""}`}
               style={darkMode ? { borderColor: "#374151" } : undefined}
             >
               <div className="mb-1 flex justify-end">
@@ -188,7 +193,7 @@ export default function CalendarGrid({
                         {dayEvents.slice(0, 5).map((event) => (
                           <button
                             key={event.id}
-                            onClick={() => onEventClick(event)}
+                            onClick={(e) => { e.stopPropagation(); onEventClick(event); }}
                             className="h-2 w-2 rounded-full"
                             style={{ backgroundColor: event.category?.color ?? accent }}
                             title={event.title}
@@ -207,7 +212,7 @@ export default function CalendarGrid({
                     {dayEvents.slice(0, 2).map((event) => (
                       <button
                         key={event.id}
-                        onClick={() => onEventClick(event)}
+                        onClick={(e) => { e.stopPropagation(); onEventClick(event); }}
                         className="flex w-full items-center gap-1 truncate"
                       >
                         {event.imageUrl ? (
@@ -247,7 +252,7 @@ export default function CalendarGrid({
                     {dayEvents.slice(0, 2).map((event) => (
                       <button
                         key={event.id}
-                        onClick={() => onEventClick(event)}
+                        onClick={(e) => { e.stopPropagation(); onEventClick(event); }}
                         className={`w-full truncate text-left ${
                           darkMode ? "text-gray-400" : "text-gray-500"
                         }`}
@@ -267,7 +272,7 @@ export default function CalendarGrid({
                     {dayEvents.slice(0, 3).map((event) => (
                       <button
                         key={event.id}
-                        onClick={() => onEventClick(event)}
+                        onClick={(e) => { e.stopPropagation(); onEventClick(event); }}
                         className="w-full truncate rounded px-1.5 py-0.5 text-left text-xs font-medium text-white"
                         style={{ backgroundColor: event.category?.color ?? accent }}
                       >
