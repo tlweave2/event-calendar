@@ -123,7 +123,7 @@ export default function EventModal({
               </p>
             )}
 
-            {event.ticketUrl && (
+            {!isGoogleEvent && event.ticketUrl && (
               <a
                 href={event.ticketUrl}
                 target="_blank"
@@ -131,7 +131,7 @@ export default function EventModal({
                 className="block"
               >
                 <Button className="w-full" style={{ backgroundColor: accent }}>
-                  {isGoogleEvent ? "View in Google Calendar →" : "Tickets / Register →"}
+                  Tickets / Register →
                 </Button>
               </a>
             )}
@@ -144,6 +144,18 @@ export default function EventModal({
               >
                 View full details & share →
               </Link>
+            )}
+
+            {isGoogleEvent && event.ticketUrl && (
+              <a
+                href={event.ticketUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-center text-sm underline"
+                style={{ color: accent }}
+              >
+                View in Google Calendar →
+              </a>
             )}
           </div>
         </div>
