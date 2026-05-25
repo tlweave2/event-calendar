@@ -21,7 +21,7 @@ model Tenant {
   timezone       String   @default("America/Los_Angeles") @db.VarChar(50)
   // Embed customization defaults
   embedFontFamily     String? @db.VarChar(100)
-  embedDefaultView    String  @default("list") @db.VarChar(10)
+  embedDefaultView    String  @default("grid") @db.VarChar(10)
   embedHideSearch     Boolean @default(false)
   embedHideCategories Boolean @default(false)
   embedHideSubmit     Boolean @default(false)
