@@ -1,0 +1,47 @@
+"use server";
+
+import { auth } from "@/lib/auth";
+import { z } from "zod";
+
+const schema = z.object({
+  icsUrl: z.string().url().max(500),
+});
+
+export async function testGoogleCalendar(input: {
+  icsUrl: string;
+}): Promise<{ success: boolean; count?: number; error?: string }> {
+  const session = await auth();
+  if (!session) return { success: false, error: "Unauthorized" };
+
+  const parsed = schema.safeParse(input);
+  if (!parsed.success) return { success: false, error: "Invalid URL." };
+
+  let raw: string;
+  try {
+    const res = await fetch(parsed.data.icsUrl, {
+      cache: "no-store",
+      headers: { "User-Agent": "Eventful/1.0" },
+    });
+    if (!res.ok) {
+      return {
+        success: false,
+        error: `Feed returned HTTP ${res.status}. Make sure the calendar is public and the URL is correct.`,
+      };
+    }
+    raw = await res.text();
+  } catch {
+    return {
+      success: false,
+      error: "Could not reach the URL. Check that it is publicly accessible.",
+    };
+  }
+
+  try {
+    const icalLib = await import("node-ical");
+    const parsed2 = icalLib.parseICS(raw);
+    const count = Object.values(parsed2).filter((c) => c?.type === "VEVENT").length;
+    return { success: true, count };
+  } catch {
+    return { success: false, error: "Could not parse the ICS file." };
+  }
+}

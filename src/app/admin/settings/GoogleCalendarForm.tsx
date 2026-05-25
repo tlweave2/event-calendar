@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { updateGoogleCalendar } from "@/lib/actions/update-google-calendar";
+import { testGoogleCalendar } from "@/lib/actions/test-google-calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ type Props = {
 export default function GoogleCalendarForm({ initialIcsUrl }: Props) {
   const [icsUrl, setIcsUrl] = useState(initialIcsUrl);
   const [saving, setSaving] = useState(false);
+  const [testing, setTesting] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -30,6 +32,25 @@ export default function GoogleCalendarForm({ initialIcsUrl }: Props) {
     }
 
     setSaving(false);
+  }
+
+  async function handleTest() {
+    if (!icsUrl) return;
+    setTesting(true);
+    setMessage(null);
+
+    const result = await testGoogleCalendar({ icsUrl });
+
+    if (result.success) {
+      setMessage({
+        type: "success",
+        text: `Connection successful — found ${result.count ?? 0} event(s) in the feed.`,
+      });
+    } else {
+      setMessage({ type: "error", text: result.error ?? "Connection failed." });
+    }
+
+    setTesting(false);
   }
 
   return (
@@ -59,9 +80,16 @@ export default function GoogleCalendarForm({ initialIcsUrl }: Props) {
             </p>
           </div>
 
-          <Button type="submit" disabled={saving}>
-            {saving ? "Saving…" : "Save"}
-          </Button>
+          <div className="flex gap-2">
+            <Button type="submit" disabled={saving}>
+              {saving ? "Saving…" : "Save"}
+            </Button>
+            {icsUrl && (
+              <Button type="button" variant="outline" disabled={testing} onClick={handleTest}>
+                {testing ? "Testing…" : "Test connection"}
+              </Button>
+            )}
+          </div>
 
           {message && (
             <p className={`text-sm ${message.type === "success" ? "text-green-600" : "text-red-600"}`}>

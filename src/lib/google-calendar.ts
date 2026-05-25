@@ -63,7 +63,7 @@ export async function getGoogleCalendarEvents(
   let raw: string;
   try {
     const res = await fetch(icsUrl, {
-      next: { revalidate: REVALIDATE_SECONDS },
+      next: { revalidate: REVALIDATE_SECONDS, tags: [`gcal-${tenantId}`] },
       headers: { "User-Agent": "Eventful/1.0" },
     });
     if (!res.ok) {

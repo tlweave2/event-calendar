@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
 
@@ -37,5 +37,10 @@ export async function updateGoogleCalendar(input: { icsUrl: string }) {
   });
 
   revalidatePath("/admin/settings");
+  revalidateTag(`gcal-${tenantId}`, "max");
+  if (tenant) {
+    revalidatePath(`/embed/${tenant.slug}/calendar`);
+    revalidatePath(`/embed/${tenant.slug}/events`);
+  }
   return { success: true };
 }
