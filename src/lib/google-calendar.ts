@@ -79,7 +79,7 @@ export async function getGoogleCalendarEvents(
   const icalLib = await import("node-ical");
   let parsed: ical.CalendarResponse;
   try {
-    parsed = icalLib.parseICS(raw);
+    parsed = await icalLib.async.parseICS(raw);
   } catch (err) {
     console.error("[gcal] parse failed:", err);
     return [];

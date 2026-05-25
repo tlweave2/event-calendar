@@ -38,6 +38,13 @@ export async function testGoogleCalendar(input: {
           "The URL returned an HTML page instead of a calendar file. Make sure the calendar is set to Public in Google Calendar → Settings → Access permissions.",
       };
     }
+
+    if (!raw.includes("BEGIN:VCALENDAR")) {
+      return {
+        success: false,
+        error: `Unexpected response — not a valid ICS file. First 100 chars: ${raw.slice(0, 100)}`,
+      };
+    }
   } catch {
     return {
       success: false,
@@ -47,10 +54,13 @@ export async function testGoogleCalendar(input: {
 
   try {
     const icalLib = await import("node-ical");
-    const parsed2 = icalLib.parseICS(raw);
+    const parsed2 = await icalLib.async.parseICS(raw);
     const count = Object.values(parsed2).filter((c) => c?.type === "VEVENT").length;
     return { success: true, count };
-  } catch {
-    return { success: false, error: "Could not parse the ICS file. The feed may be empty or malformed." };
+  } catch (err) {
+    return {
+      success: false,
+      error: `ICS parse error: ${err instanceof Error ? err.message : String(err)}`,
+    };
   }
 }
