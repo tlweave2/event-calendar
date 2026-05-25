@@ -1,8 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import EmbedPageClient from "./EmbedPageClient";
-import EmbedSettingsForm from "./EmbedSettingsForm";
+import EmbedEditorClient from "./EmbedEditorClient";
 
 export default async function EmbedPage() {
   const session = await auth();
@@ -32,19 +31,21 @@ export default async function EmbedPage() {
   const baseUrl = process.env.NEXTAUTH_URL ?? "https://www.useventful.com";
 
   return (
-    <div className="max-w-2xl px-8 py-8 space-y-8">
-      <div>
+    <div className="px-8 py-8">
+      <div className="mb-8">
         <h1 className="text-xl font-semibold text-gray-900">Embed</h1>
         <p className="mt-1 text-sm text-gray-500">
           Customize how your calendar looks when embedded, then copy the code snippet to your website.
         </p>
       </div>
 
-      <EmbedSettingsForm
+      <EmbedEditorClient
         tenantId={tenant.id}
+        slug={tenant.slug}
+        baseUrl={baseUrl}
         primaryColor={tenant.primaryColor}
         embedFontFamily={tenant.embedFontFamily}
-        embedDefaultView={tenant.embedDefaultView ?? "list"}
+        embedDefaultView={tenant.embedDefaultView ?? "grid"}
         embedCardStyle={tenant.embedCardStyle ?? "modern"}
         embedShowFlyerGallery={tenant.embedShowFlyerGallery ?? false}
         embedHideSearch={tenant.embedHideSearch ?? false}
@@ -53,14 +54,6 @@ export default async function EmbedPage() {
         embedBgColor={tenant.embedBgColor}
         embedDarkMode={tenant.embedDarkMode ?? false}
       />
-
-      <div>
-        <h2 className="text-sm font-medium text-gray-700 mb-1">Embed Code</h2>
-        <p className="text-sm text-gray-500 mb-4">
-          Copy and paste these snippets anywhere on your website.
-        </p>
-        <EmbedPageClient slug={tenant.slug} baseUrl={baseUrl} />
-      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,6 +21,18 @@ const FONT_OPTIONS = [
   { value: "Montserrat", label: "Montserrat" },
 ];
 
+export type EmbedPreviewSettings = {
+  fontFamily: string;
+  defaultView: string;
+  cardStyle: string;
+  showFlyerGallery: boolean;
+  hideSearch: boolean;
+  hideCategories: boolean;
+  hideSubmit: boolean;
+  bgColor: string;
+  darkMode: boolean;
+};
+
 type Props = {
   tenantId: string;
   primaryColor: string | null;
@@ -33,9 +45,10 @@ type Props = {
   embedHideSubmit: boolean;
   embedBgColor: string | null;
   embedDarkMode: boolean;
+  onPreviewChange?: (settings: EmbedPreviewSettings) => void;
 };
 
-export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
+export default function EmbedSettingsForm({ tenantId, onPreviewChange, ...initial }: Props) {
   const [fontFamily, setFontFamily] = useState(initial.embedFontFamily ?? "system-ui");
   const [defaultView, setDefaultView] = useState(initial.embedDefaultView);
   const [cardStyle, setCardStyle] = useState(initial.embedCardStyle ?? "modern");
@@ -47,6 +60,12 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
   const [darkMode, setDarkMode] = useState(initial.embedDarkMode);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    onPreviewChange?.({ fontFamily, defaultView, cardStyle, showFlyerGallery, hideSearch, hideCategories, hideSubmit, bgColor, darkMode });
+  // onPreviewChange is a stable callback ref — omitting it is intentional
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fontFamily, defaultView, cardStyle, showFlyerGallery, hideSearch, hideCategories, hideSubmit, bgColor, darkMode]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -101,7 +120,7 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
             Which layout visitors see first, a scrollable list of events or a
             monthly calendar grid. Visitors can always switch between the two.
           </p>
-          <Select value={defaultView} onValueChange={(value) => setDefaultView(value ?? "list")}>
+          <Select value={defaultView} onValueChange={(value) => setDefaultView(value ?? "grid")}>
             <SelectTrigger className="h-12 text-base"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="list">List</SelectItem>

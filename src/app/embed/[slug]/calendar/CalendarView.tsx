@@ -42,7 +42,7 @@ export default function CalendarView({
   categories,
   primaryColor,
   tenantSlug,
-  defaultView = "list",
+  defaultView = "grid",
   hideSearch = false,
   hideCategories = false,
   hideSubmit = false,
