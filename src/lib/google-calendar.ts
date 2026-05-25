@@ -76,10 +76,16 @@ export async function getGoogleCalendarEvents(
     return [];
   }
 
+  // Strip RRULE lines (including folded continuations) before parsing.
+  // node-rrule (used by node-ical for recurring-event expansion) references
+  // BigInt in a way that breaks in the production bundle. Recurring events
+  // will appear as their original single occurrence instead.
+  const rawStripped = raw.replace(/\r?\nRRULE:[^\r\n]*(?:\r?\n[ \t][^\r\n]*)*/g, "");
+
   const icalLib = await import("node-ical");
   let parsed: ical.CalendarResponse;
   try {
-    parsed = icalLib.parseICS(raw);
+    parsed = icalLib.parseICS(rawStripped);
   } catch (err) {
     console.error("[gcal] parse failed:", err);
     return [];

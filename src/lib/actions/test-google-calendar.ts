@@ -52,9 +52,12 @@ export async function testGoogleCalendar(input: {
     };
   }
 
+  // Strip RRULE lines to avoid BigInt runtime error from node-rrule
+  const rawStripped = raw.replace(/\r?\nRRULE:[^\r\n]*(?:\r?\n[ \t][^\r\n]*)*/g, "");
+
   try {
     const icalLib = await import("node-ical");
-    const parsed2 = icalLib.parseICS(raw);
+    const parsed2 = icalLib.parseICS(rawStripped);
     const count = Object.values(parsed2).filter((c) => c?.type === "VEVENT").length;
     return { success: true, count };
   } catch (err) {
