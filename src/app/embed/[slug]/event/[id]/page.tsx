@@ -4,7 +4,16 @@ import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import { getTenantBySlug } from "@/lib/tenant";
 import { getEventById } from "@/lib/prisma-tenant";
+import { getGoogleCalendarEvents } from "@/lib/google-calendar";
 import { recordPageView } from "@/lib/page-views";
+
+async function resolveEvent(tenantId: string, icsUrl: string | null | undefined, id: string) {
+  if (id.startsWith("gcal_")) {
+    const events = await getGoogleCalendarEvents(tenantId, icsUrl);
+    return events.find((e) => e.id === id) ?? null;
+  }
+  return getEventById(tenantId, id);
+}
 
 type Props = {
   params: Promise<{ slug: string; id: string }>;
@@ -20,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tenant = await getTenantBySlug(slug);
   if (!tenant) return {};
 
-  const event = await getEventById(tenant.id, id);
+  const event = await resolveEvent(tenant.id, tenant.googleCalendarIcsUrl, id);
   if (!event) return {};
 
   const description =
@@ -50,10 +59,10 @@ export default async function EventPage({ params, searchParams }: Props) {
   const tenant = await getTenantBySlug(slug);
   if (!tenant) notFound();
 
-  const event = await getEventById(tenant.id, id);
+  const event = await resolveEvent(tenant.id, tenant.googleCalendarIcsUrl, id);
   if (!event) notFound();
 
-  void recordPageView(tenant.id, "event", event.id);
+  if (!id.startsWith("gcal_")) void recordPageView(tenant.id, "event", event.id);
 
   // Embed settings: query params override tenant defaults.
   const fontParam = Array.isArray(sp.font) ? sp.font[0] : sp.font;
@@ -209,7 +218,7 @@ export default async function EventPage({ params, searchParams }: Props) {
                   className="block w-full rounded-lg py-3 text-center text-sm font-medium text-white transition-opacity hover:opacity-90"
                   style={{ backgroundColor: accent }}
                 >
-                  Tickets / Register →
+                  {id.startsWith("gcal_") ? "View in Google Calendar →" : "Tickets / Register →"}
                 </a>
               </div>
             )}
