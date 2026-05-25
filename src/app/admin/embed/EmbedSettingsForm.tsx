@@ -72,13 +72,8 @@ export default function EmbedSettingsForm({ tenantId, ...initial }: Props) {
   return (
     <div className="space-y-6 rounded-lg border bg-white p-6">
       <div>
-        <h2 className="text-sm font-medium uppercase tracking-wide text-gray-400">
-          Embed Appearance
-        </h2>
-        <p className="mt-1 text-sm text-gray-500">
-          These settings control how your calendar looks when embedded on a website.
-          They are the defaults and can be overridden per-embed using URL parameters
-          on the iframe.
+        <p className="text-sm text-gray-500">
+          These are the defaults for your embed. They can be overridden per-embed using URL parameters on the iframe.
         </p>
       </div>
 

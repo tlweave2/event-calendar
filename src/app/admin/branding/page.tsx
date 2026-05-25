@@ -2,7 +2,6 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import BrandingForm from "./BrandingForm";
-import EmbedSettingsForm from "../embed/EmbedSettingsForm";
 
 export default async function BrandingPage() {
   const session = await auth();
@@ -18,25 +17,10 @@ export default async function BrandingPage() {
       <div>
         <h1 className="text-xl font-semibold text-gray-900">Branding</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Control how your calendar looks to the public. These settings apply to
-          your embedded calendar, submission form, and hosted pages.
+          Your organization&apos;s identity — logo, name, colors, and timezone. These apply across your calendar, submission form, and hosted pages.
         </p>
       </div>
       <BrandingForm tenant={tenant} />
-
-      <EmbedSettingsForm
-        tenantId={tenant.id}
-        primaryColor={tenant.primaryColor}
-        embedFontFamily={tenant.embedFontFamily}
-        embedDefaultView={tenant.embedDefaultView}
-        embedCardStyle={tenant.embedCardStyle}
-        embedShowFlyerGallery={tenant.embedShowFlyerGallery}
-        embedHideSearch={tenant.embedHideSearch}
-        embedHideCategories={tenant.embedHideCategories}
-        embedHideSubmit={tenant.embedHideSubmit}
-        embedBgColor={tenant.embedBgColor}
-        embedDarkMode={tenant.embedDarkMode}
-      />
     </div>
   );
 }
