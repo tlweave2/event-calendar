@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -93,9 +93,11 @@ type BgMode = "default" | "transparent" | "dark" | "custom";
 export default function EmbedPageClient({
   slug,
   baseUrl,
+  onUrlChange,
 }: {
   slug: string;
   baseUrl: string;
+  onUrlChange?: (url: string, height: number) => void;
 }) {
   // ── widget type ──────────────────────────────────────────────────────────
   const [widget, setWidget] = useState<WidgetType>("calendar");
@@ -149,6 +151,11 @@ export default function EmbedPageClient({
   }, [widget, calView, cardStyle, hideHeader, hideSearch, hideCategories, hideSubmit, bgMode, customBg, darkMode, font, slug, baseUrl]);
 
   const iframeHeight = widget === "submit" ? 900 : widget === "flyers" ? 500 : 700;
+
+  useEffect(() => {
+    onUrlChange?.(iframeUrl, iframeHeight);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [iframeUrl, iframeHeight]);
 
   const snippet = `<iframe\n  src="${iframeUrl}"\n  width="100%"\n  height="${iframeHeight}"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`;
 

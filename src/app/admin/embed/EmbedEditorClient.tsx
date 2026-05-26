@@ -58,6 +58,8 @@ export default function EmbedEditorClient({
 
   const [liveSettings, setLiveSettings] = useState<EmbedPreviewSettings>(initialSettings);
   const [debouncedSettings, setDebouncedSettings] = useState<EmbedPreviewSettings>(initialSettings);
+  const [codeGenUrl, setCodeGenUrl] = useState<string | null>(null);
+  const [codeGenHeight, setCodeGenHeight] = useState(700);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSettings(liveSettings), 400);
@@ -66,9 +68,16 @@ export default function EmbedEditorClient({
 
   const handlePreviewChange = useCallback((s: EmbedPreviewSettings) => {
     setLiveSettings(s);
+    setCodeGenUrl(null); // settings changed — reset to settings preview
   }, []);
 
-  const previewUrl = buildPreviewUrl(slug, baseUrl, debouncedSettings);
+  const handleUrlChange = useCallback((url: string, height: number) => {
+    setCodeGenUrl(url);
+    setCodeGenHeight(height);
+  }, []);
+
+  const previewUrl = codeGenUrl ?? buildPreviewUrl(slug, baseUrl, debouncedSettings);
+  const previewHeight = codeGenUrl ? codeGenHeight : 700;
 
   return (
     <div className="flex gap-8 items-start">
@@ -95,7 +104,7 @@ export default function EmbedEditorClient({
           <p className="text-sm text-gray-500 mb-4">
             Copy and paste these snippets anywhere on your website.
           </p>
-          <EmbedPageClient slug={slug} baseUrl={baseUrl} />
+          <EmbedPageClient slug={slug} baseUrl={baseUrl} onUrlChange={handleUrlChange} />
         </div>
       </div>
 
@@ -104,14 +113,16 @@ export default function EmbedEditorClient({
         <div className="sticky top-6">
           <div className="mb-2 flex items-center justify-between">
             <p className="text-sm font-medium text-gray-700">Live Preview</p>
-            <span className="text-xs text-gray-400">Updates as you change settings</span>
+            <span className="text-xs text-gray-400">
+              {codeGenUrl ? "Showing embed code selection" : "Showing saved settings"}
+            </span>
           </div>
           <div className="overflow-hidden rounded-xl border shadow-sm bg-gray-50">
             <iframe
               key={previewUrl}
               src={previewUrl}
               width="100%"
-              height={700}
+              height={previewHeight}
               frameBorder="0"
               title="Embed preview"
               className="block"
