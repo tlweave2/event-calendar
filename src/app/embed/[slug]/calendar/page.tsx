@@ -5,7 +5,9 @@ import { getMergedApprovedEvents } from "@/lib/merged-events";
 import { recordPageView } from "@/lib/page-views";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import { addDays } from "date-fns";
 import CalendarView from "./CalendarView";
+import EmbedAutoResize from "../../_components/EmbedAutoResize";
 
 export default async function CalendarPage({
   params,
@@ -62,6 +64,25 @@ export default async function CalendarPage({
   const darkMode =
     param("dark") === "true" ||
     (param("dark") === undefined && tenant.embedDarkMode);
+  const accent = param("accent") ?? tenant.primaryColor;
+
+  const categoryId = param("category");
+  const daysParam = param("days");
+  const days = daysParam ? Number.parseInt(daysParam, 10) : undefined;
+  const limitParam = param("limit");
+  const limit = limitParam ? Number.parseInt(limitParam, 10) : undefined;
+
+  let scopedEvents = events;
+  if (categoryId) {
+    scopedEvents = scopedEvents.filter((e) => e.category?.id === categoryId);
+  }
+  if (days !== undefined && Number.isFinite(days) && days > 0) {
+    const cutoff = addDays(new Date(), days);
+    scopedEvents = scopedEvents.filter((e) => new Date(e.startAt) <= cutoff);
+  }
+  if (limit !== undefined && Number.isFinite(limit) && limit > 0) {
+    scopedEvents = scopedEvents.slice(0, limit);
+  }
 
   const fontLink =
     font && font !== "system-ui"
@@ -91,6 +112,7 @@ export default async function CalendarPage({
         // eslint-disable-next-line @next/next/no-page-custom-font
         <link rel="stylesheet" href={fontLink} />
       )}
+      <EmbedAutoResize />
       <div className="mx-auto max-w-4xl">
         {!minimal && (
           <div className="mb-8 text-center">
@@ -113,9 +135,9 @@ export default async function CalendarPage({
         )}
 
         <CalendarView
-          events={events}
+          events={scopedEvents}
           categories={tenant.categories}
-          primaryColor={tenant.primaryColor}
+          primaryColor={accent}
           tenantSlug={slug}
           defaultView={defaultView}
           hideSearch={hideSearch}
@@ -126,6 +148,7 @@ export default async function CalendarPage({
           cardStyle={cardStyle}
           showFlyerGallery={showFlyerGallery}
           emptyStateMessage={tenant.emptyStateMessage}
+          initialCategory={categoryId}
         />
       </div>
     </div>

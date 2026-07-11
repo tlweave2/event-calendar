@@ -5,6 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // ── tiny copy button ─────────────────────────────────────────────────────────
 
@@ -94,10 +101,14 @@ export default function EmbedPageClient({
   slug,
   baseUrl,
   onUrlChange,
+  categories = [],
+  defaultAccentColor = "#2563eb",
 }: {
   slug: string;
   baseUrl: string;
   onUrlChange?: (url: string, height: number) => void;
+  categories?: { id: string; name: string; color: string | null }[];
+  defaultAccentColor?: string;
 }) {
   // ── widget type ──────────────────────────────────────────────────────────
   const [widget, setWidget] = useState<WidgetType>("calendar");
@@ -110,12 +121,18 @@ export default function EmbedPageClient({
   const [hideSearch, setHideSearch] = useState(false);
   const [hideCategories, setHideCategories] = useState(false);
   const [hideSubmit, setHideSubmit] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [eventLimit, setEventLimit] = useState("");
+  const [daysAhead, setDaysAhead] = useState("");
 
   // ── shared appearance ────────────────────────────────────────────────────
   const [bgMode, setBgMode] = useState<BgMode>("default");
   const [customBg, setCustomBg] = useState("#ffffff");
   const [darkMode, setDarkMode] = useState(false);
   const [font, setFont] = useState("");
+  const [accentColor, setAccentColor] = useState(defaultAccentColor);
+  const [autoResize, setAutoResize] = useState(true);
+  const iframeId = `eventful-embed-${slug}-${widget}`;
 
   // ── derived iframe URL ────────────────────────────────────────────────────
   const iframeUrl = useMemo(() => {
@@ -129,6 +146,9 @@ export default function EmbedPageClient({
       if (hideSearch) params.set("hideSearch", "true");
       if (hideCategories) params.set("hideCategories", "true");
       if (hideSubmit) params.set("hideSubmit", "true");
+      if (categoryFilter !== "all") params.set("category", categoryFilter);
+      if (eventLimit.trim()) params.set("limit", eventLimit.trim());
+      if (daysAhead.trim()) params.set("days", daysAhead.trim());
     }
 
     if (bgMode === "transparent") params.set("bg", "transparent");
@@ -136,6 +156,7 @@ export default function EmbedPageClient({
     else if (bgMode === "custom") params.set("bg", customBg);
     if (darkMode && bgMode !== "dark") params.set("dark", "true");
     if (font.trim()) params.set("font", font.trim());
+    if (accentColor.toLowerCase() !== defaultAccentColor.toLowerCase()) params.set("accent", accentColor);
 
     const path =
       widget === "events"
@@ -148,7 +169,11 @@ export default function EmbedPageClient({
 
     const qs = params.toString();
     return `${baseUrl}${path}${qs ? `?${qs}` : ""}`;
-  }, [widget, calView, cardStyle, hideHeader, hideSearch, hideCategories, hideSubmit, bgMode, customBg, darkMode, font, slug, baseUrl]);
+  }, [
+    widget, calView, cardStyle, hideHeader, hideSearch, hideCategories, hideSubmit,
+    categoryFilter, eventLimit, daysAhead, bgMode, customBg, darkMode, font,
+    accentColor, defaultAccentColor, slug, baseUrl,
+  ]);
 
   const iframeHeight = widget === "submit" ? 900 : widget === "flyers" ? 500 : 700;
 
@@ -157,7 +182,9 @@ export default function EmbedPageClient({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [iframeUrl, iframeHeight]);
 
-  const snippet = `<iframe\n  src="${iframeUrl}"\n  width="100%"\n  height="${iframeHeight}"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`;
+  const snippet = autoResize
+    ? `<iframe\n  id="${iframeId}"\n  src="${iframeUrl}"\n  width="100%"\n  height="${iframeHeight}"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>\n<script>\n  window.addEventListener("message", function (e) {\n    if (e.data && e.data.source === "eventful-embed" && e.data.type === "resize") {\n      var f = document.getElementById("${iframeId}");\n      if (f) f.style.height = e.data.height + "px";\n    }\n  });\n</script>`
+    : `<iframe\n  src="${iframeUrl}"\n  width="100%"\n  height="${iframeHeight}"\n  frameborder="0"\n  style="border:none; border-radius:12px;"\n></iframe>`;
 
   return (
     <div className="space-y-8">
@@ -211,6 +238,54 @@ export default function EmbedPageClient({
                 { label: "Minimal", value: "minimal" },
               ]}
             />
+          </div>
+
+          <div className="space-y-1">
+            <Label>Category filter</Label>
+            <p className="text-xs text-gray-400">
+              Pin this embed to a single category, e.g. use this on a &quot;Music&quot; page
+              and a separate embed with &quot;Sports&quot; elsewhere on your site.
+            </p>
+            <Select
+              value={categoryFilter}
+              onValueChange={(value) => setCategoryFilter(value ?? "all")}
+              items={{ all: "All categories", ...Object.fromEntries(categories.map((c) => [c.id, c.name])) }}
+            >
+              <SelectTrigger className="bg-white"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All categories</SelectItem>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label htmlFor="event-limit">Max events</Label>
+              <Input
+                id="event-limit"
+                type="number"
+                min={1}
+                placeholder="No limit"
+                value={eventLimit}
+                onChange={(e) => setEventLimit(e.target.value)}
+                className="bg-white"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="days-ahead">Days ahead</Label>
+              <Input
+                id="days-ahead"
+                type="number"
+                min={1}
+                placeholder="No limit"
+                value={daysAhead}
+                onChange={(e) => setDaysAhead(e.target.value)}
+                className="bg-white"
+              />
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -289,6 +364,35 @@ export default function EmbedPageClient({
             onChange={setDarkMode}
           />
         )}
+
+        <div className="space-y-1">
+          <Label htmlFor="accent-input">Accent color</Label>
+          <p className="text-xs text-gray-400">
+            Overrides your branding color for just this embed. Used for today&apos;s date,
+            selected events, and links.
+          </p>
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              value={accentColor}
+              onChange={(e) => setAccentColor(e.target.value)}
+              className="h-9 w-9 cursor-pointer rounded border"
+            />
+            <Input
+              value={accentColor}
+              onChange={(e) => setAccentColor(e.target.value)}
+              className="max-w-[120px] bg-white font-mono"
+            />
+          </div>
+        </div>
+
+        <ToggleRow
+          id="auto-resize"
+          label="Auto-resize height"
+          description="Recommended. The iframe reports its content height so the small script below can resize it and avoid scrollbars."
+          checked={autoResize}
+          onChange={setAutoResize}
+        />
 
         <div className="space-y-1">
           <Label htmlFor="font-input">Font</Label>

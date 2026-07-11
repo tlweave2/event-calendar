@@ -4,6 +4,7 @@ import { getTenantBySlug } from "@/lib/tenant";
 import { notFound } from "next/navigation";
 import SubmitEventForm from "./SubmitEventForm";
 import { recordPageView } from "@/lib/page-views";
+import EmbedAutoResize from "../../_components/EmbedAutoResize";
 
 export default async function SubmitPage({
   params,
@@ -52,6 +53,7 @@ export default async function SubmitPage({
     >
       {fontLink && <link rel="stylesheet" href={fontLink} />}
 
+      <EmbedAutoResize />
       <div className="mx-auto max-w-2xl">
         <div className="mb-8 text-center">
           {tenant.logoUrl && (

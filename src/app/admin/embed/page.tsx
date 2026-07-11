@@ -24,6 +24,7 @@ export default async function EmbedPage() {
       embedHideHeader: true,
       embedBgColor: true,
       embedDarkMode: true,
+      categories: { select: { id: true, name: true, color: true }, orderBy: { sortOrder: "asc" } },
     },
   });
 
@@ -55,6 +56,7 @@ export default async function EmbedPage() {
         embedHideHeader={tenant.embedHideHeader ?? false}
         embedBgColor={tenant.embedBgColor}
         embedDarkMode={tenant.embedDarkMode ?? false}
+        categories={tenant.categories}
       />
     </div>
   );

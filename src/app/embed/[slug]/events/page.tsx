@@ -5,6 +5,7 @@ import { getMergedApprovedEvents } from "@/lib/merged-events";
 import { recordPageView } from "@/lib/page-views";
 import { notFound } from "next/navigation";
 import EventsList from "./EventsList";
+import EmbedAutoResize from "../../_components/EmbedAutoResize";
 
 export default async function EventsOnlyPage({
   params,
@@ -62,6 +63,7 @@ export default async function EventsOnlyPage({
         // eslint-disable-next-line @next/next/no-page-custom-font
         <link rel="stylesheet" href={fontLink} />
       )}
+      <EmbedAutoResize />
       <div className="mx-auto max-w-2xl">
         <EventsList
           events={events}

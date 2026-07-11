@@ -19,6 +19,7 @@ type Props = {
   embedHideSubmit: boolean;
   embedBgColor: string | null;
   embedDarkMode: boolean;
+  categories: { id: string; name: string; color: string | null }[];
 };
 
 function buildPreviewUrl(slug: string, baseUrl: string, s: EmbedPreviewSettings): string {
@@ -41,7 +42,7 @@ export default function EmbedEditorClient({
   tenantId, slug, baseUrl, primaryColor,
   embedFontFamily, embedDefaultView, embedCardStyle,
   embedShowFlyerGallery, embedHideHeader, embedHideSearch, embedHideCategories, embedHideSubmit,
-  embedBgColor, embedDarkMode,
+  embedBgColor, embedDarkMode, categories,
 }: Props) {
   const initialSettings: EmbedPreviewSettings = {
     fontFamily: embedFontFamily ?? "system-ui",
@@ -104,7 +105,13 @@ export default function EmbedEditorClient({
           <p className="text-sm text-gray-500 mb-4">
             Copy and paste these snippets anywhere on your website.
           </p>
-          <EmbedPageClient slug={slug} baseUrl={baseUrl} onUrlChange={handleUrlChange} />
+          <EmbedPageClient
+            slug={slug}
+            baseUrl={baseUrl}
+            onUrlChange={handleUrlChange}
+            categories={categories}
+            defaultAccentColor={primaryColor ?? "#2563eb"}
+          />
         </div>
       </div>
 

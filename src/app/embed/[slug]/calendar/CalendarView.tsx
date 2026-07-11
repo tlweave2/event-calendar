@@ -51,6 +51,7 @@ export default function CalendarView({
   cardStyle = "modern",
   showFlyerGallery = false,
   emptyStateMessage,
+  initialCategory,
 }: {
   events: CalendarEvent[];
   categories: Category[];
@@ -65,10 +66,11 @@ export default function CalendarView({
   cardStyle?: "modern" | "compact" | "image" | "minimal";
   showFlyerGallery?: boolean;
   emptyStateMessage?: string | null;
+  initialCategory?: string;
 }) {
   const view = defaultView;
   const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState(initialCategory ?? "all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [modalEvent, setModalEvent] = useState<CalendarEvent | null>(null);
   const [displayedMonth, setDisplayedMonth] = useState(new Date());
@@ -124,6 +126,7 @@ export default function CalendarView({
           <Select
             value={categoryFilter}
             onValueChange={(value) => setCategoryFilter(value ?? "all")}
+            items={{ all: "All categories", ...Object.fromEntries(categories.map((c) => [c.id, c.name])) }}
           >
             <SelectTrigger className={`w-44 ${darkMode ? "border-gray-700 bg-gray-800 text-gray-100" : "bg-white"}`}>
               <SelectValue placeholder="All categories" />
