@@ -1425,6 +1425,7 @@ export const EventScalarFieldEnum = {
   status: 'status',
   submitterName: 'submitterName',
   submitterEmail: 'submitterEmail',
+  submitterIp: 'submitterIp',
   seriesId: 'seriesId',
   seriesIndex: 'seriesIndex',
   googleEventId: 'googleEventId',

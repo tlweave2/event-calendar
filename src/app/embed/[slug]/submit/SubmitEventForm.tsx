@@ -32,6 +32,7 @@ const schema = z.object({
   submitterEmail: z.string().email("Valid email required"),
   ticketUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   cost: z.string().optional(),
+  website: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -215,6 +216,7 @@ export default function SubmitEventForm({
       submitterEmail: values.submitterEmail,
       ticketUrl: values.ticketUrl,
       cost: values.cost,
+      website: values.website,
       imageUrl,
       recurrence: recurrence || undefined,
       occurrences: recurrence ? Number(values.occurrences ?? 8) : undefined,
@@ -248,6 +250,15 @@ export default function SubmitEventForm({
     <Card className={darkMode ? "border-gray-700 bg-gray-800" : ""}>
       <CardContent className="py-8">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Honeypot: hidden from real users, but bots that auto-fill every field will trip it. */}
+          <div
+            aria-hidden="true"
+            style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }}
+          >
+            <label htmlFor="website">Website</label>
+            <input id="website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="image" className={darkMode ? "text-gray-200" : ""}>
               {isPro ? "Event Flyer / Image" : "Event Image"}

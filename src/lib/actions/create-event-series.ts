@@ -19,6 +19,7 @@ export async function createEventSeries(input: {
   imageUrl?: string;
   submitterName?: string;
   submitterEmail?: string;
+  submitterIp?: string;
   status?: "PENDING" | "APPROVED";
   rule: RecurrenceRule;
   occurrences: number;
@@ -56,6 +57,7 @@ export async function createEventSeries(input: {
           imageUrl: eventData.imageUrl ?? null,
           submitterName: eventData.submitterName ?? null,
           submitterEmail: eventData.submitterEmail ?? null,
+          submitterIp: eventData.submitterIp ?? null,
           status,
           seriesId: createdSeries.id,
           seriesIndex: index + 1,

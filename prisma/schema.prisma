@@ -122,6 +122,7 @@ model Event {
   status         EventStatus @default(PENDING)
   submitterName  String?     @db.VarChar(255)
   submitterEmail String?     @db.VarChar(255)
+  submitterIp    String?     @db.VarChar(45)
   seriesId       String?
   seriesIndex    Int?
   googleEventId  String?     @db.VarChar(255)
@@ -138,6 +139,8 @@ model Event {
   @@index([tenantId, status])
   @@index([tenantId, startAt])
   @@index([seriesId])
+  @@index([tenantId, submitterEmail, createdAt])
+  @@index([tenantId, submitterIp, createdAt])
   @@map("events")
 }
 

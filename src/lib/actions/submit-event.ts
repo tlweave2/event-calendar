@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
@@ -8,6 +9,7 @@ import { checkEventLimit } from "@/lib/plan-limits";
 import { createEventSeries } from "./create-event-series";
 import { demoFormError, isDemoTenant } from "@/lib/demo-guard";
 import { deliverWebhook } from "@/lib/webhook";
+import { checkSubmissionRateLimit, getClientIp } from "@/lib/rate-limit";
 
 const submitEventSchema = z.object({
   tenantSlug: z.string(),
@@ -25,6 +27,9 @@ const submitEventSchema = z.object({
   imageUrl: z.string().optional(),
   recurrence: z.enum(["weekly", "biweekly", "monthly"]).optional(),
   occurrences: z.number().int().min(1).max(52).optional(),
+  // Honeypot: real users never see or fill this field. Bots that
+  // auto-fill every input on the form will trip it.
+  website: z.string().optional(),
 });
 
 export type SubmitEventInput = z.infer<typeof submitEventSchema>;
@@ -43,7 +48,12 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
     };
   }
 
-  const { tenantSlug, ...data } = parsed.data;
+  const { tenantSlug, website, ...data } = parsed.data;
+
+  // Honeypot tripped — pretend success so the bot doesn't retry, but don't create anything.
+  if (website) {
+    return { success: true, eventId: "" };
+  }
 
   const tenant = await prisma.tenant.findUnique({
     where: { slug: tenantSlug },
@@ -55,6 +65,17 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
 
   if (isDemoTenant(tenant.id, tenant.slug)) {
     return demoFormError();
+  }
+
+  const requestHeaders = await headers();
+  const submitterIp = getClientIp(requestHeaders);
+
+  const rateLimit = await checkSubmissionRateLimit(tenant.id, data.submitterEmail, submitterIp);
+  if (!rateLimit.allowed) {
+    return {
+      success: false,
+      errors: { _form: [rateLimit.reason ?? "Too many submissions. Please try again later."] },
+    };
   }
 
   const limitCheck = await checkEventLimit(tenant.id);
@@ -92,6 +113,7 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       categoryId: data.categoryId || undefined,
       submitterName: data.submitterName,
       submitterEmail: data.submitterEmail,
+      submitterIp: submitterIp ?? undefined,
       ticketUrl: data.ticketUrl || undefined,
       cost: data.cost,
       imageUrl: data.imageUrl,
@@ -170,6 +192,7 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       categoryId: data.categoryId || null,
       submitterName: data.submitterName,
       submitterEmail: data.submitterEmail,
+      submitterIp,
       ticketUrl: data.ticketUrl || null,
       cost: data.cost,
       imageUrl: data.imageUrl,

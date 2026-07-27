@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { slugify } from "@/lib/slugify";
+import { sendWelcomeEmail } from "@/lib/email";
 
 const createTenantSchema = z.object({
   orgName: z.string().min(2).max(255),
@@ -57,6 +58,15 @@ export async function createTenant(input: { orgName: string; email: string; pass
       password: hashedPassword,
     },
   });
+
+  const baseUrl = process.env.NEXTAUTH_URL ?? "https://www.useventful.com";
+  sendWelcomeEmail({
+    to: email.toLowerCase(),
+    tenantName: orgName,
+    setupUrl: `${baseUrl}/setup/${tenant.slug}`,
+    calendarUrl: `${baseUrl}/embed/${tenant.slug}/calendar`,
+    submitUrl: `${baseUrl}/embed/${tenant.slug}/submit`,
+  }).catch((err) => console.error("[email] welcome email failed:", err));
 
   return { success: true, slug: tenant.slug, tenantId: tenant.id };
 }

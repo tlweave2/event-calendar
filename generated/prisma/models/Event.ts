@@ -56,6 +56,7 @@ export type EventMinAggregateOutputType = {
   status: $Enums.EventStatus | null
   submitterName: string | null
   submitterEmail: string | null
+  submitterIp: string | null
   seriesId: string | null
   seriesIndex: number | null
   googleEventId: string | null
@@ -81,6 +82,7 @@ export type EventMaxAggregateOutputType = {
   status: $Enums.EventStatus | null
   submitterName: string | null
   submitterEmail: string | null
+  submitterIp: string | null
   seriesId: string | null
   seriesIndex: number | null
   googleEventId: string | null
@@ -106,6 +108,7 @@ export type EventCountAggregateOutputType = {
   status: number
   submitterName: number
   submitterEmail: number
+  submitterIp: number
   seriesId: number
   seriesIndex: number
   googleEventId: number
@@ -145,6 +148,7 @@ export type EventMinAggregateInputType = {
   status?: true
   submitterName?: true
   submitterEmail?: true
+  submitterIp?: true
   seriesId?: true
   seriesIndex?: true
   googleEventId?: true
@@ -170,6 +174,7 @@ export type EventMaxAggregateInputType = {
   status?: true
   submitterName?: true
   submitterEmail?: true
+  submitterIp?: true
   seriesId?: true
   seriesIndex?: true
   googleEventId?: true
@@ -195,6 +200,7 @@ export type EventCountAggregateInputType = {
   status?: true
   submitterName?: true
   submitterEmail?: true
+  submitterIp?: true
   seriesId?: true
   seriesIndex?: true
   googleEventId?: true
@@ -307,6 +313,7 @@ export type EventGroupByOutputType = {
   status: $Enums.EventStatus
   submitterName: string | null
   submitterEmail: string | null
+  submitterIp: string | null
   seriesId: string | null
   seriesIndex: number | null
   googleEventId: string | null
@@ -355,6 +362,7 @@ export type EventWhereInput = {
   status?: Prisma.EnumEventStatusFilter<"Event"> | $Enums.EventStatus
   submitterName?: Prisma.StringNullableFilter<"Event"> | string | null
   submitterEmail?: Prisma.StringNullableFilter<"Event"> | string | null
+  submitterIp?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesId?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesIndex?: Prisma.IntNullableFilter<"Event"> | number | null
   googleEventId?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -385,6 +393,7 @@ export type EventOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   submitterName?: Prisma.SortOrderInput | Prisma.SortOrder
   submitterEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  submitterIp?: Prisma.SortOrderInput | Prisma.SortOrder
   seriesId?: Prisma.SortOrderInput | Prisma.SortOrder
   seriesIndex?: Prisma.SortOrderInput | Prisma.SortOrder
   googleEventId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -418,6 +427,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumEventStatusFilter<"Event"> | $Enums.EventStatus
   submitterName?: Prisma.StringNullableFilter<"Event"> | string | null
   submitterEmail?: Prisma.StringNullableFilter<"Event"> | string | null
+  submitterIp?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesId?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesIndex?: Prisma.IntNullableFilter<"Event"> | number | null
   googleEventId?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -448,6 +458,7 @@ export type EventOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   submitterName?: Prisma.SortOrderInput | Prisma.SortOrder
   submitterEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  submitterIp?: Prisma.SortOrderInput | Prisma.SortOrder
   seriesId?: Prisma.SortOrderInput | Prisma.SortOrder
   seriesIndex?: Prisma.SortOrderInput | Prisma.SortOrder
   googleEventId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -481,6 +492,7 @@ export type EventScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumEventStatusWithAggregatesFilter<"Event"> | $Enums.EventStatus
   submitterName?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   submitterEmail?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  submitterIp?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   seriesId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   seriesIndex?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
   googleEventId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
@@ -504,6 +516,7 @@ export type EventCreateInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
   createdAt?: Date | string
@@ -533,6 +546,7 @@ export type EventUncheckedCreateInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
@@ -558,6 +572,7 @@ export type EventUpdateInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -587,6 +602,7 @@ export type EventUncheckedUpdateInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -614,6 +630,7 @@ export type EventCreateManyInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
@@ -637,6 +654,7 @@ export type EventUpdateManyMutationInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -661,6 +679,7 @@ export type EventUncheckedUpdateManyInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -696,6 +715,7 @@ export type EventCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   submitterName?: Prisma.SortOrder
   submitterEmail?: Prisma.SortOrder
+  submitterIp?: Prisma.SortOrder
   seriesId?: Prisma.SortOrder
   seriesIndex?: Prisma.SortOrder
   googleEventId?: Prisma.SortOrder
@@ -727,6 +747,7 @@ export type EventMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   submitterName?: Prisma.SortOrder
   submitterEmail?: Prisma.SortOrder
+  submitterIp?: Prisma.SortOrder
   seriesId?: Prisma.SortOrder
   seriesIndex?: Prisma.SortOrder
   googleEventId?: Prisma.SortOrder
@@ -752,6 +773,7 @@ export type EventMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   submitterName?: Prisma.SortOrder
   submitterEmail?: Prisma.SortOrder
+  submitterIp?: Prisma.SortOrder
   seriesId?: Prisma.SortOrder
   seriesIndex?: Prisma.SortOrder
   googleEventId?: Prisma.SortOrder
@@ -964,6 +986,7 @@ export type EventCreateWithoutTenantInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
   createdAt?: Date | string
@@ -991,6 +1014,7 @@ export type EventUncheckedCreateWithoutTenantInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
@@ -1047,6 +1071,7 @@ export type EventScalarWhereInput = {
   status?: Prisma.EnumEventStatusFilter<"Event"> | $Enums.EventStatus
   submitterName?: Prisma.StringNullableFilter<"Event"> | string | null
   submitterEmail?: Prisma.StringNullableFilter<"Event"> | string | null
+  submitterIp?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesId?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesIndex?: Prisma.IntNullableFilter<"Event"> | number | null
   googleEventId?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -1070,6 +1095,7 @@ export type EventCreateWithoutCategoryInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
   createdAt?: Date | string
@@ -1097,6 +1123,7 @@ export type EventUncheckedCreateWithoutCategoryInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
@@ -1148,6 +1175,7 @@ export type EventCreateWithoutAuditLogsInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
   createdAt?: Date | string
@@ -1176,6 +1204,7 @@ export type EventUncheckedCreateWithoutAuditLogsInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
@@ -1216,6 +1245,7 @@ export type EventUpdateWithoutAuditLogsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1244,6 +1274,7 @@ export type EventUncheckedUpdateWithoutAuditLogsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1268,6 +1299,7 @@ export type EventCreateWithoutPageViewsInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
   createdAt?: Date | string
@@ -1296,6 +1328,7 @@ export type EventUncheckedCreateWithoutPageViewsInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
@@ -1336,6 +1369,7 @@ export type EventUpdateWithoutPageViewsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1364,6 +1398,7 @@ export type EventUncheckedUpdateWithoutPageViewsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1388,6 +1423,7 @@ export type EventCreateWithoutSeriesInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
   createdAt?: Date | string
@@ -1416,6 +1452,7 @@ export type EventUncheckedCreateWithoutSeriesInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
   createdAt?: Date | string
@@ -1467,6 +1504,7 @@ export type EventCreateManyTenantInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
@@ -1490,6 +1528,7 @@ export type EventUpdateWithoutTenantInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1517,6 +1556,7 @@ export type EventUncheckedUpdateWithoutTenantInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1543,6 +1583,7 @@ export type EventUncheckedUpdateManyWithoutTenantInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1567,6 +1608,7 @@ export type EventCreateManyCategoryInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
@@ -1590,6 +1632,7 @@ export type EventUpdateWithoutCategoryInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1617,6 +1660,7 @@ export type EventUncheckedUpdateWithoutCategoryInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1643,6 +1687,7 @@ export type EventUncheckedUpdateManyWithoutCategoryInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1668,6 +1713,7 @@ export type EventCreateManySeriesInput = {
   status?: $Enums.EventStatus
   submitterName?: string | null
   submitterEmail?: string | null
+  submitterIp?: string | null
   seriesIndex?: number | null
   googleEventId?: string | null
   createdAt?: Date | string
@@ -1690,6 +1736,7 @@ export type EventUpdateWithoutSeriesInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1718,6 +1765,7 @@ export type EventUncheckedUpdateWithoutSeriesInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1744,6 +1792,7 @@ export type EventUncheckedUpdateManyWithoutSeriesInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitterIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1808,6 +1857,7 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   status?: boolean
   submitterName?: boolean
   submitterEmail?: boolean
+  submitterIp?: boolean
   seriesId?: boolean
   seriesIndex?: boolean
   googleEventId?: boolean
@@ -1839,6 +1889,7 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   submitterName?: boolean
   submitterEmail?: boolean
+  submitterIp?: boolean
   seriesId?: boolean
   seriesIndex?: boolean
   googleEventId?: boolean
@@ -1867,6 +1918,7 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   submitterName?: boolean
   submitterEmail?: boolean
+  submitterIp?: boolean
   seriesId?: boolean
   seriesIndex?: boolean
   googleEventId?: boolean
@@ -1895,6 +1947,7 @@ export type EventSelectScalar = {
   status?: boolean
   submitterName?: boolean
   submitterEmail?: boolean
+  submitterIp?: boolean
   seriesId?: boolean
   seriesIndex?: boolean
   googleEventId?: boolean
@@ -1902,7 +1955,7 @@ export type EventSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "title" | "description" | "startAt" | "endAt" | "locationName" | "address" | "lat" | "lng" | "categoryId" | "imageUrl" | "ticketUrl" | "cost" | "status" | "submitterName" | "submitterEmail" | "seriesId" | "seriesIndex" | "googleEventId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "title" | "description" | "startAt" | "endAt" | "locationName" | "address" | "lat" | "lng" | "categoryId" | "imageUrl" | "ticketUrl" | "cost" | "status" | "submitterName" | "submitterEmail" | "submitterIp" | "seriesId" | "seriesIndex" | "googleEventId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Event$categoryArgs<ExtArgs>
@@ -1949,6 +2002,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     status: $Enums.EventStatus
     submitterName: string | null
     submitterEmail: string | null
+    submitterIp: string | null
     seriesId: string | null
     seriesIndex: number | null
     googleEventId: string | null
@@ -2399,6 +2453,7 @@ export interface EventFieldRefs {
   readonly status: Prisma.FieldRef<"Event", 'EventStatus'>
   readonly submitterName: Prisma.FieldRef<"Event", 'String'>
   readonly submitterEmail: Prisma.FieldRef<"Event", 'String'>
+  readonly submitterIp: Prisma.FieldRef<"Event", 'String'>
   readonly seriesId: Prisma.FieldRef<"Event", 'String'>
   readonly seriesIndex: Prisma.FieldRef<"Event", 'Int'>
   readonly googleEventId: Prisma.FieldRef<"Event", 'String'>

@@ -37,6 +37,14 @@ type AdminNotificationProps = {
   adminUrl: string;
 };
 
+type WelcomeEmailProps = {
+  to: string;
+  tenantName: string;
+  setupUrl: string;
+  calendarUrl: string;
+  submitUrl: string;
+};
+
 function submissionConfirmationHtml({
   submitterName,
   eventTitle,
@@ -133,6 +141,52 @@ function adminNotificationHtml({
       <p style="font-size:12px;color:#999">Sent by ${tenantName} via Event Calendar</p>
     </div>
   `;
+}
+
+function welcomeEmailHtml({
+  tenantName,
+  setupUrl,
+  calendarUrl,
+  submitUrl,
+}: Omit<WelcomeEmailProps, "to">) {
+  return `
+    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111">
+      <h2 style="font-size:18px;margin-bottom:4px">Welcome to Eventful, ${tenantName}!</h2>
+      <p style="color:#555;margin-top:0">You're a few steps away from a calendar your community will actually use.</p>
+      <p><a href="${setupUrl}" style="background:#1a1a18;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px">Finish setup -&gt;</a></p>
+      <table style="border-collapse:collapse;width:100%;margin:24px 0;font-size:14px">
+        <tr>
+          <td style="padding:8px 12px;background:#f5f5f5;font-weight:600;width:140px">Your calendar</td>
+          <td style="padding:8px 12px;background:#f5f5f5;word-break:break-all"><a href="${calendarUrl}" style="color:#2563eb">${calendarUrl}</a></td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px;font-weight:600">Submit link</td>
+          <td style="padding:8px 12px;word-break:break-all"><a href="${submitUrl}" style="color:#2563eb">${submitUrl}</a></td>
+        </tr>
+      </table>
+      <p style="font-size:14px;color:#555">
+        Share the submit link with your community so people can add their own events.
+        Share the calendar link (or embed it on your website) so everyone can see what's happening.
+        You'll review every submission before it goes live.
+      </p>
+      <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
+      <p style="font-size:12px;color:#999">Sent by Eventful</p>
+    </div>
+  `;
+}
+
+export async function sendWelcomeEmail(props: WelcomeEmailProps) {
+  if (!resend) {
+    console.log("[email] RESEND_API_KEY not set - skipping welcome email");
+    return;
+  }
+
+  await resend.emails.send({
+    from: FROM,
+    to: props.to,
+    subject: `Your ${props.tenantName} calendar is ready`,
+    html: welcomeEmailHtml(props),
+  });
 }
 
 export async function sendSubmissionConfirmation(
