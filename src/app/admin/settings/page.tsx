@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { getTenantUsers } from "@/lib/prisma-tenant";
+import { isGoogleCalendarOAuthConfigured } from "@/lib/google-calendar-oauth";
 import InviteForm from "./InviteForm";
 import BillingSection from "./BillingSection";
 import { GoogleCalendarFormClient, WebhookSettingsFormClient } from "./SettingsFormsSsr";
@@ -43,6 +44,8 @@ export default async function SettingsPage({
 
   const inviteSuccess = sp.invited === "1";
   const inviteError = typeof sp.invite_error === "string" ? sp.invite_error : null;
+  const gcalError = typeof sp.gcal_error === "string" ? sp.gcal_error : undefined;
+  const gcalConnected = sp.gcal_connected === "1";
 
   return (
     <div className="max-w-5xl px-8 py-8">
@@ -90,7 +93,16 @@ export default async function SettingsPage({
       )}
 
       <div className="mt-6 max-w-2xl">
-        <GoogleCalendarFormClient initialIcsUrl={tenant?.googleCalendarIcsUrl ?? ""} />
+        <GoogleCalendarFormClient
+          oauthConfigured={isGoogleCalendarOAuthConfigured()}
+          connected={Boolean(tenant?.googleCalendarAccessToken)}
+          calendarId={tenant?.googleCalendarId ?? null}
+          calendarSummary={tenant?.googleCalendarSummary ?? null}
+          pushEnabled={tenant?.googleCalendarPushEnabled ?? false}
+          initialIcsUrl={tenant?.googleCalendarIcsUrl ?? ""}
+          gcalError={gcalError}
+          gcalConnected={gcalConnected}
+        />
       </div>
 
       <div className="mt-6 max-w-2xl">

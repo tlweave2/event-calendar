@@ -4,17 +4,17 @@ import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import { getTenantBySlug } from "@/lib/tenant";
 import { getEventById } from "@/lib/prisma-tenant";
-import { getGoogleCalendarEvents } from "@/lib/google-calendar";
+import { getGoogleCalendarEvents, type GoogleCalendarTenant } from "@/lib/google-calendar";
 import { recordPageView } from "@/lib/page-views";
 import LinkifiedText from "@/components/LinkifiedText";
 import { formatCost } from "@/lib/format";
 
-async function resolveEvent(tenantId: string, icsUrl: string | null | undefined, id: string) {
+async function resolveEvent(tenant: GoogleCalendarTenant, id: string) {
   if (id.startsWith("gcal_")) {
-    const events = await getGoogleCalendarEvents(tenantId, icsUrl);
+    const events = await getGoogleCalendarEvents(tenant);
     return events.find((e) => e.id === id) ?? null;
   }
-  return getEventById(tenantId, id);
+  return getEventById(tenant.id, id);
 }
 
 type Props = {
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tenant = await getTenantBySlug(slug);
   if (!tenant) return {};
 
-  const event = await resolveEvent(tenant.id, tenant.googleCalendarIcsUrl, id);
+  const event = await resolveEvent(tenant, id);
   if (!event) return {};
 
   const description =
@@ -61,7 +61,7 @@ export default async function EventPage({ params, searchParams }: Props) {
   const tenant = await getTenantBySlug(slug);
   if (!tenant) notFound();
 
-  const event = await resolveEvent(tenant.id, tenant.googleCalendarIcsUrl, id);
+  const event = await resolveEvent(tenant, id);
   if (!event) notFound();
 
   if (!id.startsWith("gcal_")) void recordPageView(tenant.id, "event", event.id);

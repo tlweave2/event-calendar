@@ -1,13 +1,12 @@
 import { getApprovedEvents, type EventWithCategory } from "@/lib/prisma-tenant";
-import { getGoogleCalendarEvents } from "@/lib/google-calendar";
+import { getGoogleCalendarEvents, type GoogleCalendarTenant } from "@/lib/google-calendar";
 
-export async function getMergedApprovedEvents(tenant: {
-  id: string;
-  googleCalendarIcsUrl?: string | null;
-}): Promise<EventWithCategory[]> {
+export async function getMergedApprovedEvents(
+  tenant: GoogleCalendarTenant
+): Promise<EventWithCategory[]> {
   const [dbEvents, googleEvents] = await Promise.all([
     getApprovedEvents(tenant.id),
-    getGoogleCalendarEvents(tenant.id, tenant.googleCalendarIcsUrl),
+    getGoogleCalendarEvents(tenant),
   ]);
 
   const merged = [...dbEvents, ...googleEvents];

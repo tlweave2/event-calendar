@@ -1371,7 +1371,14 @@ export const TenantScalarFieldEnum = {
   isDemoSandbox: 'isDemoSandbox',
   demoExpiresAt: 'demoExpiresAt',
   createdAt: 'createdAt',
-  googleCalendarIcsUrl: 'googleCalendarIcsUrl'
+  googleCalendarIcsUrl: 'googleCalendarIcsUrl',
+  googleCalendarAccessToken: 'googleCalendarAccessToken',
+  googleCalendarRefreshToken: 'googleCalendarRefreshToken',
+  googleCalendarTokenExpiresAt: 'googleCalendarTokenExpiresAt',
+  googleCalendarId: 'googleCalendarId',
+  googleCalendarSummary: 'googleCalendarSummary',
+  googleCalendarSyncEnabled: 'googleCalendarSyncEnabled',
+  googleCalendarPushEnabled: 'googleCalendarPushEnabled'
 } as const
 
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
@@ -1420,6 +1427,7 @@ export const EventScalarFieldEnum = {
   submitterEmail: 'submitterEmail',
   seriesId: 'seriesId',
   seriesIndex: 'seriesIndex',
+  googleEventId: 'googleEventId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

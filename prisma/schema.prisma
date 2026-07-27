@@ -51,6 +51,15 @@ model Tenant {
   webhookConfig        WebhookConfig?
   googleCalendarIcsUrl String?       @db.VarChar(500)
 
+  // Google Calendar OAuth (two-way sync)
+  googleCalendarAccessToken    String?   @db.Text
+  googleCalendarRefreshToken   String?   @db.Text
+  googleCalendarTokenExpiresAt DateTime?
+  googleCalendarId             String?   @db.VarChar(255)
+  googleCalendarSummary        String?   @db.VarChar(255)
+  googleCalendarSyncEnabled    Boolean   @default(false)
+  googleCalendarPushEnabled    Boolean   @default(false)
+
   @@map("tenants")
 }
 
@@ -115,6 +124,7 @@ model Event {
   submitterEmail String?     @db.VarChar(255)
   seriesId       String?
   seriesIndex    Int?
+  googleEventId  String?     @db.VarChar(255)
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 

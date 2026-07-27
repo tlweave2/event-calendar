@@ -58,6 +58,7 @@ export type EventMinAggregateOutputType = {
   submitterEmail: string | null
   seriesId: string | null
   seriesIndex: number | null
+  googleEventId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -82,6 +83,7 @@ export type EventMaxAggregateOutputType = {
   submitterEmail: string | null
   seriesId: string | null
   seriesIndex: number | null
+  googleEventId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -106,6 +108,7 @@ export type EventCountAggregateOutputType = {
   submitterEmail: number
   seriesId: number
   seriesIndex: number
+  googleEventId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -144,6 +147,7 @@ export type EventMinAggregateInputType = {
   submitterEmail?: true
   seriesId?: true
   seriesIndex?: true
+  googleEventId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -168,6 +172,7 @@ export type EventMaxAggregateInputType = {
   submitterEmail?: true
   seriesId?: true
   seriesIndex?: true
+  googleEventId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -192,6 +197,7 @@ export type EventCountAggregateInputType = {
   submitterEmail?: true
   seriesId?: true
   seriesIndex?: true
+  googleEventId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -303,6 +309,7 @@ export type EventGroupByOutputType = {
   submitterEmail: string | null
   seriesId: string | null
   seriesIndex: number | null
+  googleEventId: string | null
   createdAt: Date
   updatedAt: Date
   _count: EventCountAggregateOutputType | null
@@ -350,6 +357,7 @@ export type EventWhereInput = {
   submitterEmail?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesId?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesIndex?: Prisma.IntNullableFilter<"Event"> | number | null
+  googleEventId?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -379,6 +387,7 @@ export type EventOrderByWithRelationInput = {
   submitterEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   seriesId?: Prisma.SortOrderInput | Prisma.SortOrder
   seriesIndex?: Prisma.SortOrderInput | Prisma.SortOrder
+  googleEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -411,6 +420,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   submitterEmail?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesId?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesIndex?: Prisma.IntNullableFilter<"Event"> | number | null
+  googleEventId?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -440,6 +450,7 @@ export type EventOrderByWithAggregationInput = {
   submitterEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   seriesId?: Prisma.SortOrderInput | Prisma.SortOrder
   seriesIndex?: Prisma.SortOrderInput | Prisma.SortOrder
+  googleEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EventCountOrderByAggregateInput
@@ -472,6 +483,7 @@ export type EventScalarWhereWithAggregatesInput = {
   submitterEmail?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   seriesId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   seriesIndex?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
+  googleEventId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
 }
@@ -493,6 +505,7 @@ export type EventCreateInput = {
   submitterName?: string | null
   submitterEmail?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutEventsInput
@@ -522,6 +535,7 @@ export type EventUncheckedCreateInput = {
   submitterEmail?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutEventInput
@@ -545,6 +559,7 @@ export type EventUpdateInput = {
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutEventsNestedInput
@@ -574,6 +589,7 @@ export type EventUncheckedUpdateInput = {
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutEventNestedInput
@@ -600,6 +616,7 @@ export type EventCreateManyInput = {
   submitterEmail?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -621,6 +638,7 @@ export type EventUpdateManyMutationInput = {
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -645,6 +663,7 @@ export type EventUncheckedUpdateManyInput = {
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -679,6 +698,7 @@ export type EventCountOrderByAggregateInput = {
   submitterEmail?: Prisma.SortOrder
   seriesId?: Prisma.SortOrder
   seriesIndex?: Prisma.SortOrder
+  googleEventId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -709,6 +729,7 @@ export type EventMaxOrderByAggregateInput = {
   submitterEmail?: Prisma.SortOrder
   seriesId?: Prisma.SortOrder
   seriesIndex?: Prisma.SortOrder
+  googleEventId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -733,6 +754,7 @@ export type EventMinOrderByAggregateInput = {
   submitterEmail?: Prisma.SortOrder
   seriesId?: Prisma.SortOrder
   seriesIndex?: Prisma.SortOrder
+  googleEventId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -943,6 +965,7 @@ export type EventCreateWithoutTenantInput = {
   submitterName?: string | null
   submitterEmail?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category?: Prisma.CategoryCreateNestedOneWithoutEventsInput
@@ -970,6 +993,7 @@ export type EventUncheckedCreateWithoutTenantInput = {
   submitterEmail?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutEventInput
@@ -1025,6 +1049,7 @@ export type EventScalarWhereInput = {
   submitterEmail?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesId?: Prisma.StringNullableFilter<"Event"> | string | null
   seriesIndex?: Prisma.IntNullableFilter<"Event"> | number | null
+  googleEventId?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
 }
@@ -1046,6 +1071,7 @@ export type EventCreateWithoutCategoryInput = {
   submitterName?: string | null
   submitterEmail?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutEventsInput
@@ -1073,6 +1099,7 @@ export type EventUncheckedCreateWithoutCategoryInput = {
   submitterEmail?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutEventInput
@@ -1122,6 +1149,7 @@ export type EventCreateWithoutAuditLogsInput = {
   submitterName?: string | null
   submitterEmail?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutEventsInput
@@ -1150,6 +1178,7 @@ export type EventUncheckedCreateWithoutAuditLogsInput = {
   submitterEmail?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutEventInput
@@ -1188,6 +1217,7 @@ export type EventUpdateWithoutAuditLogsInput = {
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutEventsNestedInput
@@ -1216,6 +1246,7 @@ export type EventUncheckedUpdateWithoutAuditLogsInput = {
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutEventNestedInput
@@ -1238,6 +1269,7 @@ export type EventCreateWithoutPageViewsInput = {
   submitterName?: string | null
   submitterEmail?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutEventsInput
@@ -1266,6 +1298,7 @@ export type EventUncheckedCreateWithoutPageViewsInput = {
   submitterEmail?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutEventInput
@@ -1304,6 +1337,7 @@ export type EventUpdateWithoutPageViewsInput = {
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutEventsNestedInput
@@ -1332,6 +1366,7 @@ export type EventUncheckedUpdateWithoutPageViewsInput = {
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutEventNestedInput
@@ -1354,6 +1389,7 @@ export type EventCreateWithoutSeriesInput = {
   submitterName?: string | null
   submitterEmail?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutEventsInput
@@ -1381,6 +1417,7 @@ export type EventUncheckedCreateWithoutSeriesInput = {
   submitterName?: string | null
   submitterEmail?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutEventInput
@@ -1432,6 +1469,7 @@ export type EventCreateManyTenantInput = {
   submitterEmail?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1453,6 +1491,7 @@ export type EventUpdateWithoutTenantInput = {
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.CategoryUpdateOneWithoutEventsNestedInput
@@ -1480,6 +1519,7 @@ export type EventUncheckedUpdateWithoutTenantInput = {
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutEventNestedInput
@@ -1505,6 +1545,7 @@ export type EventUncheckedUpdateManyWithoutTenantInput = {
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1528,6 +1569,7 @@ export type EventCreateManyCategoryInput = {
   submitterEmail?: string | null
   seriesId?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1549,6 +1591,7 @@ export type EventUpdateWithoutCategoryInput = {
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutEventsNestedInput
@@ -1576,6 +1619,7 @@ export type EventUncheckedUpdateWithoutCategoryInput = {
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutEventNestedInput
@@ -1601,6 +1645,7 @@ export type EventUncheckedUpdateManyWithoutCategoryInput = {
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1624,6 +1669,7 @@ export type EventCreateManySeriesInput = {
   submitterName?: string | null
   submitterEmail?: string | null
   seriesIndex?: number | null
+  googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1645,6 +1691,7 @@ export type EventUpdateWithoutSeriesInput = {
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutEventsNestedInput
@@ -1672,6 +1719,7 @@ export type EventUncheckedUpdateWithoutSeriesInput = {
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutEventNestedInput
@@ -1697,6 +1745,7 @@ export type EventUncheckedUpdateManyWithoutSeriesInput = {
   submitterName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submitterEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   seriesIndex?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1761,6 +1810,7 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   submitterEmail?: boolean
   seriesId?: boolean
   seriesIndex?: boolean
+  googleEventId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1791,6 +1841,7 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   submitterEmail?: boolean
   seriesId?: boolean
   seriesIndex?: boolean
+  googleEventId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1818,6 +1869,7 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   submitterEmail?: boolean
   seriesId?: boolean
   seriesIndex?: boolean
+  googleEventId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1845,11 +1897,12 @@ export type EventSelectScalar = {
   submitterEmail?: boolean
   seriesId?: boolean
   seriesIndex?: boolean
+  googleEventId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "title" | "description" | "startAt" | "endAt" | "locationName" | "address" | "lat" | "lng" | "categoryId" | "imageUrl" | "ticketUrl" | "cost" | "status" | "submitterName" | "submitterEmail" | "seriesId" | "seriesIndex" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "title" | "description" | "startAt" | "endAt" | "locationName" | "address" | "lat" | "lng" | "categoryId" | "imageUrl" | "ticketUrl" | "cost" | "status" | "submitterName" | "submitterEmail" | "seriesId" | "seriesIndex" | "googleEventId" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Event$categoryArgs<ExtArgs>
@@ -1898,6 +1951,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     submitterEmail: string | null
     seriesId: string | null
     seriesIndex: number | null
+    googleEventId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["event"]>
@@ -2347,6 +2401,7 @@ export interface EventFieldRefs {
   readonly submitterEmail: Prisma.FieldRef<"Event", 'String'>
   readonly seriesId: Prisma.FieldRef<"Event", 'String'>
   readonly seriesIndex: Prisma.FieldRef<"Event", 'Int'>
+  readonly googleEventId: Prisma.FieldRef<"Event", 'String'>
   readonly createdAt: Prisma.FieldRef<"Event", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Event", 'DateTime'>
 }

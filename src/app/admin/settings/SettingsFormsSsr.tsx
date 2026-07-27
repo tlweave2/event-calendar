@@ -5,8 +5,19 @@ import dynamic from "next/dynamic";
 const GoogleCalendarForm = dynamic(() => import("./GoogleCalendarForm"), { ssr: false });
 const WebhookSettingsForm = dynamic(() => import("./WebhookSettingsForm"), { ssr: false });
 
-export function GoogleCalendarFormClient({ initialIcsUrl }: { initialIcsUrl: string }) {
-  return <GoogleCalendarForm initialIcsUrl={initialIcsUrl} />;
+type GoogleCalendarFormClientProps = {
+  oauthConfigured: boolean;
+  connected: boolean;
+  calendarId: string | null;
+  calendarSummary: string | null;
+  pushEnabled: boolean;
+  initialIcsUrl: string;
+  gcalError?: string;
+  gcalConnected?: boolean;
+};
+
+export function GoogleCalendarFormClient(props: GoogleCalendarFormClientProps) {
+  return <GoogleCalendarForm {...props} />;
 }
 
 export function WebhookSettingsFormClient({

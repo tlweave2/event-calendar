@@ -7,6 +7,7 @@ import { z } from "zod";
 import { sendModerationNotice } from "@/lib/email";
 import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
 import { deliverWebhook } from "@/lib/webhook";
+import { getValidAccessToken, insertEvent } from "@/lib/google-calendar-oauth";
 
 const moderateSchema = z.object({
   eventId: z.string().uuid(),
@@ -76,6 +77,19 @@ export async function moderateEvent(input: {
     }).catch((err) => console.error("[webhook] event.approved failed:", err));
   }
 
+  // Push approved events into the organizer's connected Google Calendar — non-blocking.
+  if (
+    action === "APPROVED" &&
+    updatedEvent &&
+    !updatedEvent.googleEventId &&
+    updatedEvent.tenant.googleCalendarPushEnabled &&
+    updatedEvent.tenant.googleCalendarId
+  ) {
+    pushEventToGoogleCalendar(updatedEvent).catch((err) =>
+      console.error("[gcal] push on approve failed:", err)
+    );
+  }
+
   if (updatedEvent?.submitterEmail && action !== "PENDING") {
     const calendarUrl = `${process.env.NEXTAUTH_URL}/embed/${updatedEvent.tenant.slug}/calendar`;
 
@@ -95,4 +109,38 @@ export async function moderateEvent(input: {
   revalidatePath("/admin/events");
 
   return { success: true };
+}
+
+type EventWithTenant = NonNullable<
+  Awaited<ReturnType<typeof prisma.event.findUnique>>
+> & {
+  tenant: NonNullable<Awaited<ReturnType<typeof prisma.tenant.findUnique>>>;
+};
+
+async function pushEventToGoogleCalendar(event: EventWithTenant) {
+  const tenant = event.tenant;
+  const accessToken = await getValidAccessToken({
+    id: tenant.id,
+    googleCalendarAccessToken: tenant.googleCalendarAccessToken,
+    googleCalendarRefreshToken: tenant.googleCalendarRefreshToken,
+    googleCalendarTokenExpiresAt: tenant.googleCalendarTokenExpiresAt,
+  });
+  if (!accessToken || !tenant.googleCalendarId) return;
+
+  const location = event.address
+    ? `${event.locationName ?? ""} ${event.address}`.trim()
+    : event.locationName;
+
+  const inserted = await insertEvent(accessToken, tenant.googleCalendarId, {
+    summary: event.title,
+    description: event.description,
+    location,
+    start: event.startAt,
+    end: event.endAt ?? new Date(event.startAt.getTime() + 3600_000),
+  });
+
+  await prisma.event.update({
+    where: { id: event.id },
+    data: { googleEventId: inserted.id },
+  });
 }
