@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { PRO_PRICE_USD, YEARLY_MONTHS_FREE } from "@/lib/pricing";
 
 export const metadata: Metadata = {
   title: "Eventful — one calendar for your whole community",
@@ -280,7 +281,7 @@ export default function HomePage() {
             <h2 className="text-3xl leading-tight tracking-[-0.03em] sm:text-4xl">Pricing</h2>
             <p className="mt-3 max-w-lg font-sans text-[0.9375rem] leading-relaxed text-[#6b5c4e]">
               Everything described above is on the free plan. Paying removes the event cap
-              and the badge, and turns on the flyer scanner.
+              and the badge, and turns on the flyer scanner. Cancel whenever.
             </p>
 
             <div className="mt-9 grid max-w-3xl gap-6 sm:grid-cols-2">
@@ -311,9 +312,12 @@ export default function HomePage() {
                   Pro
                 </p>
                 <div className="mt-3 font-serif text-4xl tracking-tight">
-                  $99<span className="text-xl text-[#a89684]">/yr</span>
+                  ${PRO_PRICE_USD.monthly}
+                  <span className="text-xl text-[#a89684]">/mo</span>
                 </div>
-                <p className="mt-1 text-sm text-[#a89684]">About $8 a month</p>
+                <p className="mt-1 text-sm text-[#a89684]">
+                  or ${PRO_PRICE_USD.yearly} a year — {YEARLY_MONTHS_FREE} months free
+                </p>
                 <ul className="mt-6 space-y-2.5 text-sm text-[#6b5c4e]">
                   <li className="font-medium text-[#1a1410]">Everything in Free, plus:</li>
                   <li>Unlimited events</li>

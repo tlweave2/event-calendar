@@ -1,13 +1,13 @@
 "use server";
 
 import { auth } from "@/lib/auth";
-import { stripe } from "@/lib/stripe";
+import { getProPriceId, stripe } from "@/lib/stripe";
+import type { BillingInterval } from "@/lib/pricing";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { isDemoTenant } from "@/lib/demo-guard";
 
 export async function createCheckoutSession(formData: FormData): Promise<void> {
-  void formData;
   const session = await auth();
   if (!session) return;
 
@@ -19,6 +19,16 @@ export async function createCheckoutSession(formData: FormData): Promise<void> {
     redirect("/admin/settings?demo=1");
   }
 
+  const interval: BillingInterval =
+    formData.get("interval") === "monthly" ? "monthly" : "yearly";
+
+  // Surface a real message rather than handing Stripe an empty price id.
+  const priceId = getProPriceId(interval);
+  if (!priceId) {
+    console.error(`[billing] no Stripe price configured for ${interval}`);
+    redirect("/admin/settings?billing_error=not_configured");
+  }
+
   const baseUrl = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
 
   const checkoutSession = await stripe.checkout.sessions.create({
@@ -26,7 +36,7 @@ export async function createCheckoutSession(formData: FormData): Promise<void> {
     payment_method_types: ["card"],
     line_items: [
       {
-        price: process.env.STRIPE_PRO_PRICE_ID ?? "",
+        price: priceId,
         quantity: 1,
       },
     ],

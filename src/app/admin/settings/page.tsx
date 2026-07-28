@@ -88,7 +88,11 @@ export default async function SettingsPage({
             Your plan determines how many events you can receive each month and
             which features are available.
           </p>
-          <BillingSection plan={tenant.plan} hasStripeCustomer={!!tenant.stripeCustomerId} />
+          <BillingSection
+            plan={tenant.plan}
+            hasStripeCustomer={!!tenant.stripeCustomerId}
+            billingError={typeof sp.billing_error === "string" ? sp.billing_error : undefined}
+          />
         </div>
       )}
 
