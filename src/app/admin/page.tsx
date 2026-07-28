@@ -2,15 +2,23 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getPendingEvents } from "@/lib/prisma-tenant";
 import { checkEventLimit } from "@/lib/plan-limits";
+import { getOnboardingStatus } from "@/lib/onboarding";
+import { prisma } from "@/lib/prisma";
 import QueueRow from "./QueueRow";
+import SetupChecklist from "./SetupChecklist";
 
 export default async function AdminQueuePage() {
   const session = await auth();
   if (!session) redirect("/admin/login");
 
-  const [events, limitCheck] = await Promise.all([
+  const [events, limitCheck, onboardingStatus, tenant] = await Promise.all([
     getPendingEvents(session.user.tenantId),
     checkEventLimit(session.user.tenantId),
+    getOnboardingStatus(session.user.tenantId),
+    prisma.tenant.findUnique({
+      where: { id: session.user.tenantId },
+      select: { slug: true },
+    }),
   ]);
 
   const nearLimit =
@@ -23,6 +31,8 @@ export default async function AdminQueuePage() {
 
   return (
     <div className="max-w-4xl px-8 py-8">
+      {tenant?.slug && <SetupChecklist tenantSlug={tenant.slug} status={onboardingStatus} />}
+
       {atLimit && (
         <div className="mb-5 rounded-lg border border-red-200 bg-red-50 p-4">
           <p className="text-sm font-medium text-red-800">
