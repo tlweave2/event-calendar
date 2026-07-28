@@ -11,15 +11,15 @@ export default async function AllEventsPage() {
   const events = await getEvents(session.user.tenantId);
 
   return (
-    <div className="max-w-5xl px-8 py-8">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="max-w-5xl px-4 py-6 sm:px-8 sm:py-8">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-semibold text-gray-900">All Events</h1>
           <p className="mt-1 text-sm text-gray-500">
             {events.length} total event{events.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Link
             href="/admin/events/new"
             className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"

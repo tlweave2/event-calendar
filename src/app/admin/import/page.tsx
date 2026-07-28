@@ -14,7 +14,7 @@ export default async function ImportPage() {
 
   if (!access.allowed) {
     return (
-      <div className="max-w-5xl px-8 py-8">
+      <div className="max-w-5xl px-4 py-6 sm:px-8 sm:py-8">
         <h1 className="text-xl font-semibold text-gray-900">Import from Flyers</h1>
         <div className="mt-6 rounded-lg border-2 border-dashed border-gray-200 p-8 text-center">
           <p className="text-lg font-medium text-gray-900">
@@ -44,7 +44,7 @@ export default async function ImportPage() {
   ]);
 
   return (
-    <div className="max-w-5xl px-8 py-8">
+    <div className="max-w-5xl px-4 py-6 sm:px-8 sm:py-8">
       <div className="mb-6">
         <h1 className="text-xl font-semibold text-gray-900">Import from Flyers</h1>
         <p className="mt-1 text-sm text-gray-500">

@@ -10,7 +10,7 @@ export default async function NewEventPage() {
   const categories = await getCategories(session.user.tenantId);
 
   return (
-    <div className="max-w-2xl px-8 py-8">
+    <div className="max-w-2xl px-4 py-6 sm:px-8 sm:py-8">
       <div className="mb-6">
         <h1 className="text-xl font-semibold text-gray-900">Create Event</h1>
         <p className="mt-1 text-sm text-gray-500">

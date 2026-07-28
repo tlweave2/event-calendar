@@ -32,7 +32,7 @@ export default async function EmbedPage() {
   const baseUrl = process.env.NEXTAUTH_URL ?? "https://www.useventful.com";
 
   return (
-    <div className="px-8 py-8">
+    <div className="px-4 py-6 sm:px-8 sm:py-8">
       <div className="mb-8">
         <h1 className="text-xl font-semibold text-gray-900">Embed</h1>
         <p className="mt-1 text-sm text-gray-500">

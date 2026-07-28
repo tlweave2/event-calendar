@@ -13,7 +13,7 @@ export default async function BrandingPage() {
   if (!tenant) redirect("/admin");
 
   return (
-    <div className="max-w-2xl px-8 py-8 space-y-8">
+    <div className="max-w-2xl px-4 py-6 sm:px-8 sm:py-8 space-y-8">
       <div>
         <h1 className="text-xl font-semibold text-gray-900">Branding</h1>
         <p className="mt-1 text-sm text-gray-500">

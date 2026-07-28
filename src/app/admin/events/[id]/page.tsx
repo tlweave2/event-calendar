@@ -41,7 +41,7 @@ export default async function EventDetailPage({
     : [];
 
   return (
-    <div className="max-w-3xl space-y-6 px-8 py-8">
+    <div className="max-w-3xl space-y-6 px-4 py-6 sm:px-8 sm:py-8">
       <div className="mb-6">
         <Link href="/admin/events" className="text-sm text-gray-400 hover:text-gray-600">
           ← All Events
