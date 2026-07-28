@@ -48,6 +48,7 @@ model Tenant {
   users         User[]
   pageViews     PageView[]
   auditLogs     AuditLog[]
+  subscribers   Subscriber[]
   webhookConfig        WebhookConfig?
   googleCalendarIcsUrl String?       @db.VarChar(500)
 
@@ -270,6 +271,22 @@ model EventSeries {
 
   @@index([tenantId])
   @@map("event_series")
+}
+
+// ─── Subscribers ─────────────────────────────────────────────────────────
+
+model Subscriber {
+  id               String   @id @default(uuid())
+  tenantId         String
+  email            String   @db.VarChar(255)
+  unsubscribeToken String   @unique @db.VarChar(64)
+  createdAt        DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@map("subscribers")
 }
 
 // ─── Webhook Configs ─────────────────────────────────────────────────────

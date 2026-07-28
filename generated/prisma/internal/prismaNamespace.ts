@@ -395,6 +395,7 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   PageView: 'PageView',
   EventSeries: 'EventSeries',
+  Subscriber: 'Subscriber',
   WebhookConfig: 'WebhookConfig'
 } as const
 
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "category" | "calendarView" | "event" | "user" | "account" | "session" | "verificationToken" | "auditLog" | "pageView" | "eventSeries" | "webhookConfig"
+    modelProps: "tenant" | "category" | "calendarView" | "event" | "user" | "account" | "session" | "verificationToken" | "auditLog" | "pageView" | "eventSeries" | "subscriber" | "webhookConfig"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1229,6 +1230,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Subscriber: {
+      payload: Prisma.$SubscriberPayload<ExtArgs>
+      fields: Prisma.SubscriberFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SubscriberFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriberPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SubscriberFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriberPayload>
+        }
+        findFirst: {
+          args: Prisma.SubscriberFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriberPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SubscriberFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriberPayload>
+        }
+        findMany: {
+          args: Prisma.SubscriberFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriberPayload>[]
+        }
+        create: {
+          args: Prisma.SubscriberCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriberPayload>
+        }
+        createMany: {
+          args: Prisma.SubscriberCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SubscriberCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriberPayload>[]
+        }
+        delete: {
+          args: Prisma.SubscriberDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriberPayload>
+        }
+        update: {
+          args: Prisma.SubscriberUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriberPayload>
+        }
+        deleteMany: {
+          args: Prisma.SubscriberDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SubscriberUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SubscriberUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriberPayload>[]
+        }
+        upsert: {
+          args: Prisma.SubscriberUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriberPayload>
+        }
+        aggregate: {
+          args: Prisma.SubscriberAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSubscriber>
+        }
+        groupBy: {
+          args: Prisma.SubscriberGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubscriberGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SubscriberCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubscriberCountAggregateOutputType> | number
+        }
+      }
+    }
     WebhookConfig: {
       payload: Prisma.$WebhookConfigPayload<ExtArgs>
       fields: Prisma.WebhookConfigFieldRefs
@@ -1519,6 +1594,17 @@ export const EventSeriesScalarFieldEnum = {
 } as const
 
 export type EventSeriesScalarFieldEnum = (typeof EventSeriesScalarFieldEnum)[keyof typeof EventSeriesScalarFieldEnum]
+
+
+export const SubscriberScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  email: 'email',
+  unsubscribeToken: 'unsubscribeToken',
+  createdAt: 'createdAt'
+} as const
+
+export type SubscriberScalarFieldEnum = (typeof SubscriberScalarFieldEnum)[keyof typeof SubscriberScalarFieldEnum]
 
 
 export const WebhookConfigScalarFieldEnum = {
@@ -1819,6 +1905,7 @@ export type GlobalOmitConfig = {
   auditLog?: Prisma.AuditLogOmit
   pageView?: Prisma.PageViewOmit
   eventSeries?: Prisma.EventSeriesOmit
+  subscriber?: Prisma.SubscriberOmit
   webhookConfig?: Prisma.WebhookConfigOmit
 }
 

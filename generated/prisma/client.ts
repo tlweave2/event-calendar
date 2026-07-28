@@ -97,6 +97,11 @@ export type PageView = Prisma.PageViewModel
  */
 export type EventSeries = Prisma.EventSeriesModel
 /**
+ * Model Subscriber
+ * 
+ */
+export type Subscriber = Prisma.SubscriberModel
+/**
  * Model WebhookConfig
  * 
  */

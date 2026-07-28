@@ -14,6 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { subscribeToCalendar } from "@/lib/actions/subscribe";
 import CalendarGrid from "./CalendarGrid";
 import EventModal from "./EventModal";
 import ImageLightbox from "./ImageLightbox";
@@ -293,6 +295,8 @@ export default function CalendarView({
         />
       )}
 
+      <SubscribeForm tenantSlug={tenantSlug} darkMode={darkMode} accent={accent} />
+
       <div className="border-t pt-4 text-center">
         <Link
           href={`/embed/${tenantSlug}/calendar/feed.ics`}
@@ -315,6 +319,78 @@ export default function CalendarView({
         </div>
       )}
     </div>
+  );
+}
+
+function SubscribeForm({
+  tenantSlug,
+  darkMode,
+  accent,
+}: {
+  tenantSlug: string;
+  darkMode: boolean;
+  accent: string;
+}) {
+  const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState("");
+  const [status, setStatus] = useState<"idle" | "submitting" | "done" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("submitting");
+    setError(null);
+
+    const result = await subscribeToCalendar({ tenantSlug, email, website });
+
+    if (result.success) {
+      setStatus("done");
+    } else {
+      setStatus("error");
+      setError(result.error ?? "Something went wrong. Please try again.");
+    }
+  };
+
+  if (status === "done") {
+    return (
+      <div className="border-t pt-4 text-center">
+        <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
+          ✓ You&apos;re subscribed to weekly updates.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="border-t pt-4">
+      <p className={`mb-2 text-center text-xs font-medium ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+        Get a weekly email with what&apos;s coming up
+      </p>
+      <div className="mx-auto flex max-w-xs gap-2">
+        {/* Honeypot: hidden from real users, but bots that auto-fill every field will trip it. */}
+        <input
+          type="text"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px" }}
+        />
+        <Input
+          type="email"
+          required
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className={darkMode ? "border-gray-700 bg-gray-800 text-gray-100 placeholder:text-gray-500" : "bg-white"}
+        />
+        <Button type="submit" disabled={status === "submitting"} style={{ backgroundColor: accent }}>
+          {status === "submitting" ? "..." : "Subscribe"}
+        </Button>
+      </div>
+      {error && <p className="mt-2 text-center text-xs text-red-500">{error}</p>}
+    </form>
   );
 }
 

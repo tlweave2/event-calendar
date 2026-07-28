@@ -62,6 +62,7 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   PageView: 'PageView',
   EventSeries: 'EventSeries',
+  Subscriber: 'Subscriber',
   WebhookConfig: 'WebhookConfig'
 } as const
 
@@ -258,6 +259,17 @@ export const EventSeriesScalarFieldEnum = {
 } as const
 
 export type EventSeriesScalarFieldEnum = (typeof EventSeriesScalarFieldEnum)[keyof typeof EventSeriesScalarFieldEnum]
+
+
+export const SubscriberScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  email: 'email',
+  unsubscribeToken: 'unsubscribeToken',
+  createdAt: 'createdAt'
+} as const
+
+export type SubscriberScalarFieldEnum = (typeof SubscriberScalarFieldEnum)[keyof typeof SubscriberScalarFieldEnum]
 
 
 export const WebhookConfigScalarFieldEnum = {

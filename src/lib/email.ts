@@ -45,6 +45,27 @@ type WelcomeEmailProps = {
   submitUrl: string;
 };
 
+type SubscriptionConfirmationProps = {
+  to: string;
+  tenantName: string;
+  calendarUrl: string;
+  unsubscribeUrl: string;
+};
+
+type DigestEvent = {
+  title: string;
+  startAt: Date;
+  locationName: string | null;
+};
+
+type DigestEmailProps = {
+  to: string;
+  tenantName: string;
+  calendarUrl: string;
+  unsubscribeUrl: string;
+  events: DigestEvent[];
+};
+
 function submissionConfirmationHtml({
   submitterName,
   eventTitle,
@@ -186,6 +207,91 @@ export async function sendWelcomeEmail(props: WelcomeEmailProps) {
     to: props.to,
     subject: `Your ${props.tenantName} calendar is ready`,
     html: welcomeEmailHtml(props),
+  });
+}
+
+function subscriptionConfirmationHtml({
+  tenantName,
+  calendarUrl,
+  unsubscribeUrl,
+}: Omit<SubscriptionConfirmationProps, "to">) {
+  return `
+    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111">
+      <h2 style="font-size:18px;margin-bottom:4px">You're subscribed</h2>
+      <p style="color:#555;margin-top:0">
+        You'll get a weekly email with what's coming up on the <strong>${tenantName}</strong> calendar.
+      </p>
+      <p><a href="${calendarUrl}" style="color:#2563eb">View the calendar -&gt;</a></p>
+      <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
+      <p style="font-size:12px;color:#999">
+        Sent by ${tenantName} via Eventful. <a href="${unsubscribeUrl}" style="color:#999">Unsubscribe</a>
+      </p>
+    </div>
+  `;
+}
+
+export async function sendSubscriptionConfirmation(props: SubscriptionConfirmationProps) {
+  if (!resend) {
+    console.log("[email] RESEND_API_KEY not set - skipping subscription confirmation");
+    return;
+  }
+
+  await resend.emails.send({
+    from: FROM,
+    to: props.to,
+    subject: `You're subscribed to ${props.tenantName}`,
+    html: subscriptionConfirmationHtml(props),
+  });
+}
+
+function formatDigestDate(date: Date): string {
+  return new Date(date).toLocaleString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function digestEmailHtml({ tenantName, calendarUrl, unsubscribeUrl, events }: Omit<DigestEmailProps, "to">) {
+  const rows = events
+    .map(
+      (ev) => `
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #eee">
+            <div style="font-weight:600">${ev.title}</div>
+            <div style="color:#777;font-size:13px">${formatDigestDate(ev.startAt)}${ev.locationName ? ` · ${ev.locationName}` : ""}</div>
+          </td>
+        </tr>`
+    )
+    .join("");
+
+  return `
+    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111">
+      <h2 style="font-size:18px;margin-bottom:4px">This week at ${tenantName}</h2>
+      <p style="color:#555;margin-top:0">Here's what's coming up:</p>
+      <table style="border-collapse:collapse;width:100%;margin:16px 0">${rows}</table>
+      <p><a href="${calendarUrl}" style="background:#1a1a18;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px">See the full calendar -&gt;</a></p>
+      <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
+      <p style="font-size:12px;color:#999">
+        Sent by ${tenantName} via Eventful. <a href="${unsubscribeUrl}" style="color:#999">Unsubscribe</a>
+      </p>
+    </div>
+  `;
+}
+
+export async function sendDigestEmail(props: DigestEmailProps) {
+  if (!resend) {
+    console.log("[email] RESEND_API_KEY not set - skipping digest email");
+    return;
+  }
+
+  await resend.emails.send({
+    from: FROM,
+    to: props.to,
+    subject: `This week at ${props.tenantName}: ${props.events.length} event${props.events.length !== 1 ? "s" : ""}`,
+    html: digestEmailHtml(props),
   });
 }
 
