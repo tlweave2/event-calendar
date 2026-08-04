@@ -62,6 +62,8 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   PageView: 'PageView',
   EventSeries: 'EventSeries',
+  RateLimit: 'RateLimit',
+  ProcessedWebhookEvent: 'ProcessedWebhookEvent',
   WebhookConfig: 'WebhookConfig'
 } as const
 
@@ -174,6 +176,7 @@ export const UserScalarFieldEnum = {
   role: 'role',
   lastLogin: 'lastLogin',
   password: 'password',
+  emailVerifiedAt: 'emailVerifiedAt',
   createdAt: 'createdAt'
 } as const
 
@@ -249,6 +252,24 @@ export const EventSeriesScalarFieldEnum = {
 } as const
 
 export type EventSeriesScalarFieldEnum = (typeof EventSeriesScalarFieldEnum)[keyof typeof EventSeriesScalarFieldEnum]
+
+
+export const RateLimitScalarFieldEnum = {
+  key: 'key',
+  count: 'count',
+  expiresAt: 'expiresAt'
+} as const
+
+export type RateLimitScalarFieldEnum = (typeof RateLimitScalarFieldEnum)[keyof typeof RateLimitScalarFieldEnum]
+
+
+export const ProcessedWebhookEventScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  processedAt: 'processedAt'
+} as const
+
+export type ProcessedWebhookEventScalarFieldEnum = (typeof ProcessedWebhookEventScalarFieldEnum)[keyof typeof ProcessedWebhookEventScalarFieldEnum]
 
 
 export const WebhookConfigScalarFieldEnum = {

@@ -1,14 +1,13 @@
-import { auth } from "@/lib/auth";
+import { requirePermission } from "@/lib/authz";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getCategories } from "@/lib/prisma-tenant";
 import ViewsManager from "./ViewsManager";
 
 export default async function ViewsPage() {
-  const session = await auth();
-  if (!session) redirect("/admin/login");
+  const session = await requirePermission("settings:write");
 
-  const tenantId = session.user.tenantId;
+  const tenantId = session.tenantId;
 
   const [views, categories, tenant] = await Promise.all([
     prisma.calendarView.findMany({

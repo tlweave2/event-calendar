@@ -85,7 +85,11 @@ export default function ImportFlyersClient({
         const res = await fetch("/api/upload", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ filename: card.file.name, contentType: card.file.type }),
+          body: JSON.stringify({
+            filename: card.file.name,
+            contentType: card.file.type,
+            size: card.file.size,
+          }),
         });
 
         if (!res.ok) throw new Error("upload-url-failed");

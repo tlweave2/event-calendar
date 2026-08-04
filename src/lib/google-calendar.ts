@@ -1,5 +1,6 @@
 import { parseICS, expandEvents } from "@/lib/ics-parser";
 import type { EventWithCategory } from "@/lib/prisma-tenant";
+import { MAX_ICS_BYTES, readCapped, safeFetch } from "@/lib/safe-fetch";
 
 const EXPANSION_MONTHS = 12;
 const REVALIDATE_SECONDS = 600;
@@ -20,15 +21,21 @@ export async function getGoogleCalendarEvents(
 
   let raw: string;
   try {
-    const res = await fetch(icsUrl, {
-      next: { revalidate: REVALIDATE_SECONDS, tags: [`gcal-${tenantId}`] },
-      headers: { "User-Agent": "Eventful/1.0" },
-    });
+    // The URL comes from tenant settings, so it goes through the SSRF guards
+    // rather than straight to fetch.
+    const res = await safeFetch(
+      icsUrl,
+      {
+        next: { revalidate: REVALIDATE_SECONDS, tags: [`gcal-${tenantId}`] },
+        headers: { "User-Agent": "Eventful/1.0" },
+      },
+      { maxBytes: MAX_ICS_BYTES }
+    );
     if (!res.ok) {
       console.error(`[gcal] feed ${res.status} for tenant ${tenantId}`);
       return [];
     }
-    raw = await res.text();
+    raw = await readCapped(res, MAX_ICS_BYTES);
   } catch (err) {
     console.error("[gcal] fetch failed:", err);
     return [];

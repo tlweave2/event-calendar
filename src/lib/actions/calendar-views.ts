@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { authorize } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -25,10 +25,11 @@ export async function createCalendarView(input: {
   slug: string;
   categoryIds: string[];
 }) {
-  const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  const authorized = await authorize("settings:write");
+  if (!authorized.ok) return { success: false, error: authorized.error };
+  const ctx = authorized.ctx;
 
-  const tenantId = session.user.tenantId;
+  const tenantId = ctx.tenantId;
   const tenant = await prisma.tenant.findUnique({
     where: { id: tenantId },
     select: { id: true, slug: true },
@@ -68,10 +69,11 @@ export async function updateCalendarView(input: {
   slug: string;
   categoryIds: string[];
 }) {
-  const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  const authorized = await authorize("settings:write");
+  if (!authorized.ok) return { success: false, error: authorized.error };
+  const ctx = authorized.ctx;
 
-  const tenantId = session.user.tenantId;
+  const tenantId = ctx.tenantId;
   const tenant = await prisma.tenant.findUnique({
     where: { id: tenantId },
     select: { id: true, slug: true },
@@ -111,11 +113,12 @@ export async function updateCalendarView(input: {
 }
 
 export async function deleteCalendarView(viewId: string) {
-  const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  const authorized = await authorize("settings:write");
+  if (!authorized.ok) return { success: false, error: authorized.error };
+  const ctx = authorized.ctx;
 
   const view = await prisma.calendarView.findFirst({
-    where: { id: viewId, tenantId: session.user.tenantId },
+    where: { id: viewId, tenantId: ctx.tenantId },
   });
   if (!view) return { success: false, error: "View not found" };
 

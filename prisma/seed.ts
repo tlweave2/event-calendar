@@ -1,6 +1,7 @@
 import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
+import bcrypt from "bcryptjs";
 
 const connectionString = process.env.DATABASE_URL;
 
@@ -128,7 +129,12 @@ async function main() {
   console.log("✓ Events:", events.map((e) => e.title).join(", "));
 
   // ─── Admin User ───────────────────────────────────────────────────────────
-  // Replace this email with yours before running
+  // Replace this email with yours before running.
+  // Seeded accounts get a real bcrypt password: there is no environment-based
+  // login fallback, so an account without one cannot sign in at all.
+  const seedPassword = process.env.SEED_ADMIN_PASSWORD ?? "changeme123";
+  const seedPasswordHash = await bcrypt.hash(seedPassword, 10);
+
   const user = await prisma.user.upsert({
     where: {
       tenantId_email: {
@@ -136,16 +142,18 @@ async function main() {
         email: "admin@test.com",
       },
     },
-    update: {},
+    update: { password: seedPasswordHash, emailVerifiedAt: new Date() },
     create: {
       tenantId: tenant.id,
       email: "admin@test.com",
       name: "Test Admin",
       role: "OWNER",
+      password: seedPasswordHash,
+      emailVerifiedAt: new Date(),
     },
   });
 
-  console.log("✓ Admin user:", user.email);
+  console.log("✓ Admin user:", user.email, `(password: ${seedPassword})`);
 
   // ─── Demo Tenant (for landing page live demo) ───────────────────────────
   const demo = await prisma.tenant.upsert({
@@ -340,12 +348,14 @@ async function main() {
         email: "demo@eventful.app",
       },
     },
-    update: {},
+    update: { password: seedPasswordHash, emailVerifiedAt: new Date() },
     create: {
       tenantId: demo.id,
       email: "demo@eventful.app",
       name: "Demo Admin",
       role: "OWNER",
+      password: seedPasswordHash,
+      emailVerifiedAt: new Date(),
     },
   });
 

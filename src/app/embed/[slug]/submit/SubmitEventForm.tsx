@@ -90,7 +90,14 @@ export default function SubmitEventForm({
         const res = await fetch("/api/upload", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ filename: file.name, contentType: file.type }),
+          body: JSON.stringify({
+            filename: file.name,
+            contentType: file.type,
+            size: file.size,
+            // Anonymous submitters are scoped to the calendar they are
+            // submitting to; the upload route rejects the request without it.
+            tenantSlug,
+          }),
         });
 
         if (!res.ok) {

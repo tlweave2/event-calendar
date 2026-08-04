@@ -1,14 +1,13 @@
-import { auth } from "@/lib/auth";
+import { requirePermission } from "@/lib/authz";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import EmbedEditorClient from "./EmbedEditorClient";
 
 export default async function EmbedPage() {
-  const session = await auth();
-  if (!session) redirect("/admin/login");
+  const session = await requirePermission("settings:write");
 
   const tenant = await prisma.tenant.findUnique({
-    where: { id: session.user.tenantId },
+    where: { id: session.tenantId },
     select: {
       id: true,
       slug: true,

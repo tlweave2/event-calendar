@@ -1,4 +1,4 @@
-const URL_RE = /https?:\/\/[^\s<>"{}|\\^`[\]]+/g;
+const URL_PATTERN = /https?:\/\/[^\s<>"{}|\\^`[\]]+/g;
 
 export default function LinkifiedText({
   text,
@@ -12,9 +12,11 @@ export default function LinkifiedText({
   const parts: React.ReactNode[] = [];
   let last = 0;
   let match: RegExpExecArray | null;
-  URL_RE.lastIndex = 0;
+  // A fresh regex per render: a shared global one carries `lastIndex` between
+  // calls, so consecutive renders would start scanning mid-string.
+  const urlRe = new RegExp(URL_PATTERN.source, "g");
 
-  while ((match = URL_RE.exec(text)) !== null) {
+  while ((match = urlRe.exec(text)) !== null) {
     if (match.index > last) parts.push(text.slice(last, match.index));
     const url = match[0];
     parts.push(

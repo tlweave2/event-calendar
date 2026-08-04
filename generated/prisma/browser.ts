@@ -73,6 +73,16 @@ export type PageView = Prisma.PageViewModel
  */
 export type EventSeries = Prisma.EventSeriesModel
 /**
+ * Model RateLimit
+ * 
+ */
+export type RateLimit = Prisma.RateLimitModel
+/**
+ * Model ProcessedWebhookEvent
+ * 
+ */
+export type ProcessedWebhookEvent = Prisma.ProcessedWebhookEventModel
+/**
  * Model WebhookConfig
  * 
  */

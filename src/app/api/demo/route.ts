@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { encode } from "next-auth/jwt";
 import { cookies } from "next/headers";
+import { getClientIp, rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 async function createSandboxTenant() {
   const id = Math.random().toString(36).slice(2, 8);
@@ -57,12 +58,36 @@ async function createSandboxTenant() {
   return { user, tenant };
 }
 
+/** Ceiling on live sandboxes, so a crawler cannot fill the database. */
+const MAX_LIVE_SANDBOXES = 200;
+const SANDBOXES_PER_IP_PER_HOUR = 3;
+
 export async function GET(request: Request) {
   const origin = new URL(request.url).origin;
 
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
   if (!secret) {
     return NextResponse.json({ error: "AUTH_SECRET not configured" }, { status: 500 });
+  }
+
+  // Each call writes a tenant, five categories, six events and a user, then
+  // hands back a signed session. Unthrottled, this is a database filler that
+  // anyone can run from a browser address bar.
+  const limit = await rateLimit(
+    `demo:${getClientIp(request.headers)}`,
+    SANDBOXES_PER_IP_PER_HOUR,
+    60 * 60
+  );
+  if (!limit.allowed) return tooManyRequests(limit, "Demo limit reached. Try again later.");
+
+  const liveSandboxes = await prisma.tenant.count({
+    where: { isDemoSandbox: true, demoExpiresAt: { gt: new Date() } },
+  });
+  if (liveSandboxes >= MAX_LIVE_SANDBOXES) {
+    return NextResponse.json(
+      { error: "Too many demos running right now. Please try again shortly." },
+      { status: 503 }
+    );
   }
 
   const { user, tenant } = await createSandboxTenant();

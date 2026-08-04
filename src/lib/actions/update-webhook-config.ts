@@ -1,11 +1,12 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { authorize } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import crypto from "crypto";
 import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
+import { assertPublicUrl, UnsafeUrlError } from "@/lib/safe-fetch";
 
 const schema = z.object({
   url: z.string().url().max(500),
@@ -18,8 +19,9 @@ export async function updateWebhookConfig(input: {
   secret: string;
   enabled: boolean;
 }) {
-  const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  const authorized = await authorize("settings:write");
+  if (!authorized.ok) return { success: false, error: authorized.error };
+  const ctx = authorized.ctx;
 
   const parsed = schema.safeParse(input);
   if (!parsed.success) {
@@ -28,7 +30,7 @@ export async function updateWebhookConfig(input: {
     return { success: false, error: `Invalid input: ${firstError}` };
   }
 
-  const tenantId = session.user.tenantId;
+  const tenantId = ctx.tenantId;
 
   const tenant = await prisma.tenant.findUnique({
     where: { id: tenantId },
@@ -39,6 +41,20 @@ export async function updateWebhookConfig(input: {
   }
 
   const { url, secret, enabled } = parsed.data;
+
+  // Reject destinations we would refuse to call anyway, so the problem
+  // surfaces on the settings form rather than silently in delivery logs.
+  try {
+    await assertPublicUrl(url);
+  } catch (err) {
+    return {
+      success: false,
+      error:
+        err instanceof UnsafeUrlError
+          ? err.message
+          : "That webhook URL could not be validated.",
+    };
+  }
 
   await prisma.webhookConfig.upsert({
     where: { tenantId },

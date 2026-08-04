@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import crypto from "crypto";
+import { safeFetch } from "@/lib/safe-fetch";
 
 type WebhookEvent =
   | { type: "event.created"; payload: Record<string, unknown> }
@@ -33,7 +34,10 @@ export async function deliverWebhook(
       .update(body)
       .digest("hex");
 
-    const response = await fetch(config.url, {
+    // The destination is customer-configured, so it goes through the SSRF
+    // guards: without them a webhook URL is a way to make our servers issue
+    // POSTs to hosts only they can reach.
+    const response = await safeFetch(config.url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

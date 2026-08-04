@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { auth } from "@/lib/auth";
+import { authorize } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
 import { deliverWebhook } from "@/lib/webhook";
@@ -23,11 +23,12 @@ const schema = z.object({
 });
 
 export async function updateEventSeries(input: z.infer<typeof schema>) {
-  const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  const authorized = await authorize("events:write");
+  if (!authorized.ok) return { success: false, error: authorized.error };
+  const ctx = authorized.ctx;
 
   const tenant = await prisma.tenant.findUnique({
-    where: { id: session.user.tenantId },
+    where: { id: ctx.tenantId },
     select: { id: true, slug: true },
   });
   if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
@@ -40,7 +41,7 @@ export async function updateEventSeries(input: z.infer<typeof schema>) {
   const { eventId, scope, ...data } = parsed.data;
 
   const event = await prisma.event.findFirst({
-    where: { id: eventId, tenantId: session.user.tenantId },
+    where: { id: eventId, tenantId: ctx.tenantId },
   });
   if (!event) return { success: false, error: "Event not found" };
 
@@ -76,7 +77,7 @@ export async function updateEventSeries(input: z.infer<typeof schema>) {
         where: {
           seriesId: event.seriesId,
           seriesIndex: { gt: event.seriesIndex },
-          tenantId: session.user.tenantId,
+          tenantId: ctx.tenantId,
         },
         data: sharedData,
       }),
@@ -85,8 +86,8 @@ export async function updateEventSeries(input: z.infer<typeof schema>) {
 
   await prisma.auditLog.create({
     data: {
-      tenantId: session.user.tenantId,
-      userId: session.user.id,
+      tenantId: ctx.tenantId,
+      userId: ctx.userId,
       eventId,
       action: "event.edited",
       metadata: { scope, seriesId: event.seriesId },
@@ -94,7 +95,7 @@ export async function updateEventSeries(input: z.infer<typeof schema>) {
   });
 
   // Fire webhook for event.updated (series) — non-blocking
-  deliverWebhook(session.user.tenantId, {
+  deliverWebhook(ctx.tenantId, {
     type: "event.updated",
     payload: {
       eventId,

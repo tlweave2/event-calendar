@@ -7,13 +7,19 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const { pathname } = req.nextUrl;
 
-  // Protect all /admin routes except login and accept-invite.
+  // Protect all /admin routes except the ones a signed-out user must reach:
+  // login, invitation acceptance, and password recovery.
   // Unauthenticated users are redirected to /admin/login with a callbackUrl
   // so they land on their intended page after signing in.
+  const publicAdminPaths = [
+    "/admin/login",
+    "/admin/accept-invite",
+    "/admin/forgot-password",
+  ];
+
   if (
     pathname.startsWith("/admin") &&
-    !pathname.startsWith("/admin/login") &&
-    !pathname.startsWith("/admin/accept-invite")
+    !publicAdminPaths.some((path) => pathname.startsWith(path))
   ) {
     if (!req.auth) {
       const loginUrl = new URL("/admin/login", req.url);

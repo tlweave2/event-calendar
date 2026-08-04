@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { can, requirePermission } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { getTenantUsers } from "@/lib/prisma-tenant";
@@ -11,11 +11,10 @@ export default async function SettingsPage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const session = await auth();
-  if (!session) redirect("/admin/login");
+  const session = await requirePermission("settings:write");
 
   // Guard against corrupted/old sessions that lack tenantId
-  const tenantId = session.user.tenantId;
+  const tenantId = session.tenantId;
   if (!tenantId) redirect("/admin/login");
 
   const sp = await searchParams;
@@ -43,6 +42,10 @@ export default async function SettingsPage({
 
   const inviteSuccess = sp.invited === "1";
   const inviteError = typeof sp.invite_error === "string" ? sp.invite_error : null;
+  const billingError = typeof sp.billing_error === "string" ? sp.billing_error : null;
+
+  const canManageUsers = can(session.role, "users:manage");
+  const canManageBilling = can(session.role, "billing:manage");
 
   return (
     <div className="max-w-5xl px-8 py-8">
@@ -61,9 +64,22 @@ export default async function SettingsPage({
           {inviteError}
         </div>
       )}
+      {billingError && (
+        <div className="mb-4 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-800">
+          {billingError}
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <InviteForm />
+        {/* Team and billing changes are owner-only; the actions enforce this
+            too, this just keeps the UI honest about it. */}
+        {canManageUsers ? (
+          <InviteForm />
+        ) : (
+          <div className="rounded-lg border bg-white p-5 text-sm text-gray-500">
+            Only workspace owners can invite or remove teammates.
+          </div>
+        )}
         <div className="rounded-lg border bg-white p-5">
           <h2 className="font-semibold text-gray-900">Current users</h2>
           <div className="mt-4 space-y-3 text-sm">
@@ -79,7 +95,7 @@ export default async function SettingsPage({
         </div>
       </div>
 
-      {tenant && (
+      {tenant && canManageBilling && (
         <div className="mt-6 max-w-2xl">
           <p className="mb-2 text-sm text-gray-500">
             Your plan determines how many events you can receive each month and

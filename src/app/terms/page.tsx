@@ -1,11 +1,13 @@
+import Link from "next/link";
+
 export default function TermsPage() {
   return (
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#FFFBF5", color: "#1a1410", minHeight: "100vh" }}>
       {/* Nav */}
       <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.95rem 2.25rem", borderBottom: "2px solid #1a1410", background: "#FFFBF5" }}>
-        <a href="/" style={{ fontSize: "1.375rem", letterSpacing: "-0.03em", textDecoration: "none", color: "inherit" }}>
+        <Link href="/" style={{ fontSize: "1.375rem", letterSpacing: "-0.03em", textDecoration: "none", color: "inherit" }}>
           Event<span style={{ color: "#E8450A" }}>ful</span>
-        </a>
+        </Link>
       </nav>
 
       {/* Content */}
@@ -18,12 +20,12 @@ export default function TermsPage() {
 
         <div style={{ color: "#1a1410" }}>
           <p>
-            These Terms of Service ("Terms") govern your use of Eventful ("Service," "we," "us," or "our"), operated at useventful.com. By creating an account or using the Service, you agree to these Terms. If you do not agree, do not use the Service.
+            These Terms of Service (&quot;Terms&quot;) govern your use of Eventful (&quot;Service,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), operated at useventful.com. By creating an account or using the Service, you agree to these Terms. If you do not agree, do not use the Service.
           </p>
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>1. What Eventful Is</h2>
           <p>
-            Eventful is a web-based platform that allows organizations ("Tenants") to collect, moderate, and display community event listings through embeddable calendars and submission forms. The Service includes a public submission form, an admin dashboard, and embeddable calendar widgets.
+            Eventful is a web-based platform that allows organizations (&quot;Tenants&quot;) to collect, moderate, and display community event listings through embeddable calendars and submission forms. The Service includes a public submission form, an admin dashboard, and embeddable calendar widgets.
           </p>
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>2. Accounts and Eligibility</h2>
@@ -31,7 +33,7 @@ export default function TermsPage() {
             You must be at least 18 years old to create an account. You are responsible for maintaining the security of your account credentials and for all activity that occurs under your account. You agree to provide accurate information when creating your account and to keep it current.
           </p>
           <p>
-            Each account is associated with a single organization (tenant). You may invite additional users to your organization's account. You are responsible for the actions of any users you invite.
+            Each account is associated with a single organization (tenant). You may invite additional users to your organization&apos;s account. You are responsible for the actions of any users you invite.
           </p>
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>3. Free and Paid Plans</h2>
@@ -42,7 +44,7 @@ export default function TermsPage() {
             Payment is processed through Stripe. By subscribing to a paid plan, you authorize us to charge your payment method on a recurring annual basis until you cancel. You may cancel at any time through the billing portal in your account settings. Cancellation takes effect at the end of your current billing period — you retain access to Pro features until then.
           </p>
           <p>
-            We do not offer refunds for partial billing periods. We reserve the right to change pricing with 30 days' notice. Price changes will not affect your current billing period.
+            We do not offer refunds for partial billing periods. We reserve the right to change pricing with 30 days&apos; notice. Price changes will not affect your current billing period.
           </p>
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>4. Acceptable Use</h2>
@@ -50,7 +52,7 @@ export default function TermsPage() {
           <ul style={{ marginLeft: "1.5rem", marginBottom: "1rem" }}>
             <li>Submit, publish, or distribute content that is unlawful, defamatory, obscene, or infringes on the rights of others.</li>
             <li>Impersonate any person or organization.</li>
-            <li>Attempt to gain unauthorized access to the Service or other users' accounts.</li>
+            <li>Attempt to gain unauthorized access to the Service or other users&apos; accounts.</li>
             <li>Use the Service to send unsolicited messages or spam.</li>
             <li>Interfere with or disrupt the Service or its infrastructure.</li>
             <li>Scrape, crawl, or use automated tools to extract data from the Service without our written permission.</li>
@@ -62,7 +64,7 @@ export default function TermsPage() {
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>5. Content and Ownership</h2>
           <p>
-            "Your Content" means any text, images, event information, and other materials you or your community submitters upload to the Service.
+            &quot;Your Content&quot; means any text, images, event information, and other materials you or your community submitters upload to the Service.
           </p>
           <p>
             You retain ownership of Your Content. By uploading content to the Service, you grant us a limited, non-exclusive license to host, display, and transmit that content as necessary to operate the Service — for example, displaying event details on your public calendar or sending email notifications to submitters.
@@ -79,7 +81,7 @@ export default function TermsPage() {
             The Service allows members of the public to submit events to your calendar. You, as the Tenant, are responsible for moderating and approving submissions before they appear publicly. We do not review, verify, or endorse any event submissions.
           </p>
           <p>
-            Submitters grant the Tenant a license to display their submitted event information on the Tenant's calendar. Submitters are responsible for the accuracy of the information they provide.
+            Submitters grant the Tenant a license to display their submitted event information on the Tenant&apos;s calendar. Submitters are responsible for the accuracy of the information they provide.
           </p>
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>7. AI Features</h2>
@@ -95,12 +97,12 @@ export default function TermsPage() {
             The Service provides embeddable calendar and submission form widgets designed to be placed on third-party websites via iframe. You are responsible for how and where you embed these widgets.
           </p>
           <p>
-            Eventful may display a "Powered by Eventful" badge on embedded widgets for accounts on the free plan. Removing this badge requires a paid plan.
+            Eventful may display a &quot;Powered by Eventful&quot; badge on embedded widgets for accounts on the free plan. Removing this badge requires a paid plan.
           </p>
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>9. Availability and Support</h2>
           <p>
-            We strive to keep the Service available and reliable, but we do not guarantee uninterrupted access. The Service is provided "as is" without warranties of any kind.
+            We strive to keep the Service available and reliable, but we do not guarantee uninterrupted access. The Service is provided &quot;as is&quot; without warranties of any kind.
           </p>
           <p>
             We may perform maintenance, updates, or changes to the Service that could temporarily affect availability. We will make reasonable efforts to provide advance notice of significant planned downtime.
@@ -127,7 +129,7 @@ export default function TermsPage() {
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>12. Indemnification</h2>
           <p>
-            You agree to indemnify and hold harmless Eventful and its operators from any claims, damages, or expenses (including reasonable legal fees) arising from your use of the Service, your violation of these Terms, or your violation of any third party's rights.
+            You agree to indemnify and hold harmless Eventful and its operators from any claims, damages, or expenses (including reasonable legal fees) arising from your use of the Service, your violation of these Terms, or your violation of any third party&apos;s rights.
           </p>
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>13. Termination</h2>

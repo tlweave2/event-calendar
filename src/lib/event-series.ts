@@ -1,9 +1,18 @@
-"use server";
-
 import { addMonths, addWeeks } from "date-fns";
 import { prisma } from "@/lib/prisma";
 
+/**
+ * Internal helper — deliberately NOT a Server Action.
+ *
+ * While this lived in a `"use server"` file every export was a public HTTP
+ * endpoint, and this function performs no authorization and takes `tenantId`
+ * straight from its caller: anyone could create up to 52 events in any tenant.
+ * Callers are responsible for authorization and quota checks.
+ */
+
 export type RecurrenceRule = "weekly" | "biweekly" | "monthly";
+
+export const MAX_SERIES_OCCURRENCES = 52;
 
 export async function createEventSeries(input: {
   tenantId: string;
@@ -25,7 +34,7 @@ export async function createEventSeries(input: {
 }): Promise<{ success: true; seriesId: string } | { success: false; error: string }> {
   const { rule, occurrences, startAt, endAt, tenantId, status = "PENDING", ...eventData } = input;
 
-  const count = Math.min(Math.max(occurrences, 1), 52);
+  const count = Math.min(Math.max(occurrences, 1), MAX_SERIES_OCCURRENCES);
   const duration = endAt ? endAt.getTime() - startAt.getTime() : null;
 
   const dates: Date[] = [];

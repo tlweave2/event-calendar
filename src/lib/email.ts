@@ -37,6 +37,18 @@ type AdminNotificationProps = {
   adminUrl: string;
 };
 
+type PasswordResetProps = {
+  to: string;
+  resetUrl: string;
+  expiresInMinutes: number;
+};
+
+type EmailVerificationProps = {
+  to: string;
+  tenantName: string;
+  verifyUrl: string;
+};
+
 function submissionConfirmationHtml({
   submitterName,
   eventTitle,
@@ -100,8 +112,8 @@ function inviteEmailHtml({ tenantName, role, inviteUrl }: Omit<InviteEmailProps,
     <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111">
       <h2 style="font-size:18px;margin-bottom:4px">You're invited</h2>
       <p style="color:#555;margin-top:0">You have been invited to join <strong>${tenantName}</strong> as <strong>${role}</strong>.</p>
-      <p><a href="${inviteUrl}" style="color:#2563eb">Accept invitation -></a></p>
-      <p style="font-size:14px;color:#555">If you did not expect this invitation, you can ignore this email.</p>
+      <p><a href="${inviteUrl}" style="color:#2563eb">Accept invitation and set your password -></a></p>
+      <p style="font-size:14px;color:#555">This link expires in 7 days. If you did not expect this invitation, you can ignore this email.</p>
       <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
       <p style="font-size:12px;color:#999">Sent by ${tenantName} via Event Calendar</p>
     </div>
@@ -133,6 +145,63 @@ function adminNotificationHtml({
       <p style="font-size:12px;color:#999">Sent by ${tenantName} via Event Calendar</p>
     </div>
   `;
+}
+
+function passwordResetHtml({ resetUrl, expiresInMinutes }: Omit<PasswordResetProps, "to">) {
+  return `
+    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111">
+      <h2 style="font-size:18px;margin-bottom:4px">Reset your password</h2>
+      <p style="color:#555">We received a request to reset the password for this account.</p>
+      <p><a href="${resetUrl}" style="background:#1a1a18;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px">Choose a new password</a></p>
+      <p style="font-size:14px;color:#555">This link expires in ${expiresInMinutes} minutes and can only be used once.</p>
+      <p style="font-size:14px;color:#555">If you did not request a reset, you can safely ignore this email — your password will not change.</p>
+      <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
+      <p style="font-size:12px;color:#999">Sent via Event Calendar</p>
+    </div>
+  `;
+}
+
+function emailVerificationHtml({ tenantName, verifyUrl }: Omit<EmailVerificationProps, "to">) {
+  return `
+    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111">
+      <h2 style="font-size:18px;margin-bottom:4px">Confirm your email</h2>
+      <p style="color:#555">Thanks for creating <strong>${tenantName}</strong>. Confirm your email address to finish setting up your calendar.</p>
+      <p><a href="${verifyUrl}" style="background:#1a1a18;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px">Confirm email address</a></p>
+      <p style="font-size:14px;color:#555">This link expires in 24 hours.</p>
+      <hr style="border:none;border-top:1px solid #eee;margin:24px 0"/>
+      <p style="font-size:12px;color:#999">Sent via Event Calendar</p>
+    </div>
+  `;
+}
+
+export async function sendPasswordResetEmail(props: PasswordResetProps) {
+  if (!resend) {
+    // Without a mail provider the reset link would be unreachable. Log it so
+    // local development still has a way through.
+    console.log("[email] RESEND_API_KEY not set - password reset url:", props.resetUrl);
+    return;
+  }
+
+  await resend.emails.send({
+    from: FROM,
+    to: props.to,
+    subject: "Reset your password",
+    html: passwordResetHtml(props),
+  });
+}
+
+export async function sendEmailVerification(props: EmailVerificationProps) {
+  if (!resend) {
+    console.log("[email] RESEND_API_KEY not set - verification url:", props.verifyUrl);
+    return;
+  }
+
+  await resend.emails.send({
+    from: FROM,
+    to: props.to,
+    subject: "Confirm your email address",
+    html: emailVerificationHtml(props),
+  });
 }
 
 export async function sendSubmissionConfirmation(

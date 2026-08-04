@@ -69,7 +69,11 @@ export default function CreateEventForm({
       const res = await fetch("/api/upload", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+        body: JSON.stringify({
+          filename: file.name,
+          contentType: file.type,
+          size: file.size,
+        }),
       });
 
       if (!res.ok) throw new Error("Upload failed");

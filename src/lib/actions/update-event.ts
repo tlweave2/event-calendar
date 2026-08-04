@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { authorize } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -22,11 +22,12 @@ const updateEventSchema = z.object({
 });
 
 export async function updateEvent(input: z.infer<typeof updateEventSchema>) {
-  const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  const authorized = await authorize("events:write");
+  if (!authorized.ok) return { success: false, error: authorized.error };
+  const ctx = authorized.ctx;
 
   const tenant = await prisma.tenant.findUnique({
-    where: { id: session.user.tenantId },
+    where: { id: ctx.tenantId },
     select: { id: true, slug: true },
   });
   if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
@@ -39,7 +40,7 @@ export async function updateEvent(input: z.infer<typeof updateEventSchema>) {
   const { eventId, ...data } = parsed.data;
 
   const existing = await prisma.event.findFirst({
-    where: { id: eventId, tenantId: session.user.tenantId },
+    where: { id: eventId, tenantId: ctx.tenantId },
   });
   if (!existing) return { success: false, error: "Event not found" };
 
@@ -61,15 +62,15 @@ export async function updateEvent(input: z.infer<typeof updateEventSchema>) {
 
   await prisma.auditLog.create({
     data: {
-      tenantId: session.user.tenantId,
-      userId: session.user.id,
+      tenantId: ctx.tenantId,
+      userId: ctx.userId,
       eventId,
       action: "event.edited",
     },
   });
 
   // Fire webhook for event.updated — non-blocking
-  deliverWebhook(session.user.tenantId, {
+  deliverWebhook(ctx.tenantId, {
     type: "event.updated",
     payload: {
       eventId,

@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { authorize } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
@@ -11,15 +11,16 @@ const schema = z.object({
 });
 
 export async function updateGoogleCalendar(input: { icsUrl: string }) {
-  const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  const authorized = await authorize("settings:write");
+  if (!authorized.ok) return { success: false, error: authorized.error };
+  const ctx = authorized.ctx;
 
   const parsed = schema.safeParse(input);
   if (!parsed.success) {
     return { success: false, error: "Invalid URL." };
   }
 
-  const tenantId = session.user.tenantId;
+  const tenantId = ctx.tenantId;
   if (!tenantId) return { success: false, error: "Session missing tenant." };
 
   const tenant = await prisma.tenant.findUnique({

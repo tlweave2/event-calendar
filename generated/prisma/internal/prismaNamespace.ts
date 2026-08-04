@@ -395,6 +395,8 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   PageView: 'PageView',
   EventSeries: 'EventSeries',
+  RateLimit: 'RateLimit',
+  ProcessedWebhookEvent: 'ProcessedWebhookEvent',
   WebhookConfig: 'WebhookConfig'
 } as const
 
@@ -411,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "category" | "calendarView" | "event" | "user" | "account" | "session" | "verificationToken" | "auditLog" | "pageView" | "eventSeries" | "webhookConfig"
+    modelProps: "tenant" | "category" | "calendarView" | "event" | "user" | "account" | "session" | "verificationToken" | "auditLog" | "pageView" | "eventSeries" | "rateLimit" | "processedWebhookEvent" | "webhookConfig"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1229,6 +1231,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RateLimit: {
+      payload: Prisma.$RateLimitPayload<ExtArgs>
+      fields: Prisma.RateLimitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RateLimitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RateLimitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        findFirst: {
+          args: Prisma.RateLimitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RateLimitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        findMany: {
+          args: Prisma.RateLimitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>[]
+        }
+        create: {
+          args: Prisma.RateLimitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        createMany: {
+          args: Prisma.RateLimitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RateLimitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>[]
+        }
+        delete: {
+          args: Prisma.RateLimitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        update: {
+          args: Prisma.RateLimitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        deleteMany: {
+          args: Prisma.RateLimitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RateLimitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RateLimitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>[]
+        }
+        upsert: {
+          args: Prisma.RateLimitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        aggregate: {
+          args: Prisma.RateLimitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRateLimit>
+        }
+        groupBy: {
+          args: Prisma.RateLimitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RateLimitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RateLimitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RateLimitCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProcessedWebhookEvent: {
+      payload: Prisma.$ProcessedWebhookEventPayload<ExtArgs>
+      fields: Prisma.ProcessedWebhookEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProcessedWebhookEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedWebhookEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProcessedWebhookEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedWebhookEventPayload>
+        }
+        findFirst: {
+          args: Prisma.ProcessedWebhookEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedWebhookEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProcessedWebhookEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedWebhookEventPayload>
+        }
+        findMany: {
+          args: Prisma.ProcessedWebhookEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedWebhookEventPayload>[]
+        }
+        create: {
+          args: Prisma.ProcessedWebhookEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedWebhookEventPayload>
+        }
+        createMany: {
+          args: Prisma.ProcessedWebhookEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProcessedWebhookEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedWebhookEventPayload>[]
+        }
+        delete: {
+          args: Prisma.ProcessedWebhookEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedWebhookEventPayload>
+        }
+        update: {
+          args: Prisma.ProcessedWebhookEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedWebhookEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProcessedWebhookEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProcessedWebhookEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProcessedWebhookEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedWebhookEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProcessedWebhookEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedWebhookEventPayload>
+        }
+        aggregate: {
+          args: Prisma.ProcessedWebhookEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProcessedWebhookEvent>
+        }
+        groupBy: {
+          args: Prisma.ProcessedWebhookEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProcessedWebhookEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProcessedWebhookEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProcessedWebhookEventCountAggregateOutputType> | number
+        }
+      }
+    }
     WebhookConfig: {
       payload: Prisma.$WebhookConfigPayload<ExtArgs>
       fields: Prisma.WebhookConfigFieldRefs
@@ -1435,6 +1585,7 @@ export const UserScalarFieldEnum = {
   role: 'role',
   lastLogin: 'lastLogin',
   password: 'password',
+  emailVerifiedAt: 'emailVerifiedAt',
   createdAt: 'createdAt'
 } as const
 
@@ -1510,6 +1661,24 @@ export const EventSeriesScalarFieldEnum = {
 } as const
 
 export type EventSeriesScalarFieldEnum = (typeof EventSeriesScalarFieldEnum)[keyof typeof EventSeriesScalarFieldEnum]
+
+
+export const RateLimitScalarFieldEnum = {
+  key: 'key',
+  count: 'count',
+  expiresAt: 'expiresAt'
+} as const
+
+export type RateLimitScalarFieldEnum = (typeof RateLimitScalarFieldEnum)[keyof typeof RateLimitScalarFieldEnum]
+
+
+export const ProcessedWebhookEventScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  processedAt: 'processedAt'
+} as const
+
+export type ProcessedWebhookEventScalarFieldEnum = (typeof ProcessedWebhookEventScalarFieldEnum)[keyof typeof ProcessedWebhookEventScalarFieldEnum]
 
 
 export const WebhookConfigScalarFieldEnum = {
@@ -1810,6 +1979,8 @@ export type GlobalOmitConfig = {
   auditLog?: Prisma.AuditLogOmit
   pageView?: Prisma.PageViewOmit
   eventSeries?: Prisma.EventSeriesOmit
+  rateLimit?: Prisma.RateLimitOmit
+  processedWebhookEvent?: Prisma.ProcessedWebhookEventOmit
   webhookConfig?: Prisma.WebhookConfigOmit
 }
 

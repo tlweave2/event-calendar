@@ -57,7 +57,11 @@ export default function BrandingForm({ tenant }: {
       const res = await fetch("/api/upload", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+        body: JSON.stringify({
+          filename: file.name,
+          contentType: file.type,
+          size: file.size,
+        }),
       });
       const { uploadUrl, publicUrl } = await res.json();
       await fetch(uploadUrl, { method: "PUT", body: file, headers: { "Content-Type": file.type } });
@@ -222,7 +226,7 @@ export default function BrandingForm({ tenant }: {
             <Label>Submit Form Heading</Label>
             <p className="text-xs text-gray-400">
               The main title visitors see when they open your submission form.
-              Default: "Submit an Event"
+              Default: &quot;Submit an Event&quot;
             </p>
             <Input
               value={submitHeading}
@@ -236,7 +240,7 @@ export default function BrandingForm({ tenant }: {
             <Label>Submit Form Subheading</Label>
             <p className="text-xs text-gray-400">
               A short line below the heading, usually your organization name.
-              Default: "to [your organization name]"
+              Default: &quot;to [your organization name]&quot;
             </p>
             <Input
               value={submitSubheading}
@@ -250,8 +254,8 @@ export default function BrandingForm({ tenant }: {
             <Label>Empty Calendar Message</Label>
             <p className="text-xs text-gray-400">
               What visitors see when there are no upcoming events. Use this to set
-              expectations, for example "Check back soon for upcoming downtown events!"
-              Default: "No upcoming events"
+              expectations, for example &quot;Check back soon for upcoming downtown events!&quot;
+              Default: &quot;No upcoming events&quot;
             </p>
             <Input
               value={emptyStateMessage}

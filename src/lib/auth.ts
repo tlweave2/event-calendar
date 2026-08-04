@@ -2,11 +2,24 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { Role } from "@generated/prisma/enums";
 
-const isDev = process.env.NODE_ENV === "development";
-const adminLoginEmail = (process.env.ADMIN_LOGIN_EMAIL ?? "admin@test.com").toLowerCase();
-const adminLoginPassword = process.env.ADMIN_LOGIN_PASSWORD;
+/**
+ * Email verification is opt-in so that a deployment without a configured mail
+ * provider cannot lock every user out of its own dashboard.
+ */
+const requireEmailVerification = process.env.REQUIRE_EMAIL_VERIFICATION === "true";
+
+const LOGIN_ATTEMPTS_PER_WINDOW = 10;
+const LOGIN_WINDOW_SECONDS = 15 * 60;
+
+/**
+ * How many accounts sharing one address we are willing to bcrypt-check. The
+ * same person can hold accounts in several tenants; the cap stops a shared
+ * address from turning one login into an unbounded amount of hashing work.
+ */
+const MAX_LOGIN_CANDIDATES = 5;
 
 function hasSessionFields(user: unknown): user is { tenantId: string; role: Role } {
   if (!user || typeof user !== "object") return false;
@@ -21,19 +34,32 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   providers: [
     Credentials({
-      name: isDev ? "Dev Login" : "Admin Login",
+      name: "Sign In",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
-        const email = (credentials?.email as string | undefined)?.toLowerCase();
+      async authorize(credentials, request) {
+        const email = (credentials?.email as string | undefined)?.toLowerCase().trim();
         const password = credentials?.password as string | undefined;
         if (!email || !password) return null;
 
-        // Prefer accounts with a real password (owner-created) over seeded/invited accounts.
-        // If the same email exists on multiple tenants, this ensures the real account wins.
-        let user = await prisma.user.findFirst({
+        // Throttle by address and by source IP: the first stops credential
+        // stuffing against one account, the second stops one host from
+        // sweeping many accounts.
+        const ip = request?.headers ? getClientIp(request.headers) : "unknown";
+        const [byEmail, byIp] = await Promise.all([
+          rateLimit(`login:email:${email}`, LOGIN_ATTEMPTS_PER_WINDOW, LOGIN_WINDOW_SECONDS),
+          rateLimit(`login:ip:${ip}`, LOGIN_ATTEMPTS_PER_WINDOW * 5, LOGIN_WINDOW_SECONDS),
+        ]);
+        if (!byEmail.allowed || !byIp.allowed) {
+          console.warn("[auth] login rate limit exceeded for:", email);
+          return null;
+        }
+
+        // Only accounts that have completed password setup can sign in. An
+        // invited user with no password must redeem their invite first.
+        const candidates = await prisma.user.findMany({
           where: { email, password: { not: null } },
           select: {
             id: true,
@@ -42,51 +68,38 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             tenantId: true,
             role: true,
             password: true,
+            emailVerifiedAt: true,
           },
+          // Stable ordering so a repeated login always lands in the same
+          // tenant when one address exists in several.
+          orderBy: { createdAt: "asc" },
+          take: MAX_LOGIN_CANDIDATES,
         });
 
-        if (!user) {
-          user = await prisma.user.findFirst({
-            where: { email },
-            select: {
-              id: true,
-              email: true,
-              name: true,
-              tenantId: true,
-              role: true,
-              password: true,
-            },
-          });
-        }
-
-        if (!user) {
-          console.log("[auth] no user found for:", email);
-          return null;
-        }
-
-        if (user.password) {
-          // Tenant owner with a stored password - verify it with bcrypt.
+        for (const user of candidates) {
+          if (!user.password) continue;
           const valid = await bcrypt.compare(password, user.password);
-          if (!valid) return null;
-        } else {
-          // Legacy/seeded user with no stored password - fall back to env-based check.
-          // In dev, skip the env check so seeded users can still log in without env vars.
-          if (!isDev) {
-            if (!adminLoginPassword) {
-              console.error("[auth] ADMIN_LOGIN_PASSWORD is not configured");
-              return null;
-            }
-            if (email !== adminLoginEmail || password !== adminLoginPassword) return null;
+          if (!valid) continue;
+
+          if (requireEmailVerification && !user.emailVerifiedAt) {
+            console.warn("[auth] unverified email attempted login:", email);
+            return null;
           }
+
+          await prisma.user
+            .update({ where: { id: user.id }, data: { lastLogin: new Date() } })
+            .catch((err) => console.error("[auth] lastLogin update failed:", err));
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name ?? undefined,
+            tenantId: user.tenantId,
+            role: user.role,
+          };
         }
 
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name ?? undefined,
-          tenantId: user.tenantId,
-          role: user.role,
-        };
+        return null;
       },
     }),
   ],
@@ -95,7 +108,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async redirect({ url, baseUrl }) {
       // Only allow redirects to this app's own origin.
       if (url.startsWith("/")) return `${baseUrl}${url}`;
-      if (new URL(url).origin === baseUrl) return url;
+      try {
+        if (new URL(url).origin === baseUrl) return url;
+      } catch {
+        return `${baseUrl}/admin`;
+      }
       return `${baseUrl}/admin`;
     },
 

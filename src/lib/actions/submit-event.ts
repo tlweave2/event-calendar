@@ -1,13 +1,17 @@
 "use server";
 
+import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { sendAdminNotification, sendSubmissionConfirmation } from "@/lib/email";
 import { checkEventLimit } from "@/lib/plan-limits";
-import { createEventSeries } from "./create-event-series";
+import { createEventSeries, MAX_SERIES_OCCURRENCES } from "@/lib/event-series";
 import { demoFormError, isDemoTenant } from "@/lib/demo-guard";
 import { deliverWebhook } from "@/lib/webhook";
+import { verifySession, can } from "@/lib/authz";
+import { getClientIp, rateLimit } from "@/lib/rate-limit";
+import { getAppBaseUrl } from "@/lib/urls";
 
 const submitEventSchema = z.object({
   tenantSlug: z.string(),
@@ -24,8 +28,11 @@ const submitEventSchema = z.object({
   cost: z.string().max(100).optional(),
   imageUrl: z.string().optional(),
   recurrence: z.enum(["weekly", "biweekly", "monthly"]).optional(),
-  occurrences: z.number().int().min(1).max(52).optional(),
+  occurrences: z.number().int().min(1).max(MAX_SERIES_OCCURRENCES).optional(),
 });
+
+/** Public submissions per IP, per calendar, per hour. */
+const SUBMISSIONS_PER_HOUR = 10;
 
 export type SubmitEventInput = z.infer<typeof submitEventSchema>;
 
@@ -57,30 +64,57 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
     return demoFormError();
   }
 
-  const limitCheck = await checkEventLimit(tenant.id);
+  const series =
+    data.recurrence && data.occurrences && data.occurrences > 1
+      ? { rule: data.recurrence, occurrences: data.occurrences }
+      : null;
+  const eventCount = series?.occurrences ?? 1;
+
+  // Auto-approval requires an actual signed-in session with moderation rights.
+  // Matching on the submitted email address alone meant anyone who knew an
+  // admin's address — usually public — could publish straight to the calendar.
+  const session = await verifySession();
+  const isTenantModerator =
+    session !== null &&
+    session.tenantId === tenant.id &&
+    can(session.role, "events:moderate");
+  const status = isTenantModerator ? "APPROVED" : "PENDING";
+
+  if (!isTenantModerator) {
+    const ip = getClientIp(await headers());
+    const limit = await rateLimit(
+      `submit:${tenant.id}:${ip}`,
+      SUBMISSIONS_PER_HOUR,
+      60 * 60
+    );
+    if (!limit.allowed) {
+      return {
+        success: false,
+        errors: {
+          _form: ["Too many submissions from this network. Please try again later."],
+        },
+      };
+    }
+  }
+
+  // Count every occurrence against the quota. Checking as though a series were
+  // one event let a 52-occurrence submission sail past a 5-event plan limit.
+  const limitCheck = await checkEventLimit(tenant.id, eventCount);
   if (!limitCheck.allowed) {
     return {
       success: false,
       limitReached: true,
       errors: {
         _form: [
-          `This calendar has reached its monthly limit of ${limitCheck.limit} events. The calendar administrator can upgrade to Pro for unlimited events.`,
+          eventCount > 1
+            ? `This calendar has ${limitCheck.remaining} of its ${limitCheck.limit} monthly events left, and this series needs ${eventCount}. The calendar administrator can upgrade to Pro for unlimited events.`
+            : `This calendar has reached its monthly limit of ${limitCheck.limit} events. The calendar administrator can upgrade to Pro for unlimited events.`,
         ],
       },
     };
   }
 
-  // Auto-approve when submitter is an admin/owner of this tenant.
-  const isAdmin = await prisma.user.findFirst({
-    where: {
-      tenantId: tenant.id,
-      email: data.submitterEmail.toLowerCase(),
-      role: { in: ["OWNER", "ADMIN"] },
-    },
-  });
-  const status = isAdmin ? "APPROVED" : "PENDING";
-
-  if (data.recurrence && data.occurrences && data.occurrences > 1) {
+  if (series) {
     const seriesResult = await createEventSeries({
       tenantId: tenant.id,
       title: data.title,
@@ -95,8 +129,8 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       ticketUrl: data.ticketUrl || undefined,
       cost: data.cost,
       imageUrl: data.imageUrl,
-      rule: data.recurrence,
-      occurrences: data.occurrences,
+      rule: series.rule,
+      occurrences: series.occurrences,
       status,
     });
 
@@ -120,13 +154,13 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       console.error("[email] submission confirmation failed:", err)
     );
 
-    if (!isAdmin) {
+    if (!isTenantModerator) {
       const admins = await prisma.user.findMany({
         where: { tenantId: tenant.id },
         select: { email: true },
       });
 
-      const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://www.useventful.com"}/admin`;
+      const adminUrl = `${getAppBaseUrl()}/admin`;
 
       admins.forEach(({ email }) => {
         sendAdminNotification({
@@ -188,13 +222,13 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
     console.error("[email] submission confirmation failed:", err)
   );
 
-  if (!isAdmin) {
+  if (!isTenantModerator) {
     const admins = await prisma.user.findMany({
       where: { tenantId: tenant.id },
       select: { email: true },
     });
 
-    const adminUrl = `${process.env.NEXTAUTH_URL ?? "https://www.useventful.com"}/admin`;
+    const adminUrl = `${getAppBaseUrl()}/admin`;
 
     admins.forEach(({ email }) => {
       sendAdminNotification({

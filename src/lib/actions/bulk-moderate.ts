@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { authorize } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -26,14 +26,15 @@ export async function bulkModerateEvents(input: {
   eventIds: string[];
   action: "APPROVED" | "REJECTED" | "PENDING";
 }) {
-  const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  const authorized = await authorize("events:moderate");
+  if (!authorized.ok) return { success: false, error: authorized.error };
+  const ctx = authorized.ctx;
 
   const parsed = bulkModerateSchema.safeParse(input);
   if (!parsed.success) return { success: false, error: "Invalid input" };
 
   const { eventIds, action } = parsed.data;
-  const tenantId = session.user.tenantId;
+  const tenantId = ctx.tenantId;
 
   const tenant = await prisma.tenant.findUnique({
     where: { id: tenantId },
@@ -56,7 +57,7 @@ export async function bulkModerateEvents(input: {
     ),
     ...events.map((event: EventWithTenant) =>
       prisma.auditLog.create({
-        data: { tenantId, userId: session.user.id, eventId: event.id, action: `event.${action.toLowerCase()}` },
+        data: { tenantId, userId: ctx.userId, eventId: event.id, action: `event.${action.toLowerCase()}` },
       })
     ),
   ]);

@@ -1,13 +1,12 @@
-import { auth } from "@/lib/auth";
+import { requirePermission } from "@/lib/authz";
 import { redirect } from "next/navigation";
 import { getCategories } from "@/lib/prisma-tenant";
 import CategoriesForm from "./CategoriesForm";
 
 export default async function CategoriesPage() {
-  const session = await auth();
-  if (!session) redirect("/admin/login");
+  const session = await requirePermission("settings:write");
 
-  const categories = await getCategories(session.user.tenantId);
+  const categories = await getCategories(session.tenantId);
 
   return (
     <div className="max-w-2xl px-8 py-8">
@@ -20,7 +19,7 @@ export default async function CategoriesPage() {
         </p>
       </div>
       <CategoriesForm
-        tenantId={session.user.tenantId}
+        tenantId={session.tenantId}
         initialCategories={categories.map((c) => ({
           id: c.id,
           name: c.name,

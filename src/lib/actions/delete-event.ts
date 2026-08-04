@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { authorize } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -11,17 +11,18 @@ export async function deleteEvent(
   eventId: string,
   scope: "one" | "following" | "all" = "one"
 ): Promise<void> {
-  const session = await auth();
-  if (!session) return;
+  const authorized = await authorize("events:delete");
+  if (!authorized.ok) return;
+  const ctx = authorized.ctx;
 
   const tenant = await prisma.tenant.findUnique({
-    where: { id: session.user.tenantId },
+    where: { id: ctx.tenantId },
     select: { id: true, slug: true },
   });
   if (tenant && isDemoTenant(tenant.id, tenant.slug)) return;
 
   const event = await prisma.event.findFirst({
-    where: { id: eventId, tenantId: session.user.tenantId },
+    where: { id: eventId, tenantId: ctx.tenantId },
     select: { id: true, seriesId: true, seriesIndex: true },
   });
   if (!event) return;
@@ -33,7 +34,7 @@ export async function deleteEvent(
       where: {
         seriesId: event.seriesId,
         seriesIndex: { gte: event.seriesIndex ?? 1 },
-        tenantId: session.user.tenantId,
+        tenantId: ctx.tenantId,
       },
     });
 
@@ -48,7 +49,7 @@ export async function deleteEvent(
   }
 
   // Fire webhook for event.deleted — non-blocking
-  deliverWebhook(session.user.tenantId, {
+  deliverWebhook(ctx.tenantId, {
     type: "event.deleted",
     payload: { eventId, scope },
   }).catch((err) => console.error("[webhook] event.deleted failed:", err));

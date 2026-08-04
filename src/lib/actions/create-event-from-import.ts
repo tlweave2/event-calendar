@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { authorize } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { isDemoTenant } from "@/lib/demo-guard";
@@ -20,8 +20,8 @@ export async function createEventFromImport(input: {
   categoryId?: string;
   imageUrl?: string;
 }) {
-  const session = await auth();
-  if (!session || session.user.tenantId !== input.tenantId) {
+  const authorized = await authorize("events:write");
+  if (!authorized.ok || authorized.ctx.tenantId !== input.tenantId) {
     throw new Error("Unauthorized");
   }
 

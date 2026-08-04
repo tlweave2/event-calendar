@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { authorize } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
@@ -24,13 +24,14 @@ type BrandingFailure = {
 export async function updateTenantBranding(
   input: z.infer<typeof brandingSchema>
 ): Promise<BrandingSuccess | BrandingFailure> {
-  const session = await auth();
-  if (!session || session.user.tenantId !== input.tenantId) {
+  const authorized = await authorize("settings:write");
+  if (!authorized.ok || authorized.ctx.tenantId !== input.tenantId) {
     return { success: false, errors: { _form: ["Unauthorized"] } };
   }
+  const ctx = authorized.ctx;
 
   const tenant = await prisma.tenant.findUnique({
-    where: { id: session.user.tenantId },
+    where: { id: ctx.tenantId },
     select: { id: true, slug: true },
   });
   if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
@@ -71,13 +72,14 @@ const customTextSchema = z.object({
 export async function updateTenantCustomText(
   input: z.infer<typeof customTextSchema>
 ) {
-  const session = await auth();
-  if (!session || session.user.tenantId !== input.tenantId) {
+  const authorized = await authorize("settings:write");
+  if (!authorized.ok || authorized.ctx.tenantId !== input.tenantId) {
     return { success: false, errors: { _form: ["Unauthorized"] } };
   }
+  const ctx = authorized.ctx;
 
   const tenant = await prisma.tenant.findUnique({
-    where: { id: session.user.tenantId },
+    where: { id: ctx.tenantId },
     select: { id: true, slug: true },
   });
   if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
@@ -111,13 +113,14 @@ const categoriesSchema = z.object({
 export async function updateTenantCategories(
   input: z.infer<typeof categoriesSchema>
 ) {
-  const session = await auth();
-  if (!session || session.user.tenantId !== input.tenantId) {
+  const authorized = await authorize("settings:write");
+  if (!authorized.ok || authorized.ctx.tenantId !== input.tenantId) {
     return { success: false, errors: { _form: ["Unauthorized"] } };
   }
+  const ctx = authorized.ctx;
 
   const tenant = await prisma.tenant.findUnique({
-    where: { id: session.user.tenantId },
+    where: { id: ctx.tenantId },
     select: { id: true, slug: true },
   });
   if (tenant && isDemoTenant(tenant.id, tenant.slug)) {
@@ -164,13 +167,14 @@ const embedSettingsSchema = z.object({
 export async function updateEmbedSettings(
   input: z.infer<typeof embedSettingsSchema>
 ) {
-  const session = await auth();
-  if (!session || session.user.tenantId !== input.tenantId) {
+  const authorized = await authorize("settings:write");
+  if (!authorized.ok || authorized.ctx.tenantId !== input.tenantId) {
     return { success: false, errors: { _form: ["Unauthorized"] } };
   }
+  const ctx = authorized.ctx;
 
   const tenant = await prisma.tenant.findUnique({
-    where: { id: session.user.tenantId },
+    where: { id: ctx.tenantId },
     select: { id: true, slug: true },
   });
   if (tenant && isDemoTenant(tenant.id, tenant.slug)) {

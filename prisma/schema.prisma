@@ -140,14 +140,15 @@ enum EventStatus {
 // ─── Users ─────────────────────────────────────────────────────────────────
 
 model User {
-  id        String    @id @default(uuid())
-  tenantId  String
-  email     String    @db.VarChar(255)
-  name      String?   @db.VarChar(255)
-  role      Role      @default(ADMIN)
-  lastLogin DateTime?
-  password  String?   @db.Text
-  createdAt DateTime  @default(now())
+  id              String    @id @default(uuid())
+  tenantId        String
+  email           String    @db.VarChar(255)
+  name            String?   @db.VarChar(255)
+  role            Role      @default(ADMIN)
+  lastLogin       DateTime?
+  password        String?   @db.Text
+  emailVerifiedAt DateTime?
+  createdAt       DateTime  @default(now())
 
   tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   sessions  Session[]
@@ -257,6 +258,32 @@ model EventSeries {
 
   @@index([tenantId])
   @@map("event_series")
+}
+
+// ─── Rate Limiting ───────────────────────────────────────────────────────
+
+// Fixed-window counters. Shared across serverless instances, which an
+// in-process map cannot be — every instance would get its own full quota.
+model RateLimit {
+  key       String   @id @db.VarChar(255)
+  count     Int      @default(0)
+  expiresAt DateTime
+
+  @@index([expiresAt])
+  @@map("rate_limits")
+}
+
+// ─── Stripe Webhook Idempotency ──────────────────────────────────────────
+
+// Stripe retries deliveries and can send the same event more than once.
+// Inserting the event id first makes replays a no-op.
+model ProcessedWebhookEvent {
+  id          String   @id @db.VarChar(255)
+  type        String   @db.VarChar(100)
+  processedAt DateTime @default(now())
+
+  @@index([processedAt])
+  @@map("processed_webhook_events")
 }
 
 // ─── Webhook Configs ─────────────────────────────────────────────────────

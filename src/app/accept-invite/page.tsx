@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { acceptInvite } from "@/lib/actions/accept-invite";
+import { hashToken, parseInviteIdentifier } from "@/lib/tokens";
+import AcceptInviteForm from "./AcceptInviteForm";
 
 export default async function AcceptInvitePage({
   searchParams,
@@ -10,26 +11,35 @@ export default async function AcceptInvitePage({
   const { token } = await searchParams;
   if (!token) notFound();
 
-  const invite = await prisma.verificationToken.findUnique({ where: { token } });
+  // Tokens are stored hashed, so look up by hash.
+  const invite = await prisma.verificationToken.findUnique({
+    where: { token: hashToken(token) },
+  });
   if (!invite || invite.expires < new Date()) notFound();
 
-  const [, email] = invite.identifier.split(":");
-  const [roleHint] = token.split(".");
+  const parsed = parseInviteIdentifier(invite.identifier);
+  if (!parsed) notFound();
+
+  const tenant = await prisma.tenant.findUnique({
+    where: { id: parsed.tenantId },
+    select: { name: true },
+  });
+  if (!tenant) notFound();
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-16">
       <div className="mx-auto max-w-md rounded-xl border bg-white p-6 shadow-sm">
         <p className="text-xs uppercase tracking-wide text-gray-400">Invitation</p>
-        <h1 className="mt-2 text-2xl font-semibold text-gray-900">Accept Invitation</h1>
+        <h1 className="mt-2 text-2xl font-semibold text-gray-900">
+          Join {tenant.name}
+        </h1>
         <p className="mt-3 text-sm text-gray-600">
-          {email} has been invited to join this workspace as {roleHint.toUpperCase()}.
+          <span className="font-medium text-gray-900">{parsed.email}</span> has been
+          invited as {parsed.role}. Choose a password to finish setting up your
+          account.
         </p>
 
-        <form action={acceptInvite.bind(null, { token })} className="mt-6">
-          <button className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-            Accept Invitation
-          </button>
-        </form>
+        <AcceptInviteForm token={token} email={parsed.email} />
       </div>
     </div>
   );

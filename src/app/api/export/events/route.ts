@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { authorize } from "@/lib/authz";
 import { getEvents } from "@/lib/prisma-tenant";
 import type { EventWithCategory } from "@/lib/prisma-tenant";
 
@@ -11,12 +11,14 @@ function escapeCsv(value: string | null | undefined) {
 }
 
 export async function GET() {
-  const session = await auth();
-  if (!session) {
-    return new Response("Unauthorized", { status: 401 });
+  // The export carries submitter names and email addresses, so it is limited
+  // to admins rather than every signed-in editor.
+  const authorized = await authorize("events:export");
+  if (!authorized.ok) {
+    return new Response(authorized.error, { status: authorized.status });
   }
 
-  const events: EventWithCategory[] = await getEvents(session.user.tenantId);
+  const events: EventWithCategory[] = await getEvents(authorized.ctx.tenantId);
 
   const rows = [
     [

@@ -1,6 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { addMonths, format, startOfMonth, subMonths } from "date-fns";
 
+/**
+ * Prisma's `groupBy` signature is generic enough that inferring the row shape
+ * here fights the compiler. Casting through this narrow callable type states
+ * the expected result without reaching for `any`.
+ */
+type GroupBy<Row> = (args: Record<string, unknown>) => Promise<Row[]>;
+
 export type AnalyticsTopCategory = {
   name: string;
   color: string;
@@ -60,13 +67,18 @@ export async function getTenantAnalytics(tenantId: string): Promise<TenantAnalyt
     prisma.event.count({ where: { tenantId, status: "REJECTED" } }),
   ]);
 
-  const categoryBreakdown = (await (prisma.event.groupBy as any)({
+  const categoryBreakdown = await (
+    prisma.event.groupBy as unknown as GroupBy<{
+      categoryId: string | null;
+      _count: { id: number };
+    }>
+  )({
     by: ["categoryId"],
     where: { tenantId, status: "APPROVED" },
     _count: { id: true },
     orderBy: { _count: { id: "desc" } },
     take: 5,
-  })) as Array<{ categoryId: string | null; _count: { id: number } }>;
+  });
 
   const categories: Array<{ id: string; name: string; color: string | null }> = await prisma.category.findMany({
     where: { tenantId },
@@ -101,13 +113,18 @@ export async function getTenantAnalytics(tenantId: string): Promise<TenantAnalyt
         where: { tenantId, viewedAt: { gte: thirtyDaysAgo } },
         select: { viewedAt: true },
       }),
-      (prisma.pageView.groupBy as any)({
+      (
+        prisma.pageView.groupBy as unknown as GroupBy<{
+          eventId: string;
+          _count: { id: number };
+        }>
+      )({
         by: ["eventId"],
         where: { tenantId, page: "event", eventId: { not: null } },
         _count: { id: true },
         orderBy: { _count: { id: "desc" } },
         take: 5,
-      }) as Promise<Array<{ eventId: string; _count: { id: number } }>>,
+      }),
     ]);
 
   const viewsByDate: Record<string, number> = {};

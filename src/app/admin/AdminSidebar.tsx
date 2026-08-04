@@ -5,29 +5,43 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 
-const NAV_ITEMS = [
+import { can, type Permission } from "@/lib/permissions";
+import type { Role } from "@generated/prisma/enums";
+
+/**
+ * `permission` mirrors the guard on the destination page, so an editor is not
+ * shown links that would bounce them straight back here.
+ */
+const NAV_ITEMS: {
+  href: string;
+  label: string;
+  exact?: boolean;
+  permission?: Permission;
+}[] = [
   { href: "/admin", label: "Queue", exact: true },
   { href: "/admin/events", label: "All Events" },
-  { href: "/admin/events/new", label: "Create Event" },
-  { href: "/admin/views", label: "Views" },
-  { href: "/admin/branding", label: "Branding" },
-  { href: "/admin/categories", label: "Categories" },
+  { href: "/admin/events/new", label: "Create Event", permission: "events:write" },
+  { href: "/admin/views", label: "Views", permission: "settings:write" },
+  { href: "/admin/branding", label: "Branding", permission: "settings:write" },
+  { href: "/admin/categories", label: "Categories", permission: "settings:write" },
   { href: "/admin/analytics", label: "Analytics" },
-  { href: "/admin/embed", label: "Embed" },
-  { href: "/admin/import", label: "Import Flyers" },
-  { href: "/admin/settings", label: "Settings" },
+  { href: "/admin/embed", label: "Embed", permission: "settings:write" },
+  { href: "/admin/import", label: "Import Flyers", permission: "events:write" },
+  { href: "/admin/settings", label: "Settings", permission: "settings:write" },
 ];
 
 export default function AdminSidebar({
   tenantName,
   tenantSlug,
   plan,
+  role,
   email,
   pendingCount,
 }: {
   tenantName: string;
   tenantSlug: string;
   plan: string;
+  role: Role;
   email: string;
   pendingCount: number;
 }) {
@@ -37,10 +51,11 @@ export default function AdminSidebar({
   const isActive = (href: string, exact?: boolean) =>
     exact ? pathname === href : pathname.startsWith(href);
 
-  const navItems =
-    plan === "PRO"
-      ? NAV_ITEMS
-      : NAV_ITEMS.filter((item) => item.href !== "/admin/import");
+  const navItems = NAV_ITEMS.filter((item) => {
+    // Flyer import is a paid feature.
+    if (item.href === "/admin/import" && plan === "FREE") return false;
+    return item.permission ? can(role, item.permission) : true;
+  });
 
   const navContent = (
     <>

@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { requirePermission } from "@/lib/authz";
 import { redirect } from "next/navigation";
 import { getCategories } from "@/lib/prisma-tenant";
 import { checkFeatureAccess } from "@/lib/plan-limits";
@@ -7,10 +7,9 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
 export default async function ImportPage() {
-  const session = await auth();
-  if (!session) redirect("/admin/login");
+  const session = await requirePermission("events:write");
 
-  const access = await checkFeatureAccess(session.user.tenantId, "aiFlyer");
+  const access = await checkFeatureAccess(session.tenantId, "aiFlyer");
 
   if (!access.allowed) {
     return (
@@ -36,9 +35,9 @@ export default async function ImportPage() {
   }
 
   const [categories, tenant] = await Promise.all([
-    getCategories(session.user.tenantId),
+    getCategories(session.tenantId),
     prisma.tenant.findUnique({
-      where: { id: session.user.tenantId },
+      where: { id: session.tenantId },
       select: { slug: true },
     }),
   ]);
@@ -52,7 +51,7 @@ export default async function ImportPage() {
         </p>
       </div>
       <ImportFlyersClient
-        tenantId={session.user.tenantId}
+        tenantId={session.tenantId}
         tenantSlug={tenant?.slug ?? ""}
         categories={categories.map((c) => ({ id: c.id, name: c.name }))}
       />

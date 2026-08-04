@@ -75,8 +75,8 @@ export default function GoogleCalendarForm({ initialIcsUrl }: Props) {
               onChange={(e) => setIcsUrl(e.target.value)}
             />
             <p className="text-xs text-gray-500">
-              In Google Calendar → Settings → your calendar → "Integrate calendar" → copy the
-              "Public address in iCal format" link.
+              In Google Calendar → Settings → your calendar → &quot;Integrate calendar&quot; → copy the
+              &quot;Public address in iCal format&quot; link.
             </p>
           </div>
 

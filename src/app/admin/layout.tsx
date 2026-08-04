@@ -43,6 +43,7 @@ export default async function AdminLayout({
         tenantName={tenant?.name ?? "Event Calendar"}
         tenantSlug={tenant?.slug ?? ""}
         plan={tenant?.plan ?? "FREE"}
+        role={session.user.role ?? "EDITOR"}
         email={session.user.email ?? ""}
         pendingCount={pendingCount}
       />

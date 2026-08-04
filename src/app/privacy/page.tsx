@@ -1,11 +1,13 @@
+import Link from "next/link";
+
 export default function PrivacyPage() {
   return (
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#FFFBF5", color: "#1a1410", minHeight: "100vh" }}>
       {/* Nav */}
       <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.95rem 2.25rem", borderBottom: "2px solid #1a1410", background: "#FFFBF5" }}>
-        <a href="/" style={{ fontSize: "1.375rem", letterSpacing: "-0.03em", textDecoration: "none", color: "inherit" }}>
+        <Link href="/" style={{ fontSize: "1.375rem", letterSpacing: "-0.03em", textDecoration: "none", color: "inherit" }}>
           Event<span style={{ color: "#E8450A" }}>ful</span>
-        </a>
+        </Link>
       </nav>
 
       {/* Content */}
@@ -18,7 +20,7 @@ export default function PrivacyPage() {
 
         <div style={{ color: "#1a1410" }}>
           <p>
-            This Privacy Policy explains how Eventful ("Service," "we," "us," or "our"), operated at useventful.com, collects, uses, and protects your information. By using the Service, you agree to the practices described here.
+            This Privacy Policy explains how Eventful (&quot;Service,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), operated at useventful.com, collects, uses, and protects your information. By using the Service, you agree to the practices described here.
           </p>
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>1. Who This Policy Applies To</h2>
@@ -73,7 +75,7 @@ export default function PrivacyPage() {
             <li>Operate and maintain the Service (hosting calendars, processing submissions, sending notifications).</li>
             <li>Send email notifications related to your account or event submissions (confirmation emails, moderation notices, team invitations).</li>
             <li>Process payments and manage subscriptions through Stripe.</li>
-            <li>Provide analytics to Tenant Admins about their calendar's activity (aggregate page views, submission counts, category breakdowns).</li>
+            <li>Provide analytics to Tenant Admins about their calendar&apos;s activity (aggregate page views, submission counts, category breakdowns).</li>
             <li>Improve the Service (fixing bugs, improving performance, developing new features).</li>
             <li>Respond to support requests.</li>
             <li>Enforce our Terms of Service and protect the security of the Service.</li>
@@ -149,7 +151,7 @@ export default function PrivacyPage() {
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>5. AI Features and Image Processing</h2>
           <p>
-            When a Pro plan user uploads an event flyer, the image may be sent to an AI service (Anthropic's Claude) to extract event details such as title, date, time, and location. The image is processed in real-time and is not retained by the AI provider for model training or any other purpose beyond fulfilling the request.
+            When a Pro plan user uploads an event flyer, the image may be sent to an AI service (Anthropic&apos;s Claude) to extract event details such as title, date, time, and location. The image is processed in real-time and is not retained by the AI provider for model training or any other purpose beyond fulfilling the request.
           </p>
           <p>
             The extracted information is presented to the user for review before being saved. We do not use AI to make automated decisions about event approval or moderation.
@@ -158,7 +160,7 @@ export default function PrivacyPage() {
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>6. Data Retention</h2>
           <ul style={{ marginLeft: "1.5rem", marginBottom: "1rem" }}>
             <li><strong>Account data:</strong> We retain your account information for as long as your account is active. If you close your account, we will delete your data within 90 days, except where we are required to retain it for legal or compliance reasons.</li>
-            <li><strong>Event data:</strong> Event submissions and associated data are retained for as long as the Tenant's account is active. Tenant Admins can delete individual events at any time.</li>
+            <li><strong>Event data:</strong> Event submissions and associated data are retained for as long as the Tenant&apos;s account is active. Tenant Admins can delete individual events at any time.</li>
             <li><strong>Server logs:</strong> Basic server logs are retained for up to 90 days for security and debugging purposes.</li>
             <li><strong>Payment records:</strong> Transaction records are retained as required by tax and financial regulations.</li>
           </ul>
@@ -205,7 +207,7 @@ export default function PrivacyPage() {
             To make a request, email <a href="mailto:privacy@useventful.com" style={{ color: "#E8450A", textDecoration: "none" }}>privacy@useventful.com</a>.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>10. Children's Privacy</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>10. Children&apos;s Privacy</h2>
           <p>
             The Service is not directed at children under 13. We do not knowingly collect personal information from children under 13. If we learn that we have collected information from a child under 13, we will delete it promptly. If you believe a child under 13 has submitted information through the Service, please contact us at <a href="mailto:privacy@useventful.com" style={{ color: "#E8450A", textDecoration: "none" }}>privacy@useventful.com</a>.
           </p>
@@ -222,7 +224,7 @@ export default function PrivacyPage() {
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>13. Changes to This Policy</h2>
           <p>
-            We may update this Privacy Policy from time to time. If we make material changes, we will notify you by email or by posting a notice in the Service at least 30 days before the changes take effect. The "Last Updated" date at the top reflects the most recent revision.
+            We may update this Privacy Policy from time to time. If we make material changes, we will notify you by email or by posting a notice in the Service at least 30 days before the changes take effect. The &quot;Last Updated&quot; date at the top reflects the most recent revision.
           </p>
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>14. Contact</h2>
