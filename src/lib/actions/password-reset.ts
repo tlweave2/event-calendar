@@ -39,10 +39,12 @@ export async function requestPasswordReset(input: {
   const limit = await rateLimit(`pwreset:request:${email}`, 5, 60 * 60);
   if (!limit.allowed) return { success: true };
 
-  // Only accounts that have completed setup can reset; an invited user with no
-  // password should redeem their invitation instead.
+  // Accounts with no password are included deliberately. Legacy accounts
+  // (seeded, or invited before invitations set a password) cannot sign in and
+  // have no other way back in, so this doubles as "claim your account". The
+  // link only ever goes to the address on the account.
   const users = await prisma.user.findMany({
-    where: { email, password: { not: null } },
+    where: { email },
     select: { id: true, email: true },
     orderBy: { createdAt: "asc" },
     take: 5,

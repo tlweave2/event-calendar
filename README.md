@@ -70,6 +70,32 @@ sandboxes. It requires `CRON_SECRET`.
 `GET /api/health` reports database reachability and which integrations are
 configured. It returns 503 when the database is unreachable.
 
+## Upgrading an existing deployment
+
+This release removes the `ADMIN_LOGIN_EMAIL` / `ADMIN_LOGIN_PASSWORD` login
+fallback. Any account whose `password` column is null could previously sign in
+through that fallback and now cannot. Check for affected accounts before
+deploying:
+
+```sql
+SELECT u.email, t.slug, u.role
+FROM users u JOIN tenants t ON t.id = u."tenantId"
+WHERE u.password IS NULL;
+```
+
+Each of those users can recover through **Forgot password** at
+`/admin/forgot-password`, which also serves as "claim your account" for
+accounts that never had a password. That needs `RESEND_API_KEY` configured. If
+email is not set up yet, set a password directly:
+
+```bash
+npm run set-password -- you@example.org 'a-strong-password'
+```
+
+The migration also renames three `webhook_configs` columns to match the Prisma
+schema. The table's queries were failing before this, so no working data
+depends on the old names.
+
 ## Authentication and authorization
 
 Sign-in is email plus password (bcrypt). There is no environment-variable
