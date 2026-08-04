@@ -106,17 +106,29 @@ Moving to database sessions would close this.
 
 ## Plans and limits
 
-Plan configuration is in `src/lib/stripe.ts`.
+Two tiers are sold, matching the pricing page. Plan configuration is in
+`src/lib/stripe.ts`, and it is the single source of truth — the landing page
+and billing UI are written to match it, so change it here first.
 
-| | Free | Pro | Enterprise |
-| --- | --- | --- | --- |
-| Events per month | 5 | Unlimited | Unlimited |
-| Seats | 1 | 5 | Unlimited |
-| AI flyer scanning | — | ✓ | ✓ |
-| Webhooks, custom domain | — | ✓ | ✓ |
+| | Free | Pro ($99/yr) |
+| --- | --- | --- |
+| Events per month | 5 | Unlimited |
+| Seats | 1 | Unlimited |
+| AI flyer scanning | — | ✓ |
+| Analytics dashboard | — | ✓ |
+| Remove "Powered by" badge | — | ✓ |
 
-Seat usage counts current members plus unexpired invitations. Event limits
-count every occurrence of a recurring series, not the series as one event.
+Seat usage counts current members plus unexpired invitations. Free at 1 seat
+means the owner alone, which is what makes team management a Pro feature —
+there is no separate check for it. Event limits count every occurrence of a
+recurring series, not the series as one event.
+
+Recurring events and CSV export are available on both tiers.
+
+`ENTERPRISE` remains in the `Plan` enum as a manual override for one-off
+custom deals, granted through the superadmin endpoint. It is not sold
+self-serve — no price, no pricing card, no checkout path — and it resolves to
+Pro's limits. It must never fall through to Free.
 
 Stripe webhooks are idempotent (`processed_webhook_events`). A failed payment
 starts a grace period rather than cutting access off immediately; the

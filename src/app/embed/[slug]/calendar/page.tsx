@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { getTenantBySlug } from "@/lib/tenant";
+import { hasFeature } from "@/lib/stripe";
 import { getMergedApprovedEvents } from "@/lib/merged-events";
 import { recordPageView } from "@/lib/page-views";
 import { notFound } from "next/navigation";
@@ -57,7 +58,7 @@ export default async function CalendarPage({
       : flyersParam === "false"
         ? false
         : tenant.embedShowFlyerGallery;
-  const showBadge = tenant.plan !== "PRO";
+  const showBadge = !hasFeature(tenant.plan, "removeBadge");
   const bgColor = param("bg") ?? tenant.embedBgColor ?? undefined;
   const darkMode =
     param("dark") === "true" ||

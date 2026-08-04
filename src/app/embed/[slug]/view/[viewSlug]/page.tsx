@@ -1,4 +1,5 @@
 import { getTenantBySlug } from "@/lib/tenant";
+import { hasFeature } from "@/lib/stripe";
 import { getApprovedEvents } from "@/lib/prisma-tenant";
 import { prisma } from "@/lib/prisma";
 import { recordPageView } from "@/lib/page-views";
@@ -130,7 +131,7 @@ export default async function ViewPage({
           hideSearch={hideSearch}
           hideCategories={hideCategories}
           hideSubmit={hideSubmit}
-          showBadge={tenant.plan !== "PRO"}
+          showBadge={!hasFeature(tenant.plan, "removeBadge")}
           darkMode={darkMode}
           cardStyle={cardStyle}
           showFlyerGallery={tenant.embedShowFlyerGallery}

@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { getTenantBySlug } from "@/lib/tenant";
+import { hasFeature } from "@/lib/stripe";
 import { notFound } from "next/navigation";
 import SubmitEventForm from "./SubmitEventForm";
 import { recordPageView } from "@/lib/page-views";
@@ -28,8 +29,8 @@ export default async function SubmitPage({
   const font = fontParam ?? tenant.embedFontFamily ?? undefined;
   const bgColor = bgParam ?? tenant.embedBgColor ?? undefined;
   const darkMode = darkParam === "true" || (!darkParam && Boolean(tenant.embedDarkMode));
-  const isPro = tenant.plan === "PRO";
-  const showBadge = tenant.plan !== "PRO";
+  const isPro = hasFeature(tenant.plan, "aiFlyer");
+  const showBadge = !hasFeature(tenant.plan, "removeBadge");
 
   const fontLink =
     font && font !== "system-ui"

@@ -23,8 +23,8 @@ export default function BillingSection({
             </p>
             <p className="mt-0.5 text-sm text-gray-500">
               {isPro
-                ? "Unlimited events, AI flyer scanning, custom branding"
-                : "5 events/month, Powered by Eventful badge"}
+                ? "Unlimited events and team members, AI flyer scanning, analytics, custom branding"
+                : "5 events/month, 1 team member, Powered by Eventful badge"}
             </p>
           </div>
           <span
@@ -41,7 +41,9 @@ export default function BillingSection({
             <p className="font-medium text-gray-900">Upgrade to Pro - $99/year</p>
             <ul className="space-y-1 text-sm text-gray-500">
               <li>✓ Unlimited events</li>
+              <li>✓ Unlimited team members</li>
               <li>✓ AI flyer scanning</li>
+              <li>✓ Analytics dashboard</li>
               <li>✓ Custom branding (remove badge)</li>
             </ul>
             <form action={createCheckoutSession}>

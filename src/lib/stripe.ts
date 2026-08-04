@@ -35,11 +35,18 @@ export type PlanConfig = {
   /** Members with dashboard access, including the owner and pending invites. */
   seats: number;
   aiFlyer: boolean;
+  /** Hide the "Powered by Eventful" badge on public pages. */
   removeBadge: boolean;
-  customDomain: boolean;
-  webhooks: boolean;
+  /** Access to the analytics dashboard beyond the monthly quota meter. */
+  analytics: boolean;
 };
 
+/**
+ * Two tiers are sold, matching the pricing page: Free and Pro ($99/year).
+ *
+ * Seats count members plus unexpired invitations, so Free at 1 seat means the
+ * owner alone — which is what makes "Team management" a Pro feature.
+ */
 export const PLANS = {
   FREE: {
     name: "Free",
@@ -48,8 +55,7 @@ export const PLANS = {
     seats: 1,
     aiFlyer: false,
     removeBadge: false,
-    customDomain: false,
-    webhooks: false,
+    analytics: false,
   },
   PRO: {
     name: "Pro",
@@ -57,21 +63,10 @@ export const PLANS = {
     monthlyEvents: Number.POSITIVE_INFINITY,
     // Pro used to grant the same single seat as Free, which made the entire
     // invite flow unreachable for paying customers.
-    seats: 5,
-    aiFlyer: true,
-    removeBadge: true,
-    customDomain: true,
-    webhooks: true,
-  },
-  ENTERPRISE: {
-    name: "Enterprise",
-    priceId: process.env.STRIPE_ENTERPRISE_PRICE_ID ?? null,
-    monthlyEvents: Number.POSITIVE_INFINITY,
     seats: Number.POSITIVE_INFINITY,
     aiFlyer: true,
     removeBadge: true,
-    customDomain: true,
-    webhooks: true,
+    analytics: true,
   },
 } as const satisfies Record<string, PlanConfig>;
 
@@ -82,14 +77,21 @@ export function isPlanKey(value: string): value is PlanKey {
 }
 
 /**
- * ENTERPRISE previously had no entry here and silently fell through to FREE,
- * so enterprise tenants were served free-tier limits.
+ * Resolve a tenant's plan to its limits.
+ *
+ * ENTERPRISE is not sold self-serve — there is no price, pricing card, or
+ * checkout path for it. It survives as a manual override for one-off custom
+ * deals, set through the superadmin endpoint, and resolves to Pro's limits.
+ * It must not fall through to FREE: doing so silently served free-tier limits
+ * to tenants who had been granted more.
  */
 export function getPlanConfig(plan: string): PlanConfig {
-  return isPlanKey(plan) ? PLANS[plan] : PLANS.FREE;
+  if (isPlanKey(plan)) return PLANS[plan];
+  if (plan === "ENTERPRISE") return { ...PLANS.PRO, name: "Enterprise" };
+  return PLANS.FREE;
 }
 
-export type PlanFeature = "aiFlyer" | "removeBadge" | "customDomain" | "webhooks";
+export type PlanFeature = "aiFlyer" | "removeBadge" | "analytics";
 
 export function hasFeature(plan: string, feature: PlanFeature): boolean {
   return getPlanConfig(plan)[feature];

@@ -159,11 +159,11 @@ export default function HomePage() {
               { title: "AI flyer scanning", desc: "Upload a photo of any event flyer and AI pulls out the title, date, time, and location automatically. No typing required.", bar: "#7C3AED", pro: true },
               { title: "Share anywhere", desc: "Embed on your website, post to Facebook or Instagram, or drop the link in your newsletter. One calendar, everywhere.", bar: "#2563EB" },
               { title: "Moderation queue", desc: "Approve, reject, or bulk-action submissions from a clean dashboard. Stay in full control.", bar: "#059669" },
-              { title: "Recurring events", desc: "Set up weekly, monthly, or custom repeat schedules once. The series fills in automatically.", bar: "#D97706", pro: true },
+              { title: "Recurring events", desc: "Set up weekly, monthly, or custom repeat schedules once. The series fills in automatically.", bar: "#D97706" },
               { title: "Team management", desc: "Invite editors and admins to help you moderate. Role-based access, no chaos.", bar: "#DB2777", pro: true },
               { title: "Analytics", desc: "See how many people are viewing your calendar and which events are getting the most attention.", bar: "#0891B2", pro: true },
               { title: "Email notifications", desc: "Submitters get a confirmation, then a notification when you approve or reject their event.", bar: "#059669" },
-              { title: "CSV export", desc: "Download your full event list any time. Useful for reports, newsletters, or migrating data.", bar: "#6B7280", pro: true },
+              { title: "CSV export", desc: "Download your full event list any time. Useful for reports, newsletters, or migrating data.", bar: "#6B7280" },
             ].map((f) => (
               <div key={f.title} style={{ background: C.surface, padding: "1.5rem", position: "relative" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.25rem" }}>
@@ -222,7 +222,7 @@ export default function HomePage() {
               <div style={{ fontSize: "2.5rem", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: "0.2rem", color: C.ink }}>$0</div>
               <p style={{ fontSize: "0.875rem", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "1.75rem" }}>Forever free</p>
               <ul style={{ listStyle: "none", padding: 0, margin: "0 0 0.5rem", fontSize: "0.875rem", color: C.muted, fontFamily: "system-ui, sans-serif", lineHeight: 2.1 }}>
-                <li>✓ &nbsp;1 calendar</li>
+                <li>✓ &nbsp;1 calendar, 1 team member</li>
                 <li>✓ &nbsp;Up to 5 events per month</li>
                 <li>✓ &nbsp;Public submissions</li>
                 <li>✓ &nbsp;Email notifications</li>
@@ -250,13 +250,15 @@ export default function HomePage() {
                   ✓ &nbsp;AI flyer scanning
                   <span style={{ fontSize: "0.6rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", background: C.purple.bg, color: C.purple.text, padding: "0.1rem 0.4rem", borderRadius: "2rem" }}>New</span>
                 </li>
+                <li>✓ &nbsp;Unlimited team members</li>
+                <li>✓ &nbsp;Analytics dashboard</li>
                 <li>✓ &nbsp;Custom branding (remove badge)</li>
               </ul>
               <p style={{ fontSize: "0.75rem", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "1.75rem", lineHeight: 1.5 }}>
                 For communities that need room to grow.
               </p>
               <Link href="/signup" style={{ display: "block", textAlign: "center", background: C.red, color: "#fff", padding: "0.7rem", borderRadius: "0.4rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontSize: "0.875rem", fontWeight: 700 }}>
-                Start free trial
+                Start free, upgrade anytime
               </Link>
             </div>
           </div>
