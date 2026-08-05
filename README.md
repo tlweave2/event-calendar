@@ -96,6 +96,25 @@ The migration also renames three `webhook_configs` columns to match the Prisma
 schema. The table's queries were failing before this, so no working data
 depends on the old names.
 
+## Operator console
+
+`/superadmin` is the cross-tenant view: ARR, paying vs free counts, signups and
+event volume over 30 days, free tenants sitting at their cap (upgrade
+conversations), tenants with no activity in 30 days (churn risk), and a table
+of every tenant with usage, seats, moderation backlog, and last activity.
+
+Sign in at `/superadmin/login` with `SUPERADMIN_SECRET`, which is exchanged for
+an 8-hour signed cookie. It is entirely separate from customer sign-in and
+cannot be reached by escalating a tenant account. Login attempts are rate
+limited to 5 per 15 minutes per IP.
+
+Plan changes made here bypass Stripe, so they suit comped accounts and support
+fixes. A tenant with a live subscription will be moved back by its next
+subscription webhook — cancel in Stripe first if the change should stick. Every
+change writes an audit log entry.
+
+`POST /api/superadmin/set-plan` remains for scripting the same operation.
+
 ## Authentication and authorization
 
 Sign-in is email plus password (bcrypt). There is no environment-variable

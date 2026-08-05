@@ -39,5 +39,7 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/admin/:path*", "/embed/:path*"],
+  // /superadmin is included so the operator console is never statically
+  // cached; the pages check the operator cookie themselves.
+  matcher: ["/admin/:path*", "/embed/:path*", "/superadmin/:path*"],
 };
