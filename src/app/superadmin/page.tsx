@@ -67,7 +67,12 @@ export default async function SuperadminPage({
             sub="churn risk"
             accent={summary.staleTenants > 0 ? "red" : undefined}
           />
-          <Stat label="Free" value={summary.freeTenants} sub="tenants" />
+          <Stat
+            label="Failed webhooks"
+            value={summary.failedWebhooks}
+            sub="gave up, last 30d"
+            accent={summary.failedWebhooks > 0 ? "red" : undefined}
+          />
           <Stat label="Demo sandboxes" value={summary.demoTenants} sub="live now" />
         </section>
 

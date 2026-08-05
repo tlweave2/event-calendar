@@ -64,6 +64,7 @@ export const ModelName = {
   EventSeries: 'EventSeries',
   RateLimit: 'RateLimit',
   ProcessedWebhookEvent: 'ProcessedWebhookEvent',
+  WebhookDelivery: 'WebhookDelivery',
   WebhookConfig: 'WebhookConfig'
 } as const
 
@@ -272,6 +273,24 @@ export const ProcessedWebhookEventScalarFieldEnum = {
 export type ProcessedWebhookEventScalarFieldEnum = (typeof ProcessedWebhookEventScalarFieldEnum)[keyof typeof ProcessedWebhookEventScalarFieldEnum]
 
 
+export const WebhookDeliveryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  eventType: 'eventType',
+  payload: 'payload',
+  status: 'status',
+  attempts: 'attempts',
+  lastError: 'lastError',
+  responseCode: 'responseCode',
+  nextAttemptAt: 'nextAttemptAt',
+  deliveredAt: 'deliveredAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WebhookDeliveryScalarFieldEnum = (typeof WebhookDeliveryScalarFieldEnum)[keyof typeof WebhookDeliveryScalarFieldEnum]
+
+
 export const WebhookConfigScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -299,6 +318,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

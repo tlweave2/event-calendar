@@ -41,6 +41,8 @@ export type OperatorSummary = {
   eventsLast30Days: number;
   tenantsAtLimit: number;
   staleTenants: number;
+  /** Webhook deliveries that exhausted their retries — broken integrations. */
+  failedWebhooks: number;
 };
 
 function startOfMonth(): Date {
@@ -144,6 +146,9 @@ export async function getOperatorDashboard(): Promise<{
     staleTenants: real.filter(
       (row) => !row.lastActivityAt || row.lastActivityAt < thirtyDaysAgo
     ).length,
+    failedWebhooks: await prisma.webhookDelivery.count({
+      where: { status: "FAILED", createdAt: { gte: thirtyDaysAgo } },
+    }),
   };
 
   return { summary, rows: real.concat(rows.filter((row) => row.isDemo)) };

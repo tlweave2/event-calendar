@@ -5,7 +5,8 @@ import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { slugify } from "@/lib/slugify";
-import { sendEmailVerification } from "@/lib/email";
+import { sendEmailVerification, sendWelcomeEmail } from "@/lib/email";
+import { captureError } from "@/lib/observability";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
 import { getAppBaseUrl } from "@/lib/urls";
 import {
@@ -109,8 +110,18 @@ export async function createTenant(input: {
         tenantName: orgName,
         verifyUrl: `${getAppBaseUrl()}/verify-email?token=${encodeURIComponent(rawToken)}`,
       });
+
+      await sendWelcomeEmail({
+        to: normalizedEmail,
+        tenantName: orgName,
+        calendarUrl: `${getAppBaseUrl()}/embed/${slug}/calendar`,
+        adminUrl: `${getAppBaseUrl()}/admin`,
+      });
     } catch (err) {
-      console.error("[signup] verification email failed:", err);
+      await captureError(err, {
+        scope: "signup.email",
+        tenantId: tenant.id,
+      });
     }
   }
 

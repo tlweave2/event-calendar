@@ -3,6 +3,10 @@
     {
       "path": "/api/demo/cleanup",
       "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/retry-webhooks",
+      "schedule": "15 * * * *"
     }
   ]
 }

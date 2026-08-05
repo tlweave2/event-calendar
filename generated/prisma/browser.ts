@@ -83,6 +83,11 @@ export type RateLimit = Prisma.RateLimitModel
  */
 export type ProcessedWebhookEvent = Prisma.ProcessedWebhookEventModel
 /**
+ * Model WebhookDelivery
+ * 
+ */
+export type WebhookDelivery = Prisma.WebhookDeliveryModel
+/**
  * Model WebhookConfig
  * 
  */

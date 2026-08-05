@@ -64,8 +64,11 @@ skip them, so opening a pull request no longer migrates the production
 database ahead of the code that ships with it. Set `RUN_MIGRATIONS=1` to force
 migrations in another environment, or run `npm run db:migrate` yourself.
 
-`vercel.json` schedules `GET /api/demo/cleanup` hourly to delete expired demo
-sandboxes. It requires `CRON_SECRET`.
+`vercel.json` schedules two cron jobs, both authenticated with `CRON_SECRET`:
+`/api/demo/cleanup` deletes expired demo sandboxes, and
+`/api/cron/retry-webhooks` retries webhook deliveries that are due. On Vercel's
+Hobby plan only daily crons are allowed — change both schedules if you are on
+it.
 
 `GET /api/health` reports database reachability and which integrations are
 configured. It returns 503 when the database is unreachable.
@@ -114,6 +117,55 @@ subscription webhook — cancel in Stripe first if the change should stick. Ever
 change writes an audit log entry.
 
 `POST /api/superadmin/set-plan` remains for scripting the same operation.
+
+## Email
+
+All outbound mail goes through one `send` helper in `src/lib/email.ts`, which
+retries three times and reports a final failure through `captureError` rather
+than swallowing it. The Resend SDK returns errors on the result object instead
+of throwing, so the helper checks for that — otherwise a rejected address looks
+like a successful send.
+
+| Email | Trigger |
+| --- | --- |
+| Welcome | Signup |
+| Confirm your email | Signup |
+| Reset your password | Forgot password |
+| You're invited | Team invitation |
+| Event received / approved / rejected | Public submission and moderation |
+| New event submission | Sent to admins on a pending submission |
+| Payment received | `invoice.payment_succeeded` |
+| **Payment failed** | `invoice.payment_failed` — includes the grace deadline |
+| Subscription ended | Subscription canceled or unpaid |
+| Near monthly limit | A Free tenant passes 80% of its cap, once per month |
+
+Billing mail goes to the tenant's owners, falling back to admins so a
+workspace whose owner has left is still reachable
+(`src/lib/billing-contacts.ts`).
+
+## Observability
+
+`src/lib/observability.ts` provides `captureError`, `captureWarning`,
+`logInfo`, and `withRetry`. Everything is emitted as structured JSON, and also
+sent to Sentry when `SENTRY_DSN` is set — the SDK is imported lazily, so a
+deployment without a DSN pays nothing for it.
+
+Webhook delivery is durable. Each event is written to `webhook_deliveries`
+before the attempt, retried with backoff (1m, 5m, 30m, 2h) up to five times,
+and parked as `FAILED` with the last error if it never succeeds. Exhausted
+deliveries are reported and surfaced in the operator console — previously a
+customer endpoint that was down for a minute lost the event entirely, with no
+retry and no record.
+
+## Deleting a workspace
+
+Owners can delete a workspace from **Settings → Danger zone**. It requires
+typing the workspace slug, cancels any live Stripe subscription first (so a
+deleted workspace cannot keep billing), and then cascades to every event,
+category, view, member, and audit record.
+
+There is no operator-side delete in the console yet; use the customer flow or
+delete the tenant row directly.
 
 ## Authentication and authorization
 

@@ -5,6 +5,7 @@ import { getTenantUsers } from "@/lib/prisma-tenant";
 import InviteForm from "./InviteForm";
 import BillingSection from "./BillingSection";
 import { GoogleCalendarFormClient, WebhookSettingsFormClient } from "./SettingsFormsSsr";
+import DangerZone from "./DangerZone";
 
 export default async function SettingsPage({
   searchParams,
@@ -39,6 +40,10 @@ export default async function SettingsPage({
   } catch {
     // Table may not exist yet or other transient error
   }
+
+  // Shown in the delete confirmation so the owner sees what they are about
+  // to destroy before they type the slug.
+  const eventCount = await prisma.event.count({ where: { tenantId } }).catch(() => 0);
 
   const inviteSuccess = sp.invited === "1";
   const inviteError = typeof sp.invite_error === "string" ? sp.invite_error : null;
@@ -115,6 +120,17 @@ export default async function SettingsPage({
           initialEnabled={webhookConfig?.enabled ?? false}
         />
       </div>
+
+      {tenant && canManageBilling && (
+        <div className="mt-10 max-w-2xl">
+          <DangerZone
+            slug={tenant.slug}
+            eventCount={eventCount}
+            memberCount={users.length}
+            hasSubscription={Boolean(tenant.stripeSubscriptionId)}
+          />
+        </div>
+      )}
     </div>
   );
 }

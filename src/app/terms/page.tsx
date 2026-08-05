@@ -134,7 +134,7 @@ export default function TermsPage() {
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>13. Termination</h2>
           <p>
-            You may close your account at any time by contacting us at support@useventful.com.
+            You may close your account at any time from Settings &rarr; Danger zone in your dashboard. Deleting a workspace cancels any active subscription and permanently removes your events, categories, and settings. You can also contact us at support@useventful.com.
           </p>
           <p>
             We may suspend or terminate your account if you violate these Terms, if your account is inactive for an extended period, or if we discontinue the Service. If we terminate your account without cause, we will provide reasonable notice and the opportunity to export your data.

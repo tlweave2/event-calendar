@@ -25,6 +25,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.6.0",
+    "@sentry/nextjs": "^10.69.0",
     "@stripe/stripe-js": "^9.0.1",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",

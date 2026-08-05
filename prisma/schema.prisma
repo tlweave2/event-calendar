@@ -49,6 +49,7 @@ model Tenant {
   pageViews     PageView[]
   auditLogs     AuditLog[]
   webhookConfig        WebhookConfig?
+  webhookDeliveries    WebhookDelivery[]
   googleCalendarIcsUrl String?       @db.VarChar(500)
 
   @@map("tenants")
@@ -284,6 +285,38 @@ model ProcessedWebhookEvent {
 
   @@index([processedAt])
   @@map("processed_webhook_events")
+}
+
+// ─── Webhook Deliveries ──────────────────────────────────────────────────
+
+// Outbound webhook attempts. Delivery used to be fire-and-forget: a customer
+// endpoint that was down for a minute lost the event with no record and no
+// retry. Rows here are the queue and the dead-letter log both.
+model WebhookDelivery {
+  id           String    @id @default(uuid())
+  tenantId     String
+  eventType    String    @db.VarChar(50)
+  payload      Json
+  status       DeliveryStatus @default(PENDING)
+  attempts     Int       @default(0)
+  lastError    String?   @db.Text
+  responseCode Int?
+  nextAttemptAt DateTime?
+  deliveredAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([status, nextAttemptAt])
+  @@map("webhook_deliveries")
+}
+
+enum DeliveryStatus {
+  PENDING
+  DELIVERED
+  FAILED
 }
 
 // ─── Webhook Configs ─────────────────────────────────────────────────────

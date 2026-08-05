@@ -11,6 +11,7 @@ import { demoFormError, isDemoTenant } from "@/lib/demo-guard";
 import { deliverWebhook } from "@/lib/webhook";
 import { verifySession, can } from "@/lib/authz";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
+import { maybeWarnApproachingLimit } from "@/lib/limit-warning";
 import { getAppBaseUrl } from "@/lib/urls";
 
 const submitEventSchema = z.object({
@@ -188,6 +189,8 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       }).catch((err) => console.error("[webhook] event.created (series) failed:", err));
     }
 
+    await maybeWarnApproachingLimit(tenant.id);
+
     revalidatePath(`/embed/${tenantSlug}/calendar`);
     return { success: true, eventId: firstEvent?.id ?? "" };
   }
@@ -254,6 +257,8 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
       status: event.status,
     },
   }).catch((err) => console.error("[webhook] event.created failed:", err));
+
+  await maybeWarnApproachingLimit(tenant.id);
 
   revalidatePath(`/embed/${tenantSlug}/calendar`);
 

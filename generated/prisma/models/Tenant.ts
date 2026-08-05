@@ -382,6 +382,7 @@ export type TenantWhereInput = {
   pageViews?: Prisma.PageViewListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   webhookConfig?: Prisma.XOR<Prisma.WebhookConfigNullableScalarRelationFilter, Prisma.WebhookConfigWhereInput> | null
+  webhookDeliveries?: Prisma.WebhookDeliveryListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -422,6 +423,7 @@ export type TenantOrderByWithRelationInput = {
   pageViews?: Prisma.PageViewOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   webhookConfig?: Prisma.WebhookConfigOrderByWithRelationInput
+  webhookDeliveries?: Prisma.WebhookDeliveryOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -465,6 +467,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   pageViews?: Prisma.PageViewListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   webhookConfig?: Prisma.XOR<Prisma.WebhookConfigNullableScalarRelationFilter, Prisma.WebhookConfigWhereInput> | null
+  webhookDeliveries?: Prisma.WebhookDeliveryListRelationFilter
 }, "id" | "slug">
 
 export type TenantOrderByWithAggregationInput = {
@@ -575,6 +578,7 @@ export type TenantCreateInput = {
   pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -615,6 +619,7 @@ export type TenantUncheckedCreateInput = {
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigUncheckedCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -655,6 +660,7 @@ export type TenantUpdateInput = {
   pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -695,6 +701,7 @@ export type TenantUncheckedUpdateInput = {
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUncheckedUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -1016,6 +1023,20 @@ export type TenantUpdateOneRequiredWithoutEventSeriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutEventSeriesInput, Prisma.TenantUpdateWithoutEventSeriesInput>, Prisma.TenantUncheckedUpdateWithoutEventSeriesInput>
 }
 
+export type TenantCreateNestedOneWithoutWebhookDeliveriesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutWebhookDeliveriesInput, Prisma.TenantUncheckedCreateWithoutWebhookDeliveriesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutWebhookDeliveriesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutWebhookDeliveriesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutWebhookDeliveriesInput, Prisma.TenantUncheckedCreateWithoutWebhookDeliveriesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutWebhookDeliveriesInput
+  upsert?: Prisma.TenantUpsertWithoutWebhookDeliveriesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutWebhookDeliveriesInput, Prisma.TenantUpdateWithoutWebhookDeliveriesInput>, Prisma.TenantUncheckedUpdateWithoutWebhookDeliveriesInput>
+}
+
 export type TenantCreateNestedOneWithoutWebhookConfigInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutWebhookConfigInput, Prisma.TenantUncheckedCreateWithoutWebhookConfigInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutWebhookConfigInput
@@ -1067,6 +1088,7 @@ export type TenantCreateWithoutCategoriesInput = {
   pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCategoriesInput = {
@@ -1106,6 +1128,7 @@ export type TenantUncheckedCreateWithoutCategoriesInput = {
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigUncheckedCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCategoriesInput = {
@@ -1161,6 +1184,7 @@ export type TenantUpdateWithoutCategoriesInput = {
   pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCategoriesInput = {
@@ -1200,6 +1224,7 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUncheckedUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCalendarViewsInput = {
@@ -1239,6 +1264,7 @@ export type TenantCreateWithoutCalendarViewsInput = {
   pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCalendarViewsInput = {
@@ -1278,6 +1304,7 @@ export type TenantUncheckedCreateWithoutCalendarViewsInput = {
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigUncheckedCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCalendarViewsInput = {
@@ -1333,6 +1360,7 @@ export type TenantUpdateWithoutCalendarViewsInput = {
   pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCalendarViewsInput = {
@@ -1372,6 +1400,7 @@ export type TenantUncheckedUpdateWithoutCalendarViewsInput = {
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUncheckedUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEventsInput = {
@@ -1411,6 +1440,7 @@ export type TenantCreateWithoutEventsInput = {
   pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEventsInput = {
@@ -1450,6 +1480,7 @@ export type TenantUncheckedCreateWithoutEventsInput = {
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigUncheckedCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEventsInput = {
@@ -1505,6 +1536,7 @@ export type TenantUpdateWithoutEventsInput = {
   pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEventsInput = {
@@ -1544,6 +1576,7 @@ export type TenantUncheckedUpdateWithoutEventsInput = {
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUncheckedUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutUsersInput = {
@@ -1583,6 +1616,7 @@ export type TenantCreateWithoutUsersInput = {
   pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -1622,6 +1656,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigUncheckedCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -1677,6 +1712,7 @@ export type TenantUpdateWithoutUsersInput = {
   pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -1716,6 +1752,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUncheckedUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAuditLogsInput = {
@@ -1755,6 +1792,7 @@ export type TenantCreateWithoutAuditLogsInput = {
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAuditLogsInput = {
@@ -1794,6 +1832,7 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigUncheckedCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAuditLogsInput = {
@@ -1849,6 +1888,7 @@ export type TenantUpdateWithoutAuditLogsInput = {
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAuditLogsInput = {
@@ -1888,6 +1928,7 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUncheckedUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPageViewsInput = {
@@ -1927,6 +1968,7 @@ export type TenantCreateWithoutPageViewsInput = {
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPageViewsInput = {
@@ -1966,6 +2008,7 @@ export type TenantUncheckedCreateWithoutPageViewsInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigUncheckedCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPageViewsInput = {
@@ -2021,6 +2064,7 @@ export type TenantUpdateWithoutPageViewsInput = {
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPageViewsInput = {
@@ -2060,6 +2104,7 @@ export type TenantUncheckedUpdateWithoutPageViewsInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUncheckedUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEventSeriesInput = {
@@ -2099,6 +2144,7 @@ export type TenantCreateWithoutEventSeriesInput = {
   pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEventSeriesInput = {
@@ -2138,6 +2184,7 @@ export type TenantUncheckedCreateWithoutEventSeriesInput = {
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   webhookConfig?: Prisma.WebhookConfigUncheckedCreateNestedOneWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEventSeriesInput = {
@@ -2193,6 +2240,7 @@ export type TenantUpdateWithoutEventSeriesInput = {
   pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   webhookConfig?: Prisma.WebhookConfigUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEventSeriesInput = {
@@ -2226,6 +2274,183 @@ export type TenantUncheckedUpdateWithoutEventSeriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
+  calendarViews?: Prisma.CalendarViewUncheckedUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  webhookConfig?: Prisma.WebhookConfigUncheckedUpdateOneWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutWebhookDeliveriesInput = {
+  id?: string
+  slug: string
+  name: string
+  logoUrl?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  plan?: $Enums.Plan
+  customDomain?: string | null
+  timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideHeader?: boolean
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
+  embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
+  submitHeading?: string | null
+  submitSubheading?: string | null
+  emptyStateMessage?: string | null
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
+  events?: Prisma.EventCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
+  calendarViews?: Prisma.CalendarViewCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  webhookConfig?: Prisma.WebhookConfigCreateNestedOneWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutWebhookDeliveriesInput = {
+  id?: string
+  slug: string
+  name: string
+  logoUrl?: string | null
+  primaryColor?: string | null
+  secondaryColor?: string | null
+  plan?: $Enums.Plan
+  customDomain?: string | null
+  timezone?: string
+  embedFontFamily?: string | null
+  embedDefaultView?: string
+  embedHideHeader?: boolean
+  embedHideSearch?: boolean
+  embedHideCategories?: boolean
+  embedHideSubmit?: boolean
+  embedBgColor?: string | null
+  embedDarkMode?: boolean
+  embedCardStyle?: string
+  embedShowFlyerGallery?: boolean
+  submitHeading?: string | null
+  submitSubheading?: string | null
+  emptyStateMessage?: string | null
+  stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
+  planExpiresAt?: Date | string | null
+  isDemoSandbox?: boolean
+  demoExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  googleCalendarIcsUrl?: string | null
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutTenantInput
+  eventSeries?: Prisma.EventSeriesUncheckedCreateNestedManyWithoutTenantInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
+  calendarViews?: Prisma.CalendarViewUncheckedCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  webhookConfig?: Prisma.WebhookConfigUncheckedCreateNestedOneWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutWebhookDeliveriesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutWebhookDeliveriesInput, Prisma.TenantUncheckedCreateWithoutWebhookDeliveriesInput>
+}
+
+export type TenantUpsertWithoutWebhookDeliveriesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutWebhookDeliveriesInput, Prisma.TenantUncheckedUpdateWithoutWebhookDeliveriesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutWebhookDeliveriesInput, Prisma.TenantUncheckedCreateWithoutWebhookDeliveriesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutWebhookDeliveriesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutWebhookDeliveriesInput, Prisma.TenantUncheckedUpdateWithoutWebhookDeliveriesInput>
+}
+
+export type TenantUpdateWithoutWebhookDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  submitHeading?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitSubheading?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emptyStateMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  events?: Prisma.EventUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUpdateManyWithoutTenantNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
+  calendarViews?: Prisma.CalendarViewUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  webhookConfig?: Prisma.WebhookConfigUpdateOneWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutWebhookDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  secondaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  embedFontFamily?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDefaultView?: Prisma.StringFieldUpdateOperationsInput | string
+  embedHideHeader?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideCategories?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedHideSubmit?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedBgColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  embedDarkMode?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  embedCardStyle?: Prisma.StringFieldUpdateOperationsInput | string
+  embedShowFlyerGallery?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  submitHeading?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  submitSubheading?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emptyStateMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  planExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isDemoSandbox?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  demoExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleCalendarIcsUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  events?: Prisma.EventUncheckedUpdateManyWithoutTenantNestedInput
+  eventSeries?: Prisma.EventSeriesUncheckedUpdateManyWithoutTenantNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
   calendarViews?: Prisma.CalendarViewUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
@@ -2271,6 +2496,7 @@ export type TenantCreateWithoutWebhookConfigInput = {
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWebhookConfigInput = {
@@ -2310,6 +2536,7 @@ export type TenantUncheckedCreateWithoutWebhookConfigInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWebhookConfigInput = {
@@ -2365,6 +2592,7 @@ export type TenantUpdateWithoutWebhookConfigInput = {
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWebhookConfigInput = {
@@ -2404,6 +2632,7 @@ export type TenantUncheckedUpdateWithoutWebhookConfigInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  webhookDeliveries?: Prisma.WebhookDeliveryUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -2419,6 +2648,7 @@ export type TenantCountOutputType = {
   users: number
   pageViews: number
   auditLogs: number
+  webhookDeliveries: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2429,6 +2659,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   users?: boolean | TenantCountOutputTypeCountUsersArgs
   pageViews?: boolean | TenantCountOutputTypeCountPageViewsArgs
   auditLogs?: boolean | TenantCountOutputTypeCountAuditLogsArgs
+  webhookDeliveries?: boolean | TenantCountOutputTypeCountWebhookDeliveriesArgs
 }
 
 /**
@@ -2490,6 +2721,13 @@ export type TenantCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Type
   where?: Prisma.AuditLogWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountWebhookDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WebhookDeliveryWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2529,6 +2767,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   pageViews?: boolean | Prisma.Tenant$pageViewsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Tenant$auditLogsArgs<ExtArgs>
   webhookConfig?: boolean | Prisma.Tenant$webhookConfigArgs<ExtArgs>
+  webhookDeliveries?: boolean | Prisma.Tenant$webhookDeliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -2638,6 +2877,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   pageViews?: boolean | Prisma.Tenant$pageViewsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Tenant$auditLogsArgs<ExtArgs>
   webhookConfig?: boolean | Prisma.Tenant$webhookConfigArgs<ExtArgs>
+  webhookDeliveries?: boolean | Prisma.Tenant$webhookDeliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2654,6 +2894,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     pageViews: Prisma.$PageViewPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     webhookConfig: Prisma.$WebhookConfigPayload<ExtArgs> | null
+    webhookDeliveries: Prisma.$WebhookDeliveryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3087,6 +3328,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   pageViews<T extends Prisma.Tenant$pageViewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$pageViewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PageViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.Tenant$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   webhookConfig<T extends Prisma.Tenant$webhookConfigArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$webhookConfigArgs<ExtArgs>>): Prisma.Prisma__WebhookConfigClient<runtime.Types.Result.GetResult<Prisma.$WebhookConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  webhookDeliveries<T extends Prisma.Tenant$webhookDeliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$webhookDeliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebhookDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3722,6 +3964,30 @@ export type Tenant$webhookConfigArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.WebhookConfigInclude<ExtArgs> | null
   where?: Prisma.WebhookConfigWhereInput
+}
+
+/**
+ * Tenant.webhookDeliveries
+ */
+export type Tenant$webhookDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WebhookDelivery
+   */
+  select?: Prisma.WebhookDeliverySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WebhookDelivery
+   */
+  omit?: Prisma.WebhookDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WebhookDeliveryInclude<ExtArgs> | null
+  where?: Prisma.WebhookDeliveryWhereInput
+  orderBy?: Prisma.WebhookDeliveryOrderByWithRelationInput | Prisma.WebhookDeliveryOrderByWithRelationInput[]
+  cursor?: Prisma.WebhookDeliveryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WebhookDeliveryScalarFieldEnum | Prisma.WebhookDeliveryScalarFieldEnum[]
 }
 
 /**

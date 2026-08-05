@@ -2,6 +2,14 @@ import { getStripe, PLANS, type PlanKey } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import {
+  sendPaymentFailed,
+  sendPaymentReceipt,
+  sendSubscriptionEnded,
+} from "@/lib/email";
+import { formatAmount, formatDate, getBillingContacts } from "@/lib/billing-contacts";
+import { getAppBaseUrl } from "@/lib/urls";
+import { captureError, captureWarning, logInfo } from "@/lib/observability";
 
 export const runtime = "nodejs";
 
@@ -52,7 +60,7 @@ export async function POST(req: NextRequest) {
   try {
     await handleEvent(event);
   } catch (err) {
-    console.error("[stripe webhook] handler error:", event.type, err);
+    await captureError(err, { scope: "stripe.webhook", eventType: event.type, eventId: event.id });
     // Release the idempotency claim so Stripe's retry can be processed.
     await prisma.processedWebhookEvent
       .delete({ where: { id: event.id } })
@@ -94,7 +102,7 @@ async function handleEvent(event: Stripe.Event) {
         },
       });
 
-      console.log(`[stripe] tenant ${tenantId} upgraded to ${plan}`);
+      logInfo("tenant upgraded", { scope: "stripe.checkout", tenantId, plan });
       break;
     }
 
@@ -126,14 +134,26 @@ async function handleEvent(event: Stripe.Event) {
             planExpiresAt: graceDeadline(sub),
           },
         });
-        console.warn(`[stripe] tenant ${tenant.id} subscription ${sub.status}`);
+        await captureWarning("subscription in grace period", {
+          scope: "stripe.subscription",
+          tenantId: tenant.id,
+          status: sub.status,
+        });
       } else {
         // canceled, unpaid, incomplete_expired, paused
         await prisma.tenant.update({
           where: { id: tenant.id },
           data: { plan: "FREE", planExpiresAt: null },
         });
-        console.log(`[stripe] tenant ${tenant.id} downgraded (status ${sub.status})`);
+        await notifySubscriptionEnded(
+          tenant.id,
+          sub.status === "unpaid" ? "unpaid" : "canceled"
+        );
+        logInfo("tenant downgraded", {
+          scope: "stripe.subscription",
+          tenantId: tenant.id,
+          status: sub.status,
+        });
       }
       break;
     }
@@ -148,7 +168,11 @@ async function handleEvent(event: Stripe.Event) {
         data: { plan: "FREE", stripeSubscriptionId: null, planExpiresAt: null },
       });
 
-      console.log("[stripe] tenant downgraded to FREE:", tenant.id);
+      await notifySubscriptionEnded(tenant.id, "canceled");
+      logInfo("tenant downgraded to FREE", {
+        scope: "stripe.subscription",
+        tenantId: tenant.id,
+      });
       break;
     }
 
@@ -161,20 +185,45 @@ async function handleEvent(event: Stripe.Event) {
 
       const tenant = await prisma.tenant.findFirst({
         where: { stripeCustomerId: customerId },
-        select: { id: true },
+        select: { id: true, name: true },
       });
       if (!tenant) break;
+
+      const graceEnds = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
 
       await prisma.tenant.update({
         where: { id: tenant.id },
         data: {
           // Grace period; the subscription.updated event that follows Stripe's
           // final retry performs the actual downgrade.
-          planExpiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+          planExpiresAt: graceEnds,
         },
       });
 
-      console.warn("[stripe] payment failed for tenant:", tenant.id);
+      // The customer has to know their card failed, or the first they hear of
+      // it is their calendar quietly losing Pro.
+      const contacts = await getBillingContacts(tenant.id);
+      await Promise.all(
+        contacts.map((to) =>
+          sendPaymentFailed({
+            to,
+            tenantName: tenant.name,
+            amount: formatAmount(invoice.amount_due, invoice.currency),
+            updatePaymentUrl: `${getAppBaseUrl()}/admin/settings`,
+            graceEnds: graceEnds.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }),
+          })
+        )
+      );
+
+      await captureWarning("payment failed", {
+        scope: "stripe.invoice",
+        tenantId: tenant.id,
+        notified: contacts.length,
+      });
       break;
     }
 
@@ -183,17 +232,56 @@ async function handleEvent(event: Stripe.Event) {
       const customerId = idOf(invoice.customer);
       if (!customerId) break;
 
-      // Payment recovered — clear any dunning deadline.
-      await prisma.tenant.updateMany({
+      const tenant = await prisma.tenant.findFirst({
         where: { stripeCustomerId: customerId },
+        select: { id: true, name: true, planExpiresAt: true },
+      });
+      if (!tenant) break;
+
+      // Payment recovered — clear any dunning deadline.
+      await prisma.tenant.update({
+        where: { id: tenant.id },
         data: { planExpiresAt: null },
       });
+
+      const contacts = await getBillingContacts(tenant.id);
+      await Promise.all(
+        contacts.map((to) =>
+          sendPaymentReceipt({
+            to,
+            tenantName: tenant.name,
+            amount: formatAmount(invoice.amount_paid, invoice.currency),
+            invoiceUrl: invoice.hosted_invoice_url ?? null,
+            periodEnd: formatDate(invoice.period_end),
+          })
+        )
+      );
       break;
     }
 
     default:
       break;
   }
+}
+
+async function notifySubscriptionEnded(tenantId: string, reason: "canceled" | "unpaid") {
+  const tenant = await prisma.tenant.findUnique({
+    where: { id: tenantId },
+    select: { name: true },
+  });
+  if (!tenant) return;
+
+  const contacts = await getBillingContacts(tenantId);
+  await Promise.all(
+    contacts.map((to) =>
+      sendSubscriptionEnded({
+        to,
+        tenantName: tenant.name,
+        reason,
+        resubscribeUrl: `${getAppBaseUrl()}/admin/settings`,
+      })
+    )
+  );
 }
 
 function idOf(value: string | { id: string } | null | undefined): string | null {
@@ -213,7 +301,11 @@ function planFromSubscription(sub: Stripe.Subscription): PlanKey {
 
   // An unrecognized price still represents a real payment; treat it as Pro
   // rather than silently giving the customer nothing.
-  console.warn("[stripe] unrecognized price on subscription:", sub.id, priceIds);
+  void captureWarning("unrecognized price on subscription", {
+    scope: "stripe.plan",
+    subscriptionId: sub.id,
+    priceIds: priceIds.join(","),
+  });
   return "PRO";
 }
 
