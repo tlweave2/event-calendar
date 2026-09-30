@@ -37,8 +37,8 @@ export default async function SettingsPage({
   let webhookConfig = null;
   try {
     webhookConfig = await prisma.webhookConfig.findUnique({ where: { tenantId } });
-  } catch {
-    // Table may not exist yet or other transient error
+  } catch (err) {
+    console.error("[settings] webhook config query failed:", err);
   }
 
   const inviteSuccess = sp.invited === "1";
