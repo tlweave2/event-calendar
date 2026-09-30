@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { hasFeature } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
   const { image, mediaType, tenantSlug } = (await req.json()) as {
@@ -12,18 +14,26 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({}, { status: 400 });
   }
 
-  if (tenantSlug) {
-    const tenant = await prisma.tenant.findUnique({
-      where: { slug: tenantSlug },
-      select: { plan: true },
-    });
+  // Every request must be tied to a tenant whose plan includes AI flyer
+  // scanning — the signed-in admin's tenant, or the public calendar's slug.
+  const session = await auth();
+  const tenant = session?.user?.tenantId
+    ? await prisma.tenant.findUnique({
+        where: { id: session.user.tenantId },
+        select: { plan: true },
+      })
+    : tenantSlug
+      ? await prisma.tenant.findUnique({
+          where: { slug: tenantSlug },
+          select: { plan: true },
+        })
+      : null;
 
-    if (!tenant || tenant.plan !== "PRO") {
-      return NextResponse.json(
-        { error: "AI flyer scanning requires a Pro plan." },
-        { status: 403 }
-      );
-    }
+  if (!tenant || !hasFeature(tenant.plan, "aiFlyer")) {
+    return NextResponse.json(
+      { error: "AI flyer scanning requires a Pro plan." },
+      { status: 403 }
+    );
   }
 
   if (!process.env.ANTHROPIC_API_KEY) {

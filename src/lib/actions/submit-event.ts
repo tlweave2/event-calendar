@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { sendAdminNotification, sendSubmissionConfirmation } from "@/lib/email";
@@ -70,14 +71,12 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
     };
   }
 
-  // Auto-approve when submitter is an admin/owner of this tenant.
-  const isAdmin = await prisma.user.findFirst({
-    where: {
-      tenantId: tenant.id,
-      email: data.submitterEmail.toLowerCase(),
-      role: { in: ["OWNER", "ADMIN"] },
-    },
-  });
+  // Auto-approve only when the request comes from a signed-in admin/owner of
+  // this tenant. The submitterEmail field is user-supplied and can't be trusted.
+  const session = await auth();
+  const isAdmin =
+    session?.user?.tenantId === tenant.id &&
+    (session.user.role === "OWNER" || session.user.role === "ADMIN");
   const status = isAdmin ? "APPROVED" : "PENDING";
 
   if (data.recurrence && data.occurrences && data.occurrences > 1) {
