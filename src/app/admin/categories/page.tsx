@@ -12,7 +12,7 @@ export default async function CategoriesPage() {
   return (
     <div className="max-w-2xl px-8 py-8">
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-gray-900">Categories</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">Categories</h1>
         <p className="mt-1 text-sm text-gray-500">
           Categories help organize your events and let visitors filter by type.
           Submitters pick one when they add an event, and each category color

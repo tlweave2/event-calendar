@@ -117,7 +117,7 @@ export default function EmbedEditorClient({
               {codeGenUrl ? "Showing embed code selection" : "Showing saved settings"}
             </span>
           </div>
-          <div className="overflow-hidden rounded-xl border shadow-sm bg-gray-50">
+          <div className="overflow-hidden rounded border border-gray-300 bg-gray-50">
             <iframe
               key={previewUrl}
               src={previewUrl}

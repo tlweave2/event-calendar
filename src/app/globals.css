@@ -8,7 +8,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-plex-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -127,4 +127,77 @@
   html {
     @apply font-sans;
   }
+}
+/*
+ * Eventful's own pages (marketing, auth, admin). Scoped so embedded tenant
+ * calendars keep their configured look. Re-points Tailwind's gray and blue
+ * scales at a warm paper/ink palette with a single brick accent, so existing
+ * utility classes pick up the house style without per-page rewrites.
+ */
+.app-ui {
+  --paper: #faf8f3;
+  --ink: #1c1a16;
+  --rule: #e2ddd1;
+  --brick: #a8401b;
+
+  --color-gray-50: #f5f3ed;
+  --color-gray-100: #eeebe3;
+  --color-gray-200: #e2ddd1;
+  --color-gray-300: #ccc6b8;
+  --color-gray-400: #a19a8a;
+  --color-gray-500: #736c5e;
+  --color-gray-600: #585247;
+  --color-gray-700: #433e35;
+  --color-gray-800: #2d2a24;
+  --color-gray-900: #1c1a16;
+  --color-gray-950: #110f0c;
+
+  --color-blue-50: #fbf1eb;
+  --color-blue-100: #f5ddd0;
+  --color-blue-200: #ebb9a1;
+  --color-blue-300: #dd8f6d;
+  --color-blue-400: #cc6b44;
+  --color-blue-500: #bb5028;
+  --color-blue-600: #a8401b;
+  --color-blue-700: #8a3416;
+  --color-blue-800: #6c2912;
+  --color-blue-900: #4f1e0d;
+
+  --background: #faf8f3;
+  --foreground: #1c1a16;
+  --card: #ffffff;
+  --card-foreground: #1c1a16;
+  --popover: #ffffff;
+  --popover-foreground: #1c1a16;
+  --primary: #1c1a16;
+  --primary-foreground: #faf8f3;
+  --secondary: #eeebe3;
+  --secondary-foreground: #1c1a16;
+  --muted: #eeebe3;
+  --muted-foreground: #736c5e;
+  --accent: #eeebe3;
+  --accent-foreground: #1c1a16;
+  --border: #e2ddd1;
+  --input: #ccc6b8;
+  --ring: #a8401b;
+  --radius: 0.25rem;
+
+  --app-sans: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  --app-serif: var(--font-source-serif), Georgia, serif;
+
+  font-family: var(--app-sans);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.app-ui h1,
+.app-ui h2 {
+  font-family: var(--app-serif);
+  letter-spacing: -0.01em;
+}
+
+.app-ui a:focus-visible,
+.app-ui button:focus-visible {
+  outline: 2px solid var(--brick);
+  outline-offset: 2px;
 }

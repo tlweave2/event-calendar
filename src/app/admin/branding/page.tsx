@@ -15,7 +15,7 @@ export default async function BrandingPage() {
   return (
     <div className="max-w-2xl px-8 py-8 space-y-8">
       <div>
-        <h1 className="text-xl font-semibold text-gray-900">Branding</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">Branding</h1>
         <p className="mt-1 text-sm text-gray-500">
           Your organization&apos;s identity — logo, name, colors, and timezone. These apply across your calendar, submission form, and hosted pages.
         </p>

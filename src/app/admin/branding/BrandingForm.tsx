@@ -269,7 +269,7 @@ export default function BrandingForm({ tenant }: {
         <Button onClick={handleSave} disabled={saving || logoUploading}>
           {saving ? "Saving..." : "Save changes"}
         </Button>
-        {saved && <p className="text-sm text-green-600">✓ Saved</p>}
+        {saved && <p className="text-sm text-green-700">Saved.</p>}
       </div>
     </div>
   );

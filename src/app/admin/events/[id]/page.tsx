@@ -61,7 +61,7 @@ export default async function EventDetailPage({
 
         <div className="space-y-4 p-6">
           <div className="flex items-start justify-between gap-4">
-            <h1 className="text-xl font-semibold text-gray-900">{event.title}</h1>
+            <h1 className="text-3xl font-semibold text-gray-900">{event.title}</h1>
             <div className="flex items-center gap-2">
               <span
                 className={`inline-flex shrink-0 rounded-full px-2 py-0.5 text-xs font-medium
@@ -76,7 +76,7 @@ export default async function EventDetailPage({
                 {event.status.charAt(0) + event.status.slice(1).toLowerCase()}
               </span>
               {event.seriesId && (
-                <span className="inline-flex shrink-0 rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700">
+                <span className="inline-flex shrink-0 rounded-sm border border-gray-300 px-2 py-0.5 text-xs font-medium text-gray-600">
                   Recurring
                 </span>
               )}

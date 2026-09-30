@@ -24,11 +24,11 @@ export default async function AdminQueuePage() {
   return (
     <div className="max-w-4xl px-8 py-8">
       {atLimit && (
-        <div className="mb-5 rounded-lg border border-red-200 bg-red-50 p-4">
+        <div className="mb-6 border-l-2 border-red-700 bg-white px-4 py-3">
           <p className="text-sm font-medium text-red-800">
             Monthly limit reached ({limitCheck.current}/{limitCheck.limit} events)
           </p>
-          <p className="mt-0.5 text-sm text-red-600">
+          <p className="mt-0.5 text-sm text-gray-600">
             New submissions are paused until next month or you{" "}
             <a href="/admin/settings" className="font-medium underline">
               upgrade to Pro
@@ -39,11 +39,11 @@ export default async function AdminQueuePage() {
       )}
 
       {nearLimit && !atLimit && (
-        <div className="mb-5 rounded-lg border border-amber-200 bg-amber-50 p-4">
+        <div className="mb-6 border-l-2 border-amber-600 bg-white px-4 py-3">
           <p className="text-sm font-medium text-amber-800">
             Approaching monthly limit ({limitCheck.current}/{limitCheck.limit} events)
           </p>
-          <p className="mt-0.5 text-sm text-amber-600">
+          <p className="mt-0.5 text-sm text-gray-600">
             <a href="/admin/settings" className="font-medium underline">
               Upgrade to Pro
             </a>{" "}
@@ -53,19 +53,21 @@ export default async function AdminQueuePage() {
       )}
 
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-gray-900">Pending Queue</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">Review queue</h1>
         <p className="mt-1 text-sm text-gray-500">
           {events.length === 0
-            ? "No events pending review."
-            : `${events.length} event${events.length !== 1 ? "s" : ""} waiting for review`}
+            ? "Nothing waiting. New submissions will show up here."
+            : `${events.length} event${events.length !== 1 ? "s" : ""} waiting for you`}
         </p>
       </div>
 
-      <div className="space-y-3">
-        {events.map((event) => (
-          <QueueRow key={event.id} event={event} />
-        ))}
-      </div>
+      {events.length > 0 && (
+        <ol className="border-y border-gray-900 bg-white">
+          {events.map((event) => (
+            <QueueRow key={event.id} event={event} />
+          ))}
+        </ol>
+      )}
     </div>
   );
 }

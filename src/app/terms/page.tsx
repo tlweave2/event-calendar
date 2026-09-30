@@ -1,32 +1,32 @@
 export default function TermsPage() {
   return (
-    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#FFFBF5", color: "#1a1410", minHeight: "100vh" }}>
+    <div className="app-ui" style={{ fontFamily: "var(--app-serif)", background: "#faf8f3", color: "#1c1a16", minHeight: "100vh" }}>
       {/* Nav */}
-      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.95rem 2.25rem", borderBottom: "2px solid #1a1410", background: "#FFFBF5" }}>
+      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.95rem 2.25rem", borderBottom: "1px solid #e2ddd1", background: "#faf8f3" }}>
         <a href="/" style={{ fontSize: "1.375rem", letterSpacing: "-0.03em", textDecoration: "none", color: "inherit" }}>
-          Event<span style={{ color: "#E8450A" }}>ful</span>
+          Eventful
         </a>
       </nav>
 
       {/* Content */}
-      <div style={{ maxWidth: "800px", margin: "0 auto", padding: "3rem 2.25rem", fontSize: "0.95rem", lineHeight: 1.8, fontFamily: "system-ui, sans-serif", color: "#333" }}>
-        <h1 style={{ fontSize: "2rem", fontWeight: 600, marginBottom: "0.25rem", fontFamily: "'Georgia', 'Times New Roman', serif", color: "#1a1410" }}>Terms of Service</h1>
-        <p style={{ color: "#6b5c4e", marginBottom: "2rem", fontSize: "0.875rem" }}>
+      <div style={{ maxWidth: "800px", margin: "0 auto", padding: "3rem 2.25rem", fontSize: "0.95rem", lineHeight: 1.8, fontFamily: "var(--app-sans)", color: "#2d2a24" }}>
+        <h1 style={{ fontSize: "2rem", fontWeight: 600, marginBottom: "0.25rem", fontFamily: "var(--app-serif)", color: "#1c1a16" }}>Terms of Service</h1>
+        <p style={{ color: "#585247", marginBottom: "2rem", fontSize: "0.875rem" }}>
           <strong>Effective Date:</strong> April 9, 2026<br />
           <strong>Last Updated:</strong> April 9, 2026
         </p>
 
-        <div style={{ color: "#1a1410" }}>
+        <div style={{ color: "#1c1a16" }}>
           <p>
             These Terms of Service ("Terms") govern your use of Eventful ("Service," "we," "us," or "our"), operated at useventful.com. By creating an account or using the Service, you agree to these Terms. If you do not agree, do not use the Service.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>1. What Eventful Is</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>1. What Eventful Is</h2>
           <p>
             Eventful is a web-based platform that allows organizations ("Tenants") to collect, moderate, and display community event listings through embeddable calendars and submission forms. The Service includes a public submission form, an admin dashboard, and embeddable calendar widgets.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>2. Accounts and Eligibility</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>2. Accounts and Eligibility</h2>
           <p>
             You must be at least 18 years old to create an account. You are responsible for maintaining the security of your account credentials and for all activity that occurs under your account. You agree to provide accurate information when creating your account and to keep it current.
           </p>
@@ -34,7 +34,7 @@ export default function TermsPage() {
             Each account is associated with a single organization (tenant). You may invite additional users to your organization's account. You are responsible for the actions of any users you invite.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>3. Free and Paid Plans</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>3. Free and Paid Plans</h2>
           <p>
             Eventful offers a free plan and a paid Pro plan. The free plan includes limited features and a monthly event cap. The Pro plan is billed annually at the price displayed at the time of purchase.
           </p>
@@ -45,7 +45,7 @@ export default function TermsPage() {
             We do not offer refunds for partial billing periods. We reserve the right to change pricing with 30 days' notice. Price changes will not affect your current billing period.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>4. Acceptable Use</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>4. Acceptable Use</h2>
           <p>You agree not to use the Service to:</p>
           <ul style={{ marginLeft: "1.5rem", marginBottom: "1rem" }}>
             <li>Submit, publish, or distribute content that is unlawful, defamatory, obscene, or infringes on the rights of others.</li>
@@ -60,7 +60,7 @@ export default function TermsPage() {
             We reserve the right to suspend or terminate accounts that violate these Terms.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>5. Content and Ownership</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>5. Content and Ownership</h2>
           <p>
             "Your Content" means any text, images, event information, and other materials you or your community submitters upload to the Service.
           </p>
@@ -74,7 +74,7 @@ export default function TermsPage() {
             You are responsible for ensuring you have the right to upload any content, including event images and flyers. If you receive a takedown request for content on your calendar, you agree to address it promptly.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>6. Event Submissions by Third Parties</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>6. Event Submissions by Third Parties</h2>
           <p>
             The Service allows members of the public to submit events to your calendar. You, as the Tenant, are responsible for moderating and approving submissions before they appear publicly. We do not review, verify, or endorse any event submissions.
           </p>
@@ -82,7 +82,7 @@ export default function TermsPage() {
             Submitters grant the Tenant a license to display their submitted event information on the Tenant's calendar. Submitters are responsible for the accuracy of the information they provide.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>7. AI Features</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>7. AI Features</h2>
           <p>
             The Service may include AI-powered features, such as automated extraction of event details from uploaded flyer images. These features are provided as a convenience and may not always be accurate. You are responsible for reviewing and correcting any AI-generated content before publishing.
           </p>
@@ -90,7 +90,7 @@ export default function TermsPage() {
             AI features may be limited to certain plan tiers.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>8. Embeddable Widgets</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>8. Embeddable Widgets</h2>
           <p>
             The Service provides embeddable calendar and submission form widgets designed to be placed on third-party websites via iframe. You are responsible for how and where you embed these widgets.
           </p>
@@ -98,7 +98,7 @@ export default function TermsPage() {
             Eventful may display a "Powered by Eventful" badge on embedded widgets for accounts on the free plan. Removing this badge requires a paid plan.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>9. Availability and Support</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>9. Availability and Support</h2>
           <p>
             We strive to keep the Service available and reliable, but we do not guarantee uninterrupted access. The Service is provided "as is" without warranties of any kind.
           </p>
@@ -109,15 +109,15 @@ export default function TermsPage() {
             Support is provided via email. Response times may vary based on your plan tier.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>10. Data and Privacy</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>10. Data and Privacy</h2>
           <p>
-            Our collection and use of personal information is described in our <a href="/privacy" style={{ color: "#E8450A", textDecoration: "none" }}>Privacy Policy</a>. By using the Service, you agree to the terms of our Privacy Policy.
+            Our collection and use of personal information is described in our <a href="/privacy" style={{ color: "#a8401b", textDecoration: "none" }}>Privacy Policy</a>. By using the Service, you agree to the terms of our Privacy Policy.
           </p>
           <p>
             You, as a Tenant, are responsible for any data you collect from event submitters through the Service. If you operate in a jurisdiction that requires a privacy policy or data processing disclosures, you are responsible for maintaining your own compliance.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>11. Limitation of Liability</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>11. Limitation of Liability</h2>
           <p>
             To the maximum extent permitted by law, Eventful and its operators shall not be liable for any indirect, incidental, consequential, or punitive damages, including lost revenue, lost data, or business interruption, arising out of your use of or inability to use the Service.
           </p>
@@ -125,12 +125,12 @@ export default function TermsPage() {
             Our total liability for any claim arising from these Terms or the Service shall not exceed the amount you paid us in the 12 months preceding the claim, or $100, whichever is greater.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>12. Indemnification</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>12. Indemnification</h2>
           <p>
             You agree to indemnify and hold harmless Eventful and its operators from any claims, damages, or expenses (including reasonable legal fees) arising from your use of the Service, your violation of these Terms, or your violation of any third party's rights.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>13. Termination</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>13. Termination</h2>
           <p>
             You may close your account at any time by contacting us at support@useventful.com.
           </p>
@@ -141,24 +141,24 @@ export default function TermsPage() {
             Upon termination, your right to use the Service ceases. We may delete your data after a reasonable retention period following account closure.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>14. Changes to These Terms</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>14. Changes to These Terms</h2>
           <p>
             We may update these Terms from time to time. If we make material changes, we will notify you by email or by posting a notice in the Service at least 30 days before the changes take effect. Your continued use of the Service after the effective date constitutes acceptance of the updated Terms.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>15. Governing Law</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>15. Governing Law</h2>
           <p>
             These Terms are governed by the laws of the State of California, without regard to conflict of law principles. Any disputes shall be resolved in the courts located in San Joaquin County, California.
           </p>
 
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "'Georgia', 'Times New Roman', serif" }}>16. Contact</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>16. Contact</h2>
           <p>
             If you have questions about these Terms, contact us at:
           </p>
           <p style={{ marginBottom: 0 }}>
             <strong>Eventful</strong><br />
-            Email: <a href="mailto:support@useventful.com" style={{ color: "#E8450A", textDecoration: "none" }}>support@useventful.com</a><br />
-            Website: <a href="https://useventful.com" style={{ color: "#E8450A", textDecoration: "none" }}>useventful.com</a>
+            Email: <a href="mailto:support@useventful.com" style={{ color: "#a8401b", textDecoration: "none" }}>support@useventful.com</a><br />
+            Website: <a href="https://useventful.com" style={{ color: "#a8401b", textDecoration: "none" }}>useventful.com</a>
           </p>
         </div>
       </div>

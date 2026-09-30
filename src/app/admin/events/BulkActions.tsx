@@ -137,7 +137,7 @@ export default function BulkActions({ events }: { events: EventRow[] }) {
                     {event.title}
                   </Link>
                   {event.seriesId && (
-                    <span className="shrink-0 rounded-full bg-purple-100 px-1.5 py-0.5 text-xs font-medium text-purple-600">
+                    <span className="shrink-0 rounded-sm border border-gray-300 px-1.5 py-0.5 text-xs font-medium text-gray-600">
                       Series
                     </span>
                   )}

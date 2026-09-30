@@ -12,7 +12,7 @@ export default async function NewEventPage() {
   return (
     <div className="max-w-2xl px-8 py-8">
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-gray-900">Create Event</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">New event</h1>
         <p className="mt-1 text-sm text-gray-500">
           Manually add an event to your calendar. It will be published immediately.
         </p>

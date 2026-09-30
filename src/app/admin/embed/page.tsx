@@ -34,7 +34,7 @@ export default async function EmbedPage() {
   return (
     <div className="px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-xl font-semibold text-gray-900">Embed</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">Embed</h1>
         <p className="mt-1 text-sm text-gray-500">
           Customize how your calendar looks when embedded, then copy the code snippet to your website.
         </p>

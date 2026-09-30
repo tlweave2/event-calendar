@@ -27,12 +27,13 @@ export default async function SetupPage({
   const baseUrl = host ? `${protocol}://${host}` : "";
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-12">
+    <div className="app-ui min-h-screen px-5 py-12">
       <div className="mx-auto max-w-2xl">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold text-gray-900">Set up your calendar</h1>
-          <p className="mt-2 text-sm text-gray-500">
-            You are a few steps away from going live.
+        <div className="mb-8 border-b border-gray-900 pb-6">
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Eventful</p>
+          <h1 className="mt-2 text-3xl font-semibold text-gray-900">Set up your calendar</h1>
+          <p className="mt-2 text-gray-600">
+            A few settings, then you can share your calendar and start taking submissions.
           </p>
         </div>
         <SetupWizard tenant={tenant} baseUrl={baseUrl} />
