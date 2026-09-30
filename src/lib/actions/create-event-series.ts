@@ -1,5 +1,5 @@
-"use server";
-
+// Server-only helper. Deliberately NOT a "use server" module: exporting it as
+// a server action would let anyone create approved events on any tenant.
 import { addMonths, addWeeks } from "date-fns";
 import { prisma } from "@/lib/prisma";
 
