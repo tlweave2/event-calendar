@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@generated/prisma/enums";
@@ -7,6 +8,27 @@ import { Role } from "@generated/prisma/enums";
 const isDev = process.env.NODE_ENV === "development";
 const adminLoginEmail = (process.env.ADMIN_LOGIN_EMAIL ?? "admin@test.com").toLowerCase();
 const adminLoginPassword = process.env.ADMIN_LOGIN_PASSWORD;
+
+/**
+ * Google sign-in is offered only when both credentials are configured
+ * (AUTH_GOOGLE_ID / AUTH_GOOGLE_SECRET, read automatically by Auth.js).
+ */
+export const googleSignInEnabled = Boolean(
+  process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET,
+);
+
+/**
+ * The Eventful user a Google sign-in maps to. Mirrors the password login:
+ * if the same email is on several calendars, prefer the account that owns a
+ * password (the one who created a calendar), then the oldest.
+ */
+function findUserForGoogleEmail(email: string) {
+  return prisma.user.findFirst({
+    where: { email: email.toLowerCase() },
+    orderBy: [{ password: { sort: "asc", nulls: "last" } }, { createdAt: "asc" }],
+    select: { id: true, tenantId: true, role: true },
+  });
+}
 
 function hasSessionFields(user: unknown): user is { tenantId: string; role: Role } {
   if (!user || typeof user !== "object") return false;
@@ -20,6 +42,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 
   providers: [
+    ...(googleSignInEnabled ? [Google] : []),
     Credentials({
       name: isDev ? "Dev Login" : "Admin Login",
       credentials: {
@@ -99,7 +122,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return `${baseUrl}/admin`;
     },
 
-    async jwt({ token, user }) {
+    // Google only signs in people who already have an Eventful account
+    // (created a calendar, or accepted an invite). It never creates one.
+    async signIn({ account, profile }) {
+      if (account?.provider !== "google") return true;
+      if (!profile?.email || profile.email_verified !== true) {
+        return "/admin/login?error=GoogleUnverified";
+      }
+      const user = await findUserForGoogleEmail(profile.email);
+      return user ? true : "/admin/login?error=NoAccount";
+    },
+
+    async jwt({ token, user, account }) {
+      if (account?.provider === "google" && token.email) {
+        const dbUser = await findUserForGoogleEmail(token.email);
+        if (dbUser) {
+          token.sub = dbUser.id;
+          token.tenantId = dbUser.tenantId;
+          token.role = dbUser.role;
+          await prisma.user
+            .update({ where: { id: dbUser.id }, data: { lastLogin: new Date() } })
+            .catch(() => {});
+        }
+        return token;
+      }
+
       // On sign-in, user object is present - persist to token
       if (user) {
         token.sub = user.id;
