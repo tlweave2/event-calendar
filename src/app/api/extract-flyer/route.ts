@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { hasFeature } from "@/lib/stripe";
+import { LIMITS, consumeRateLimits, getClientIp } from "@/lib/spam-guard";
 
 export async function POST(req: NextRequest) {
   const { image, mediaType, tenantSlug } = (await req.json()) as {
@@ -34,6 +35,16 @@ export async function POST(req: NextRequest) {
       { error: "AI flyer scanning requires a Pro plan." },
       { status: 403 }
     );
+  }
+
+  // Each scan costs an API call, so cap anonymous use per connection.
+  if (!session?.user?.tenantId) {
+    const allowed = await consumeRateLimits([
+      { rule: LIMITS.flyerScanPerIp, value: await getClientIp() },
+    ]);
+    if (!allowed) {
+      return NextResponse.json({ error: "Too many scans. Please try again later." }, { status: 429 });
+    }
   }
 
   if (!process.env.ANTHROPIC_API_KEY) {

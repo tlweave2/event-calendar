@@ -45,6 +45,7 @@ export default function SubmitEventForm({
   darkMode = false,
   isPro = false,
   showBadge = true,
+  formToken,
 }: {
   tenantSlug: string;
   categories: Category[];
@@ -52,6 +53,7 @@ export default function SubmitEventForm({
   darkMode?: boolean;
   isPro?: boolean;
   showBadge?: boolean;
+  formToken: string;
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -62,6 +64,7 @@ export default function SubmitEventForm({
   const [extractedFields, setExtractedFields] = useState<string[]>([]);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [recurrence, setRecurrence] = useState<"" | "weekly" | "biweekly" | "monthly">("");
+  const [honeypot, setHoneypot] = useState("");
 
   const {
     register,
@@ -218,6 +221,8 @@ export default function SubmitEventForm({
       imageUrl,
       recurrence: recurrence || undefined,
       occurrences: recurrence ? Number(values.occurrences ?? 8) : undefined,
+      formToken,
+      website: honeypot || undefined,
     });
 
     if (result.success) {
@@ -248,6 +253,19 @@ export default function SubmitEventForm({
     <Card className={darkMode ? "border-gray-700 bg-gray-800" : ""}>
       <CardContent className="py-8">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Spam trap: hidden from people and screen readers, but bots fill it in. */}
+          <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
+            <label htmlFor="website">Leave this empty</label>
+            <input
+              id="website"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="image" className={darkMode ? "text-gray-200" : ""}>
               {isPro ? "Event Flyer / Image" : "Event Image"}

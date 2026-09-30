@@ -5,6 +5,7 @@ import { hasFeature } from "@/lib/plans";
 import { notFound } from "next/navigation";
 import SubmitEventForm from "./SubmitEventForm";
 import { recordPageView } from "@/lib/page-views";
+import { createFormToken } from "@/lib/spam-guard";
 
 export default async function SubmitPage({
   params,
@@ -76,6 +77,7 @@ export default async function SubmitPage({
           darkMode={darkMode}
           isPro={isPro}
           showBadge={showBadge}
+          formToken={createFormToken(tenant.id)}
         />
       </div>
     </div>

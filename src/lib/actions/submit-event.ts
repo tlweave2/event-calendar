@@ -9,6 +9,7 @@ import { checkEventLimit } from "@/lib/plan-limits";
 import { createEventSeries } from "./create-event-series";
 import { demoFormError, isDemoTenant } from "@/lib/demo-guard";
 import { deliverWebhook } from "@/lib/webhook";
+import { LIMITS, checkFormToken, consumeRateLimits, getClientIp } from "@/lib/spam-guard";
 
 const submitEventSchema = z.object({
   tenantSlug: z.string(),
@@ -26,6 +27,9 @@ const submitEventSchema = z.object({
   imageUrl: z.string().optional(),
   recurrence: z.enum(["weekly", "biweekly", "monthly"]).optional(),
   occurrences: z.number().int().min(1).max(52).optional(),
+  // Anti-spam: signed render timestamp, and a hidden field people never fill.
+  formToken: z.string().max(200).optional(),
+  website: z.string().max(500).optional(),
 });
 
 export type SubmitEventInput = z.infer<typeof submitEventSchema>;
@@ -44,7 +48,7 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
     };
   }
 
-  const { tenantSlug, ...data } = parsed.data;
+  const { tenantSlug, formToken, website, ...data } = parsed.data;
 
   const tenant = await prisma.tenant.findUnique({
     where: { slug: tenantSlug },
@@ -78,6 +82,34 @@ export async function submitEvent(input: SubmitEventInput): Promise<SubmitResult
     session?.user?.tenantId === tenant.id &&
     (session.user.role === "OWNER" || session.user.role === "ADMIN");
   const status = isAdmin ? "APPROVED" : "PENDING";
+
+  if (!isAdmin) {
+    // Bots that fill the hidden field or post faster than a person could type
+    // get a normal-looking success so they have no signal to adapt to.
+    const tokenCheck = checkFormToken(formToken, tenant.id);
+    if (website || tokenCheck === "too_fast") {
+      return { success: true, eventId: "" };
+    }
+    if (tokenCheck !== "ok") {
+      return {
+        success: false,
+        errors: { _form: ["This form has expired. Please reload the page and try again."] },
+      };
+    }
+
+    const allowed = await consumeRateLimits([
+      { rule: LIMITS.submitPerIp, value: await getClientIp() },
+      { rule: LIMITS.submitPerEmail, value: `${tenant.id}:${data.submitterEmail}` },
+    ]);
+    if (!allowed) {
+      return {
+        success: false,
+        errors: {
+          _form: ["You've sent several events in a short time. Please wait a while and try again."],
+        },
+      };
+    }
+  }
 
   if (data.recurrence && data.occurrences && data.occurrences > 1) {
     const seriesResult = await createEventSeries({
