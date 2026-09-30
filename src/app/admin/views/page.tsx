@@ -27,7 +27,7 @@ export default async function ViewsPage() {
   return (
     <div className="max-w-3xl px-8 py-8">
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-gray-900">Calendar Views</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">Calendar views</h1>
         <p className="mt-1 text-sm text-gray-500">
           Views let you embed a filtered version of your calendar on different pages.
           For example, create a &quot;Music Events&quot; view and embed it on your music

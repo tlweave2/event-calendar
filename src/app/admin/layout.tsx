@@ -1,7 +1,6 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { headers } from "next/headers";
-import Link from "next/link";
 import AdminSidebar from "./AdminSidebar";
 import DemoBanner from "./DemoBanner";
 
@@ -38,7 +37,7 @@ export default async function AdminLayout({
   ]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="app-ui min-h-screen">
       <AdminSidebar
         tenantName={tenant?.name ?? "Event Calendar"}
         tenantSlug={tenant?.slug ?? ""}
@@ -46,7 +45,7 @@ export default async function AdminLayout({
         email={session.user.email ?? ""}
         pendingCount={pendingCount}
       />
-      <main className="min-h-screen pt-14 md:pt-0 md:pl-56">
+      <main className="min-h-screen pt-14 md:pt-0 md:pl-60">
         {tenant?.isDemoSandbox && <DemoBanner />}
         {children}
       </main>

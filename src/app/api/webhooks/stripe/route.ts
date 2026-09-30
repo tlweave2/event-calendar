@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
         const tenant = await prisma.tenant.findFirst({
           where: { stripeSubscriptionId: sub.id },
         });
-        if (!tenant) break;
+        if (!tenant || tenant.plan === "ENTERPRISE") break;
 
         const isActive = ["active", "trialing"].includes(sub.status);
         await prisma.tenant.update({
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
         const tenant = await prisma.tenant.findFirst({
           where: { stripeSubscriptionId: sub.id },
         });
-        if (!tenant) break;
+        if (!tenant || tenant.plan === "ENTERPRISE") break;
 
         await prisma.tenant.update({
           where: { id: tenant.id },

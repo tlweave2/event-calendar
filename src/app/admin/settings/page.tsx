@@ -47,7 +47,7 @@ export default async function SettingsPage({
   return (
     <div className="max-w-5xl px-8 py-8">
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-gray-900">Settings</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">Settings</h1>
         <p className="mt-1 text-sm text-gray-500">Invite collaborators and review access.</p>
       </div>
 

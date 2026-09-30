@@ -14,7 +14,7 @@ export default async function AllEventsPage() {
     <div className="max-w-5xl px-8 py-8">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-gray-900">All Events</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">All events</h1>
           <p className="mt-1 text-sm text-gray-500">
             {events.length} total event{events.length !== 1 ? "s" : ""}
           </p>
@@ -42,7 +42,7 @@ export default async function AllEventsPage() {
             href="/admin/events/new"
             className="mt-3 inline-block text-sm font-medium text-blue-600 hover:underline"
           >
-            Create your first event →
+            Create your first event
           </Link>
         </div>
       ) : (

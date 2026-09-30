@@ -331,7 +331,7 @@ export default function EditEventForm({
         <Button type="submit" disabled={isSubmitting || uploading}>
           {isSubmitting ? "Saving..." : "Save changes"}
         </Button>
-        {saved && <p className="text-sm text-green-600">✓ Saved</p>}
+        {saved && <p className="text-sm text-green-700">Saved.</p>}
       </div>
     </form>
   );

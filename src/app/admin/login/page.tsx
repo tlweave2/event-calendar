@@ -7,7 +7,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import AuthShell from "@/components/AuthShell";
 
 export default function LoginPage() {
   const searchParams = useSearchParams();
@@ -35,14 +35,20 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-center text-lg">Admin Sign In</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+    <AuthShell
+      title="Sign in"
+      footer={
+        <>
+          New to Eventful?{" "}
+          <a href="/signup" className="font-medium text-gray-900 underline">
+            Start a calendar
+          </a>
+        </>
+      }
+    >
+        <div className="space-y-4">
           {error && error !== "OAuthSignin" && error !== "OAuthCallback" && (
-            <div className="rounded bg-red-100 p-3 text-sm text-red-700">
+            <div className="border-l-2 border-red-700 bg-red-50 px-3 py-2 text-sm text-red-800">
               {error === "MissingCSRF"
                 ? "Something went wrong. Please try again."
                 : "Invalid email or password. Please try again."}
@@ -91,18 +97,10 @@ export default function LoginPage() {
               className="w-full"
               disabled={credLoading}
             >
-              {credLoading ? "Signing in..." : "Sign in"}
+              {credLoading ? "Signing in…" : "Sign in"}
             </Button>
           </form>
-
-          <p className="text-center text-xs text-gray-400">
-            Don&apos;t have an account?{" "}
-            <a href="/signup" className="text-gray-600 underline">
-              Create a calendar
-            </a>
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+    </AuthShell>
   );
 }

@@ -186,7 +186,7 @@ export default function ImportFlyersClient({
       <div
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
-        className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-white px-6 py-12 text-center transition-colors hover:border-gray-300 hover:bg-gray-50"
+        className="flex cursor-pointer flex-col items-center justify-center rounded border-2 border-dashed border-gray-300 bg-white px-6 py-12 text-center transition-colors hover:border-gray-300 hover:bg-gray-50"
         onClick={() => document.getElementById("flyer-input")?.click()}
       >
         <div className="mb-3 text-4xl">IMG</div>
@@ -224,7 +224,7 @@ export default function ImportFlyersClient({
       {cards.length > 0 && (
         <div className="grid gap-6 md:grid-cols-2">
           {cards.map((card) => (
-            <div key={card.id} className="overflow-hidden rounded-xl border bg-white shadow-sm">
+            <div key={card.id} className="overflow-hidden rounded border border-gray-200 bg-white">
               <div
                 className="relative cursor-zoom-in overflow-hidden bg-gray-100"
                 style={{ height: "180px" }}

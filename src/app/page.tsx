@@ -1,304 +1,245 @@
 import Link from "next/link";
 
-const C = {
-  bg: "#FFFBF5",
-  ink: "#1a1410",
-  red: "#E8450A",
-  muted: "#6b5c4e",
-  border: "#1a1410",
-  faint: "#f0ebe3",
-  surface: "#fff",
-  purple: { bg: "#EDE9FE", text: "#5B21B6" },
-  teal: { bg: "#D1FAE5", text: "#065F46" },
-  pink: { bg: "#FCE7F3", text: "#9D174D" },
-  amber: { bg: "#FEF3C7", text: "#92400E" },
-  blue: { bg: "#DBEAFE", text: "#1E40AF" },
-};
+const SALES_EMAIL = "mailto:support@useventful.com?subject=Eventful%20Enterprise";
 
-type EvStyle = { bg: string; text: string };
-const evStyles: Record<string, EvStyle> = {
-  purple: C.purple, teal: C.teal, pink: C.pink, amber: C.amber, blue: C.blue,
-};
-
-const calDays: { num: number; other?: boolean; today?: boolean; events: { label: string; style: string }[] }[] = [
-  { num: 29, other: true, events: [] }, { num: 30, other: true, events: [] },
-  { num: 1, events: [] }, { num: 2, events: [] }, { num: 3, events: [] },
-  { num: 4, events: [{ label: "Fireworks Night", style: "teal" }] },
-  { num: 5, events: [{ label: "Farmers Mkt", style: "amber" }] },
-  { num: 6, events: [] }, { num: 7, events: [] },
-  { num: 8, events: [{ label: "Park Run", style: "blue" }] },
-  { num: 9, events: [] }, { num: 10, events: [] },
-  { num: 11, events: [{ label: "Jazz Night", style: "purple" }] },
-  { num: 12, events: [{ label: "Farmers Mkt", style: "amber" }] },
-  { num: 13, events: [] },
-  { num: 14, events: [{ label: "Art Walk", style: "pink" }] },
-  { num: 15, events: [{ label: "Park Run", style: "blue" }] },
-  { num: 16, events: [] }, { num: 17, events: [] },
-  { num: 18, events: [{ label: "Block Party", style: "teal" }, { label: "Open Mic", style: "purple" }] },
-  { num: 19, events: [{ label: "Farmers Mkt", style: "amber" }] },
-  { num: 20, events: [] }, { num: 21, events: [] },
-  { num: 22, today: true, events: [{ label: "Park Run", style: "blue" }] },
-  { num: 23, events: [{ label: "Gallery Show", style: "pink" }] },
-  { num: 24, events: [] },
-  { num: 25, events: [{ label: "Movie Night", style: "teal" }] },
-  { num: 26, events: [{ label: "Farmers Mkt", style: "amber" }] },
-  { num: 27, events: [] },
-  { num: 28, events: [{ label: "Concert", style: "purple" }] },
-  { num: 29, events: [{ label: "Park Run", style: "blue" }] },
-  { num: 30, events: [] }, { num: 31, events: [] },
-  { num: 1, other: true, events: [] }, { num: 2, other: true, events: [] },
+const sampleListing = [
+  { day: "Fri", date: "12", month: "Jun", time: "6:00 pm", title: "Downtown Farmers Market", venue: "Library Park", tag: "Market" },
+  { day: "Sat", date: "13", month: "Jun", time: "8:00 am", title: "Riverside 5K Fun Run", venue: "Woodward Park trailhead", tag: "Sports" },
+  { day: "Sat", date: "13", month: "Jun", time: "7:30 pm", title: "Summer Concert: The Tin Cans", venue: "Bandshell, Central Park", tag: "Music" },
+  { day: "Sun", date: "14", month: "Jun", time: "11:00 am", title: "Classic Car Show & Swap Meet", venue: "Fairgrounds Lot B", tag: "Community" },
+  { day: "Wed", date: "17", month: "Jun", time: "6:30 pm", title: "Open Mic at the Grange", venue: "Grange Hall, 2nd St", tag: "Arts" },
 ];
+
+const features = [
+  ["Submission form", "A public form anyone can fill out. No account needed. Submitters get an email when you've received it."],
+  ["Review queue", "New submissions wait for you. Approve or reject them one at a time or in bulk, and edit anything before it goes live."],
+  ["Embed on your site", "Paste one snippet into your website. Choose a month grid, a list, or a flyer wall, and match your colors and font."],
+  ["Filtered views", "Publish separate calendars by category, such as a music-only page for the bandshell or a kids' page for the library."],
+  ["Recurring events", "Weekly, every other week, or monthly. Edit or cancel one date or the whole series."],
+  ["Google Calendar", "Already keep a Google Calendar? Paste its link and those events show up alongside the submitted ones."],
+  ["Subscribe and export", "Every calendar has a feed people can add to their phone. Download everything as a spreadsheet whenever you need it."],
+  ["Webhooks", "Send new and approved events to your newsletter tool, Zapier, or anything else that accepts a webhook."],
+];
+
+type Cell = string | boolean;
+const pricingRows: { label: string; free: Cell; pro: Cell; enterprise: Cell }[] = [
+  { label: "Events per month", free: "5", pro: "Unlimited", enterprise: "Unlimited" },
+  { label: "People who can manage the calendar", free: "1", pro: "1", enterprise: "Up to 25" },
+  { label: "Submission form, review queue, embed", free: true, pro: true, enterprise: true },
+  { label: "Recurring events, views, Google Calendar", free: true, pro: true, enterprise: true },
+  { label: "Fill in events from a flyer photo", free: false, pro: true, enterprise: true },
+  { label: "Remove the “Powered by Eventful” line", free: false, pro: true, enterprise: true },
+  { label: "Setup help and import of existing events", free: false, pro: false, enterprise: true },
+  { label: "Billing", free: "None", pro: "Card, yearly", enterprise: "Invoice, yearly" },
+  { label: "Support", free: "Email", pro: "Email", enterprise: "Priority email" },
+];
+
+const faqs = [
+  ["Do people need an account to submit an event?", "No. They fill out the form and give an email address so you can reach them. Only the people who manage the calendar sign in."],
+  ["Will it work with my website?", "If your site lets you paste HTML (WordPress, Squarespace, Wix, and most others do), yes. You can also just link to your calendar's own page."],
+  ["What happens after 5 events on the free plan?", "The form stops taking new submissions until the next month starts. Everything already on the calendar stays up."],
+  ["Who is Enterprise for?", "Cities, chambers of commerce, school districts, and venues where several staff share the work, or where the purchase has to go through an invoice."],
+];
+
+function Mark({ value }: { value: Cell }) {
+  if (value === true) return <span aria-label="Included">Yes</span>;
+  if (value === false) return <span aria-label="Not included" className="text-gray-400">—</span>;
+  return <>{value}</>;
+}
 
 export default function HomePage() {
   return (
-    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: C.bg, color: C.ink, minHeight: "100vh", overflowX: "hidden" }}>
-
-      {/* ── Nav ── */}
-      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.95rem 2.25rem", borderBottom: `2px solid ${C.border}`, background: C.bg }}>
-        <span style={{ fontSize: "1.375rem", letterSpacing: "-0.03em", fontWeight: 400 }}>
-          Event<span style={{ color: C.red }}>ful</span>
-        </span>
-        <div style={{ display: "flex", gap: "1.75rem", alignItems: "center" }}>
-          <Link href="/admin/login" style={{ color: C.muted, fontSize: "0.875rem", textDecoration: "none", fontFamily: "system-ui, sans-serif" }}>
-            Sign in
+    <div className="app-ui min-h-screen">
+      <header className="border-b border-gray-200">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
+          <Link href="/" className="text-xl font-semibold tracking-tight" style={{ fontFamily: "var(--app-serif)" }}>
+            Eventful
           </Link>
-          <Link href="/signup" style={{ background: C.ink, color: C.bg, padding: "0.5rem 1.25rem", borderRadius: "0.375rem", fontSize: "0.875rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
-            Get started free
-          </Link>
+          <nav className="flex items-center gap-5 text-sm">
+            <a href="#pricing" className="hidden text-gray-600 hover:text-gray-900 sm:inline">Pricing</a>
+            <Link href="/api/demo" className="hidden text-gray-600 hover:text-gray-900 sm:inline">Demo</Link>
+            <Link href="/admin/login" className="text-gray-600 hover:text-gray-900">Sign in</Link>
+            <Link href="/signup" className="rounded bg-gray-900 px-3.5 py-2 font-medium text-white hover:bg-gray-700">
+              Start a calendar
+            </Link>
+          </nav>
         </div>
-      </nav>
+      </header>
 
-      {/* ── Hero ── */}
-      <section style={{ padding: "3.2rem 2.25rem 2.75rem", maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "center" }}>
-
-          {/* Left */}
+      <main>
+        <section className="mx-auto grid max-w-6xl gap-12 px-5 pb-16 pt-14 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:pt-20">
           <div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: C.amber.bg, border: "1.5px solid #F59E0B", borderRadius: "0.375rem", padding: "0.3rem 0.75rem", fontSize: "0.68rem", letterSpacing: "0.06em", textTransform: "uppercase", color: C.amber.text, marginBottom: "1.35rem", fontFamily: "system-ui, sans-serif", fontWeight: 600 }}>
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#F59E0B", display: "inline-block" }} />
-              Community event calendars
-            </div>
-
-            <h1 style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", lineHeight: 1.05, letterSpacing: "-0.04em", fontWeight: 400, margin: "0 0 1rem", color: C.ink }}>
-              The calendar your<br />
-              community <em style={{ color: C.red, fontStyle: "italic" }}>actually uses</em>
+            <h1 className="text-4xl font-semibold leading-[1.1] sm:text-5xl">
+              One calendar for everything happening in town.
             </h1>
-
-            <p style={{ fontSize: "0.9375rem", color: C.muted, maxWidth: "380px", margin: "0 0 1.5rem", lineHeight: 1.7, fontFamily: "system-ui, sans-serif" }}>
-              Anyone can submit events. You approve what goes live. Share to your website, newsletter, or social media — all from one place.
+            <p className="mt-6 max-w-lg text-lg leading-relaxed text-gray-700">
+              People send you their events. You approve the ones that belong.
+              Eventful puts them on your website, in a feed people can add to
+              their phones, and on a page you can link from anywhere.
             </p>
-
-            <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.75rem" }}>
-              <Link href="/signup" style={{ background: C.red, color: "#fff", padding: "0.7rem 1.75rem", borderRadius: "0.4rem", fontSize: "0.9rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 700 }}>
-                Create your calendar →
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link href="/signup" className="rounded bg-gray-900 px-5 py-3 font-medium text-white hover:bg-gray-700">
+                Start a calendar
               </Link>
-              <Link href="/api/demo" style={{ background: C.surface, color: C.ink, padding: "0.7rem 1.75rem", borderRadius: "0.4rem", fontSize: "0.9rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", border: `1.5px solid ${C.border}`, fontWeight: 500 }}>
-                Try live demo
-              </Link>
-            </div>
-
-            <p style={{ fontSize: "0.75rem", color: "#bbb", fontFamily: "system-ui, sans-serif" }}>
-              Free to start · No credit card required
-            </p>
-          </div>
-
-          {/* Right: calendar mockup */}
-          <div style={{ border: `2px solid ${C.border}`, borderRadius: "12px", overflow: "hidden", fontFamily: "system-ui, sans-serif", background: C.surface }}>
-            <div style={{ background: C.ink, padding: "0.7rem 1rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: "0.8125rem", fontWeight: 600, color: C.bg, letterSpacing: "-0.01em" }}>Riverside Community</span>
-              <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
-                <span style={{ background: "#2d2520", color: "#ccc", width: "22px", height: "22px", borderRadius: "4px", fontSize: "0.75rem", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>‹</span>
-                <span style={{ fontSize: "0.7rem", color: "#aaa" }}>July 2026</span>
-                <span style={{ background: "#2d2520", color: "#ccc", width: "22px", height: "22px", borderRadius: "4px", fontSize: "0.75rem", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>›</span>
-              </div>
-            </div>
-            <div style={{ display: "flex", gap: "0.35rem", padding: "0.55rem 0.875rem", borderBottom: `1.5px solid ${C.faint}`, flexWrap: "wrap", background: C.bg }}>
-              {(["Music:purple", "Community:teal", "Arts:pink", "Markets:amber", "Sports:blue"]).map((entry) => {
-                const [label, s] = entry.split(":");
-                return <span key={label} style={{ fontSize: "0.62rem", padding: "0.2rem 0.55rem", borderRadius: "0.25rem", fontWeight: 600, background: evStyles[s].bg, color: evStyles[s].text }}>{label}</span>;
-              })}
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", background: "#f7f2ea", borderBottom: `1.5px solid ${C.faint}` }}>
-              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-                <div key={d} style={{ fontSize: "0.58rem", color: "#999", textAlign: "center", padding: "0.35rem 0", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600 }}>{d}</div>
-              ))}
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)" }}>
-              {calDays.map((d, i) => (
-                <div key={i} style={{ minHeight: "52px", borderRight: (i + 1) % 7 === 0 ? "none" : `1px solid ${C.faint}`, borderBottom: `1px solid ${C.faint}`, padding: "3px" }}>
-                  {d.today ? (
-                    <div style={{ width: "18px", height: "18px", borderRadius: "50%", background: C.red, color: "#fff", fontSize: "0.6rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "2px" }}>{d.num}</div>
-                  ) : (
-                    <div style={{ fontSize: "0.6rem", color: d.other ? "#ccc" : "#888", marginBottom: "2px", fontWeight: 500 }}>{d.num}</div>
-                  )}
-                  {d.events.slice(0, 2).map((e, j) => (
-                    <div key={j} style={{ fontSize: "0.58rem", padding: "2px 4px", borderRadius: "3px", marginBottom: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", lineHeight: 1.35, fontWeight: 500, background: evStyles[e.style].bg, color: evStyles[e.style].text }}>{e.label}</div>
-                  ))}
-                </div>
-              ))}
-            </div>
-            <div style={{ padding: "0.6rem 1rem", borderTop: `1.5px solid ${C.faint}`, display: "flex", justifyContent: "space-between", alignItems: "center", background: C.bg }}>
-              <span style={{ fontSize: "0.65rem", color: "#aaa" }}>23 events this month</span>
-              <span style={{ fontSize: "0.7rem", background: C.red, color: "#fff", padding: "0.3rem 0.875rem", borderRadius: "2rem", fontWeight: 700 }}>+ Submit an event</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Features ── */}
-      <section style={{ padding: "3rem 2.25rem 3.75rem", maxWidth: "1100px", margin: "0 auto" }}>
-        <div style={{ borderTop: `2px solid ${C.faint}`, paddingTop: "3rem" }}>
-          <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "0.75rem" }}>Everything you need</p>
-          <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)", letterSpacing: "-0.03em", fontWeight: 400, marginBottom: "2.25rem", lineHeight: 1.1, color: C.ink }}>
-            Run your calendar like a pro
-          </h2>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1px", background: C.border, border: `2px solid ${C.border}`, borderRadius: "12px", overflow: "hidden" }}>
-            {[
-              { title: "Public submissions", desc: "Anyone in your community can submit an event. You review and approve every one before it goes live.", bar: C.red },
-              { title: "AI flyer scanning", desc: "Upload a photo of any event flyer and AI pulls out the title, date, time, and location automatically. No typing required.", bar: "#7C3AED", pro: true },
-              { title: "Share anywhere", desc: "Embed on your website, post to Facebook or Instagram, or drop the link in your newsletter. One calendar, everywhere.", bar: "#2563EB" },
-              { title: "Moderation queue", desc: "Approve, reject, or bulk-action submissions from a clean dashboard. Stay in full control.", bar: "#059669" },
-              { title: "Recurring events", desc: "Set up weekly, monthly, or custom repeat schedules once. The series fills in automatically.", bar: "#D97706", pro: true },
-              { title: "Team management", desc: "Invite editors and admins to help you moderate. Role-based access, no chaos.", bar: "#DB2777", pro: true },
-              { title: "Analytics", desc: "See how many people are viewing your calendar and which events are getting the most attention.", bar: "#0891B2", pro: true },
-              { title: "Email notifications", desc: "Submitters get a confirmation, then a notification when you approve or reject their event.", bar: "#059669" },
-              { title: "CSV export", desc: "Download your full event list any time. Useful for reports, newsletters, or migrating data.", bar: "#6B7280", pro: true },
-            ].map((f) => (
-              <div key={f.title} style={{ background: C.surface, padding: "1.5rem", position: "relative" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.25rem" }}>
-                  <div style={{ width: "32px", height: "4px", borderRadius: "2px", background: f.bar }} />
-                  {f.pro && (
-                    <span style={{ fontSize: "0.6rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", background: C.amber.bg, color: C.amber.text, padding: "0.15rem 0.5rem", borderRadius: "2rem", fontFamily: "system-ui, sans-serif" }}>Pro</span>
-                  )}
-                </div>
-                <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "0.5rem", fontFamily: "system-ui, sans-serif", color: C.ink }}>{f.title}</h3>
-                <p style={{ fontSize: "0.875rem", color: C.muted, lineHeight: 1.65, fontFamily: "system-ui, sans-serif", margin: 0 }}>{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── How it works ── */}
-      <section style={{ padding: "0 2.25rem 3.75rem", maxWidth: "1000px", margin: "0 auto" }}>
-        <div style={{ borderTop: `2px solid ${C.faint}`, paddingTop: "3.25rem" }}>
-          <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "0.75rem" }}>How it works</p>
-          <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)", letterSpacing: "-0.03em", fontWeight: 400, marginBottom: "2.25rem", lineHeight: 1.1, color: C.ink }}>
-            Up and running in minutes
-          </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2rem" }}>
-            {[
-              { n: "01", title: "Sign up", desc: "Create your account and set up your calendar — pick your slug, colors, and event categories.", color: C.red },
-              { n: "02", title: "Share the link", desc: "Embed it on your website, post it to Facebook or Instagram, or drop the link in your newsletter. One calendar, everywhere.", color: "#2563EB" },
-              { n: "03", title: "Moderate & publish", desc: "Events from the community come in. You approve what goes live. Everyone stays informed.", color: "#059669" },
-            ].map((step) => (
-              <div key={step.n}>
-                <div style={{ fontSize: "2.5rem", fontWeight: 700, color: step.color, lineHeight: 1, marginBottom: "1rem", fontFamily: "system-ui, sans-serif", opacity: 0.25 }}>{step.n}</div>
-                <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "0.4rem", fontFamily: "system-ui, sans-serif", color: C.ink }}>{step.title}</h3>
-                <p style={{ fontSize: "0.875rem", color: C.muted, lineHeight: 1.65, fontFamily: "system-ui, sans-serif", margin: 0 }}>{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Pricing ── */}
-      <section style={{ padding: "0 2.25rem 3.75rem", maxWidth: "860px", margin: "0 auto" }}>
-        <div style={{ borderTop: `2px solid ${C.faint}`, paddingTop: "3.25rem" }}>
-          <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "0.75rem" }}>Pricing</p>
-          <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)", letterSpacing: "-0.03em", fontWeight: 400, marginBottom: "0.75rem", lineHeight: 1.1, color: C.ink }}>
-            Simple, honest pricing
-          </h2>
-          <p style={{ fontSize: "0.9375rem", color: C.muted, fontFamily: "system-ui, sans-serif", marginBottom: "2.25rem", maxWidth: "480px", lineHeight: 1.6 }}>
-            Start free. Upgrade when your community grows — or when you want the tools that save real time.
-          </p>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.5rem" }}>
-
-            {/* Free */}
-            <div style={{ border: `2px solid ${C.border}`, borderRadius: "12px", padding: "2.25rem", background: C.surface }}>
-              <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: C.muted, fontFamily: "system-ui, sans-serif", margin: "0 0 1rem", fontWeight: 600 }}>Free</p>
-              <div style={{ fontSize: "2.5rem", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: "0.2rem", color: C.ink }}>$0</div>
-              <p style={{ fontSize: "0.875rem", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "1.75rem" }}>Forever free</p>
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 0.5rem", fontSize: "0.875rem", color: C.muted, fontFamily: "system-ui, sans-serif", lineHeight: 2.1 }}>
-                <li>✓ &nbsp;1 calendar</li>
-                <li>✓ &nbsp;Up to 5 events per month</li>
-                <li>✓ &nbsp;Public submissions</li>
-                <li>✓ &nbsp;Email notifications</li>
-                <li>✓ &nbsp;Embeddable calendar</li>
-              </ul>
-              <p style={{ fontSize: "0.75rem", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "1.75rem", lineHeight: 1.5 }}>
-                Great for getting started. Most active communities outgrow this in their first busy season.
-              </p>
-              <Link href="/signup" style={{ display: "block", textAlign: "center", border: `2px solid ${C.border}`, color: C.ink, padding: "0.7rem", borderRadius: "0.4rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontSize: "0.875rem", fontWeight: 600 }}>
-                Get started free
+              <Link href="/api/demo" className="rounded border border-gray-300 bg-white px-5 py-3 font-medium hover:border-gray-900">
+                Open the demo
               </Link>
             </div>
+            <p className="mt-4 text-sm text-gray-500">Free for up to 5 events a month.</p>
+          </div>
 
-            {/* Pro */}
-            <div style={{ border: `2px solid ${C.red}`, borderRadius: "12px", padding: "2.25rem", background: C.surface, position: "relative" }}>
-              <div style={{ position: "absolute", top: "-0.75rem", left: "1.5rem", background: C.red, color: "#fff", fontSize: "0.68rem", letterSpacing: "0.08em", textTransform: "uppercase", padding: "0.25rem 0.75rem", borderRadius: "2rem", fontFamily: "system-ui, sans-serif", fontWeight: 700 }}>
-                Most popular
-              </div>
-              <p style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: C.red, fontFamily: "system-ui, sans-serif", margin: "0 0 1rem", fontWeight: 600 }}>Pro</p>
-              <div style={{ fontSize: "2.5rem", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: "0.2rem", color: C.ink }}>$99</div>
-              <p style={{ fontSize: "0.875rem", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "1.75rem" }}>per year</p>
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 0.5rem", fontSize: "0.875rem", color: C.muted, fontFamily: "system-ui, sans-serif", lineHeight: 2.1 }}>
-                <li>✓ &nbsp;Unlimited events</li>
-                <li style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                  ✓ &nbsp;AI flyer scanning
-                  <span style={{ fontSize: "0.6rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", background: C.purple.bg, color: C.purple.text, padding: "0.1rem 0.4rem", borderRadius: "2rem" }}>New</span>
+          <figure aria-label="Example calendar listing" className="border border-gray-900 bg-white">
+            <div className="flex items-baseline justify-between border-b border-gray-900 px-5 py-3">
+              <span className="font-semibold" style={{ fontFamily: "var(--app-serif)" }}>This week in Riverside</span>
+              <span className="text-xs text-gray-500">June 12–17</span>
+            </div>
+            <ol>
+              {sampleListing.map((ev) => (
+                <li key={ev.title} className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-gray-200 px-5 py-3 last:border-b-0">
+                  <div className="text-center leading-none">
+                    <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-gray-500">{ev.day}</div>
+                    <div className="mt-1 text-2xl font-semibold" style={{ fontFamily: "var(--app-serif)" }}>{ev.date}</div>
+                    <div className="mt-1 text-[0.65rem] uppercase tracking-wider text-gray-500">{ev.month}</div>
+                  </div>
+                  <div className="min-w-0">
+                    <div className="truncate font-medium">{ev.title}</div>
+                    <div className="mt-0.5 truncate text-sm text-gray-600">{ev.time} · {ev.venue}</div>
+                    <div className="mt-1 text-xs font-medium uppercase tracking-wider text-blue-700">{ev.tag}</div>
+                  </div>
                 </li>
-                <li>✓ &nbsp;Custom branding (remove badge)</li>
-              </ul>
-              <p style={{ fontSize: "0.75rem", color: "#bbb", fontFamily: "system-ui, sans-serif", marginBottom: "1.75rem", lineHeight: 1.5 }}>
-                For communities that need room to grow.
-              </p>
-              <Link href="/signup" style={{ display: "block", textAlign: "center", background: C.red, color: "#fff", padding: "0.7rem", borderRadius: "0.4rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontSize: "0.875rem", fontWeight: 700 }}>
-                Start free trial
-              </Link>
+              ))}
+            </ol>
+            <figcaption className="flex items-center justify-between border-t border-gray-900 bg-gray-50 px-5 py-2.5 text-sm">
+              <span className="text-gray-600">3 submissions waiting for review</span>
+              <span className="font-medium text-blue-700">Review</span>
+            </figcaption>
+          </figure>
+        </section>
+
+        <section className="border-y border-gray-200 bg-white">
+          <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_2fr]">
+            <h2 className="text-3xl font-semibold leading-tight">What happens when someone submits an event</h2>
+            <ol className="space-y-6 text-gray-700">
+              <li>
+                <p className="font-medium text-gray-900">They fill out your form.</p>
+                <p className="mt-1">Title, date, place, a flyer if they have one. It lives at your own address and can sit inside your website.</p>
+              </li>
+              <li>
+                <p className="font-medium text-gray-900">It lands in your queue, and you get an email.</p>
+                <p className="mt-1">Nothing is public yet. Fix a typo, pick a category, or turn it down.</p>
+              </li>
+              <li>
+                <p className="font-medium text-gray-900">You approve it, and it’s everywhere at once.</p>
+                <p className="mt-1">Your embedded calendar, your subscribe feed, and any webhook you’ve connected all update. The submitter doesn’t have to do anything else.</p>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+          <h2 className="text-3xl font-semibold">What’s included</h2>
+          <dl className="mt-10 grid gap-x-12 gap-y-8 sm:grid-cols-2">
+            {features.map(([term, desc]) => (
+              <div key={term} className="border-t border-gray-300 pt-4">
+                <dt className="font-semibold">{term}</dt>
+                <dd className="mt-1.5 leading-relaxed text-gray-700">{desc}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section id="pricing" className="border-t border-gray-200 bg-white">
+          <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+            <h2 className="text-3xl font-semibold">Pricing</h2>
+            <p className="mt-3 max-w-xl text-gray-700">
+              Every plan includes the submission form, review queue and embeddable calendar.
+              You pay for volume, a few extras, and more people on the account.
+            </p>
+
+            <div className="mt-10 overflow-x-auto">
+              <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+                <thead>
+                  <tr className="border-b border-gray-900 align-bottom">
+                    <th className="w-2/5 py-3 pr-4 font-normal text-gray-500">
+                      <span className="sr-only">Feature</span>
+                    </th>
+                    <th className="px-4 py-3">
+                      <div className="text-base font-semibold">Free</div>
+                      <div className="mt-1 text-2xl font-semibold" style={{ fontFamily: "var(--app-serif)" }}>$0</div>
+                    </th>
+                    <th className="bg-gray-50 px-4 py-3">
+                      <div className="text-base font-semibold">Pro</div>
+                      <div className="mt-1 text-2xl font-semibold" style={{ fontFamily: "var(--app-serif)" }}>
+                        $99<span className="text-sm font-normal text-gray-500"> / year</span>
+                      </div>
+                    </th>
+                    <th className="px-4 py-3">
+                      <div className="text-base font-semibold">Enterprise</div>
+                      <div className="mt-1 text-2xl font-semibold" style={{ fontFamily: "var(--app-serif)" }}>
+                        Custom<span className="text-sm font-normal text-gray-500"> / year</span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pricingRows.map((row) => (
+                    <tr key={row.label} className="border-b border-gray-200">
+                      <th scope="row" className="py-3 pr-4 font-normal text-gray-700">{row.label}</th>
+                      <td className="px-4 py-3"><Mark value={row.free} /></td>
+                      <td className="bg-gray-50 px-4 py-3"><Mark value={row.pro} /></td>
+                      <td className="px-4 py-3"><Mark value={row.enterprise} /></td>
+                    </tr>
+                  ))}
+                  <tr>
+                    <td className="py-4 pr-4" />
+                    <td className="px-4 py-4">
+                      <Link href="/signup" className="inline-block rounded border border-gray-300 bg-white px-4 py-2 font-medium hover:border-gray-900">
+                        Start free
+                      </Link>
+                    </td>
+                    <td className="bg-gray-50 px-4 py-4">
+                      <Link href="/signup" className="inline-block rounded bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700">
+                        Start, then upgrade
+                      </Link>
+                    </td>
+                    <td className="px-4 py-4">
+                      <a href={SALES_EMAIL} className="inline-block rounded border border-gray-300 bg-white px-4 py-2 font-medium hover:border-gray-900">
+                        Email us
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── CTA banner ── */}
-      <section style={{ margin: "0 2.25rem 3.75rem", borderRadius: "16px", background: C.ink, padding: "3rem 2.5rem", textAlign: "center", border: `2px solid ${C.border}` }}>
-        <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 3rem)", letterSpacing: "-0.04em", fontWeight: 400, marginBottom: "1rem", lineHeight: 1.05, color: C.bg }}>
-          Your community deserves a{" "}
-          <em style={{ color: C.red, fontStyle: "italic" }}>real</em> calendar.
-        </h2>
-        <p style={{ fontSize: "1rem", color: "#888", marginBottom: "1.75rem", fontFamily: "system-ui, sans-serif", maxWidth: "480px", margin: "0 auto 1.75rem", lineHeight: 1.6 }}>
-          Stop scattering events across Facebook posts, email threads, and group chats. Give your community one place to find everything.
-        </p>
-        <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href="/signup" style={{ background: C.red, color: "#fff", padding: "0.875rem 2.5rem", borderRadius: "0.4rem", fontSize: "1rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 700, display: "inline-block" }}>
-            Create your calendar →
-          </Link>
-          <Link href="/api/demo" style={{ background: "transparent", color: C.bg, padding: "0.875rem 2.5rem", borderRadius: "0.4rem", fontSize: "1rem", textDecoration: "none", fontFamily: "system-ui, sans-serif", fontWeight: 600, display: "inline-block", border: `1.5px solid ${C.bg}` }}>
-            Try the demo first
-          </Link>
-        </div>
-        <p style={{ marginTop: "1rem", fontSize: "0.75rem", color: "#555", fontFamily: "system-ui, sans-serif" }}>No credit card required</p>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer style={{ borderTop: `2px solid ${C.border}`, padding: "1.75rem 2.25rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1.5rem", marginBottom: "1.5rem" }}>
-          <span style={{ fontSize: "1.125rem", letterSpacing: "-0.03em" }}>
-            Event<span style={{ color: C.red }}>ful</span>
-          </span>
-          <div style={{ display: "flex", gap: "2.5rem", fontSize: "0.8125rem", color: C.muted, fontFamily: "system-ui, sans-serif", flexWrap: "wrap" }}>
-            <Link href="/signup" style={{ color: C.muted, textDecoration: "none" }}>Get started</Link>
-            <Link href="/admin/login" style={{ color: C.muted, textDecoration: "none" }}>Sign in</Link>
-            <Link href="/privacy" style={{ color: C.muted, textDecoration: "none" }}>Privacy</Link>
-            <Link href="/terms" style={{ color: C.muted, textDecoration: "none" }}>Terms</Link>
+        <section className="mx-auto max-w-3xl px-5 py-16 sm:px-8">
+          <h2 className="text-3xl font-semibold">Questions</h2>
+          <div className="mt-8 divide-y divide-gray-200 border-y border-gray-200">
+            {faqs.map(([q, a]) => (
+              <details key={q} className="group py-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium">
+                  {q}
+                  <span aria-hidden className="text-gray-500 group-open:rotate-45 transition-transform">+</span>
+                </summary>
+                <p className="mt-2 leading-relaxed text-gray-700">{a}</p>
+              </details>
+            ))}
           </div>
-        </div>
-        <p style={{ fontSize: "0.75rem", color: "#999", fontFamily: "system-ui, sans-serif", margin: 0 }}>© 2026 Eventful. Community event calendars made simple.</p>
-      </footer>
+        </section>
+      </main>
 
+      <footer className="border-t border-gray-900">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-6 text-sm text-gray-600 sm:px-8">
+          <span>© {new Date().getFullYear()} Eventful</span>
+          <nav className="flex gap-6">
+            <Link href="/privacy" className="hover:text-gray-900">Privacy</Link>
+            <Link href="/terms" className="hover:text-gray-900">Terms</Link>
+            <a href="mailto:support@useventful.com" className="hover:text-gray-900">support@useventful.com</a>
+          </nav>
+        </div>
+      </footer>
     </div>
   );
 }

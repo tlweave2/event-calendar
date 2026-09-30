@@ -96,7 +96,7 @@ export default function CategoriesForm({
         <Button onClick={handleSave} disabled={saving}>
           {saving ? "Saving..." : "Save categories"}
         </Button>
-        {saved && <p className="text-sm text-green-600">✓ Saved</p>}
+        {saved && <p className="text-sm text-green-700">Saved.</p>}
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ import { createTenant } from "@/lib/actions/create-tenant";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
+import AuthShell from "@/components/AuthShell";
 
 const schema = z.object({
   orgName: z.string().min(2, "Organization name must be at least 2 characters"),
@@ -57,17 +57,18 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm space-y-6">
-        <div className="text-center">
-          <h1 className="text-2xl font-semibold text-gray-900">Create your calendar</h1>
-          <p className="mt-2 text-sm text-gray-500">
-            Set up your community event calendar in minutes.
-          </p>
-        </div>
-
-        <Card>
-          <CardContent className="pt-6">
+    <AuthShell
+      title="Start a calendar"
+      subtitle="Free for up to 5 events a month. You can upgrade later."
+      footer={
+        <>
+          Already have an account?{" "}
+          <a href="/admin/login" className="font-medium text-gray-900 underline">
+            Sign in
+          </a>
+        </>
+      }
+    >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-1">
                 <Label htmlFor="orgName">Organization name</Label>
@@ -147,19 +148,9 @@ export default function SignupPage() {
               {serverError && <p className="text-sm text-red-500">{serverError}</p>}
 
               <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? "Creating..." : "Create Calendar"}
+                {isSubmitting ? "Creating…" : "Create calendar"}
               </Button>
             </form>
-          </CardContent>
-        </Card>
-
-        <p className="text-center text-xs text-gray-400">
-          Already have an account?{" "}
-          <a href="/admin/login" className="text-gray-600 underline">
-            Sign in
-          </a>
-        </p>
-      </div>
-    </div>
+    </AuthShell>
   );
 }
