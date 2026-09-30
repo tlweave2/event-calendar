@@ -274,3 +274,19 @@ model WebhookConfig {
 
   @@map("webhook_configs")
 }
+
+// ─── Rate limiting ───────────────────────────────────────────────────────
+// One row per rate-limited action (public submission, upload, flyer scan).
+// `key` is a salted hash of the client IP or submitter email, never the raw
+// value. Rows older than a day are pruned opportunistically.
+
+model RateLimitHit {
+  id        String   @id @default(uuid())
+  kind      String   @db.VarChar(30)
+  key       String   @db.VarChar(64)
+  createdAt DateTime @default(now())
+
+  @@index([kind, key, createdAt])
+  @@index([createdAt])
+  @@map("rate_limit_hits")
+}

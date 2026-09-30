@@ -3,6 +3,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { LIMITS, consumeRateLimits, getClientIp } from "@/lib/spam-guard";
 
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024; // 10 MB
 
@@ -71,6 +72,18 @@ export async function POST(req: NextRequest) {
 
   if (!tenant) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (!session?.user?.tenantId) {
+    const allowed = await consumeRateLimits([
+      { rule: LIMITS.uploadPerIp, value: await getClientIp() },
+    ]);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many uploads. Please wait a while and try again." },
+        { status: 429 }
+      );
+    }
   }
 
   const cfg = getS3Config();

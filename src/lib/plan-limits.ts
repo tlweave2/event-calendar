@@ -14,6 +14,8 @@ export async function checkEventLimit(tenantId: string) {
     where: {
       tenantId,
       createdAt: { gte: startOfMonth(new Date()) },
+      // Rejected submissions (usually spam) shouldn't use up the allowance.
+      status: { not: "REJECTED" },
     },
   });
 
