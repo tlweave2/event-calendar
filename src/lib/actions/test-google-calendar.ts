@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { z } from "zod";
+import { UNSAFE_URL_MESSAGE, UnsafeUrlError, safeFetch } from "@/lib/safe-fetch";
 
 const schema = z.object({
   icsUrl: z.string().url().max(500),
@@ -18,7 +19,7 @@ export async function testGoogleCalendar(input: {
 
   let raw: string;
   try {
-    const res = await fetch(parsed.data.icsUrl, {
+    const res = await safeFetch(parsed.data.icsUrl, {
       cache: "no-store",
       headers: { "User-Agent": "Eventful/1.0" },
     });
@@ -45,7 +46,8 @@ export async function testGoogleCalendar(input: {
         error: `Unexpected response — not a valid ICS file. First 100 chars: ${raw.slice(0, 100)}`,
       };
     }
-  } catch {
+  } catch (err) {
+    if (err instanceof UnsafeUrlError) return { success: false, error: UNSAFE_URL_MESSAGE };
     return {
       success: false,
       error: "Could not reach the URL. Check that it is publicly accessible.",

@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import crypto from "crypto";
 import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
+import { UNSAFE_URL_MESSAGE, isPublicUrl } from "@/lib/safe-fetch";
 
 const schema = z.object({
   url: z.string().url().max(500),
@@ -39,6 +40,10 @@ export async function updateWebhookConfig(input: {
   }
 
   const { url, secret, enabled } = parsed.data;
+
+  if (!(await isPublicUrl(url))) {
+    return { success: false, error: UNSAFE_URL_MESSAGE };
+  }
 
   await prisma.webhookConfig.upsert({
     where: { tenantId },

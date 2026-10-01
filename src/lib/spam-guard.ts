@@ -71,6 +71,7 @@ export const LIMITS = {
   submitPerEmail: { kind: "submit:email", limit: 10, windowMs: 24 * 60 * 60 * 1000 },
   uploadPerIp: { kind: "upload:ip", limit: 20, windowMs: 60 * 60 * 1000 },
   flyerScanPerIp: { kind: "flyer:ip", limit: 20, windowMs: 60 * 60 * 1000 },
+  demoPerIp: { kind: "demo:ip", limit: 10, windowMs: 60 * 60 * 1000 },
 } satisfies Record<string, RateLimitRule>;
 
 /**

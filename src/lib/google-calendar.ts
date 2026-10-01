@@ -1,5 +1,6 @@
 import { parseICS, expandEvents } from "@/lib/ics-parser";
 import type { EventWithCategory } from "@/lib/prisma-tenant";
+import { safeFetch } from "@/lib/safe-fetch";
 
 const EXPANSION_MONTHS = 12;
 const REVALIDATE_SECONDS = 600;
@@ -20,7 +21,7 @@ export async function getGoogleCalendarEvents(
 
   let raw: string;
   try {
-    const res = await fetch(icsUrl, {
+    const res = await safeFetch(icsUrl, {
       next: { revalidate: REVALIDATE_SECONDS, tags: [`gcal-${tenantId}`] },
       headers: { "User-Agent": "Eventful/1.0" },
     });

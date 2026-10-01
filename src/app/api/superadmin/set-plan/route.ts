@@ -1,28 +1,45 @@
+import crypto from "crypto";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 /**
- * GET /api/superadmin/set-plan?secret=XXX&slug=downtown-manteca&plan=PRO
+ * Change a tenant's plan. Protected by the SUPERADMIN_SECRET env var, sent in
+ * the Authorization header so it never appears in URLs, browser history or
+ * request logs:
  *
- * Protected by the SUPERADMIN_SECRET env var. Only the app owner should
- * know this value. Set it in Vercel → Project → Environment Variables.
+ *   curl -X POST https://<your-domain>/api/superadmin/set-plan \
+ *     -H "Authorization: Bearer $SUPERADMIN_SECRET" \
+ *     -H "Content-Type: application/json" \
+ *     -d '{"slug":"downtown-manteca","plan":"ENTERPRISE"}'
  */
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
 
+const PLANS = ["FREE", "PRO", "ENTERPRISE"] as const;
+type PlanName = (typeof PLANS)[number];
+
+function isAuthorized(request: Request, secret: string): boolean {
+  const header = request.headers.get("authorization") ?? "";
+  const provided = header.startsWith("Bearer ") ? header.slice(7) : "";
+  // Compare digests so the check takes the same time whatever was sent.
+  const a = crypto.createHash("sha256").update(provided).digest();
+  const b = crypto.createHash("sha256").update(secret).digest();
+  return provided.length > 0 && crypto.timingSafeEqual(a, b);
+}
+
+export async function POST(request: Request) {
   const secret = process.env.SUPERADMIN_SECRET;
   if (!secret) {
     return NextResponse.json({ error: "SUPERADMIN_SECRET not configured" }, { status: 500 });
   }
-  if (searchParams.get("secret") !== secret) {
+  if (!isAuthorized(request, secret)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const slug = searchParams.get("slug");
-  const plan = searchParams.get("plan");
+  const body = (await request.json().catch(() => null)) as { slug?: unknown; plan?: unknown } | null;
+  const slug = typeof body?.slug === "string" ? body.slug : "";
+  const plan = typeof body?.plan === "string" ? body.plan : "";
 
   if (!slug) return NextResponse.json({ error: "slug is required" }, { status: 400 });
-  if (!plan || !["FREE", "PRO", "ENTERPRISE"].includes(plan)) {
+  if (!PLANS.includes(plan as PlanName)) {
     return NextResponse.json({ error: "plan must be FREE, PRO, or ENTERPRISE" }, { status: 400 });
   }
 
@@ -33,7 +50,7 @@ export async function GET(request: Request) {
 
   await prisma.tenant.update({
     where: { slug },
-    data: { plan: plan as "FREE" | "PRO" | "ENTERPRISE" },
+    data: { plan: plan as PlanName },
   });
 
   return NextResponse.json({
@@ -42,4 +59,13 @@ export async function GET(request: Request) {
     plan,
     message: `${slug} is now on the ${plan} plan.`,
   });
+}
+
+// The old GET form put the secret in the query string. Point anyone still
+// using it at the new form instead of silently accepting it.
+export function GET() {
+  return NextResponse.json(
+    { error: "Use POST with an Authorization: Bearer header. See the comment in this route for an example." },
+    { status: 405 },
+  );
 }

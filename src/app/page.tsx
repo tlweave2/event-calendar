@@ -47,7 +47,13 @@ function Mark({ value }: { value: Cell }) {
   return <>{value}</>;
 }
 
-export default function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ demo?: string }>;
+}) {
+  const { demo } = await searchParams;
+
   return (
     <div className="app-ui min-h-screen">
       <header className="border-b border-gray-200">
@@ -67,6 +73,14 @@ export default function HomePage() {
       </header>
 
       <main>
+        {demo === "busy" && (
+          <div role="status" className="border-b border-gray-200 bg-white">
+            <p className="mx-auto max-w-6xl px-5 py-3 text-sm text-gray-700 sm:px-8">
+              Too many demos have been started from your connection recently. Try again in an hour, or{" "}
+              <Link href="/signup" className="font-medium text-gray-900 underline">start a free calendar</Link>.
+            </p>
+          </div>
+        )}
         <section className="mx-auto grid max-w-6xl gap-12 px-5 pb-16 pt-14 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:pt-20">
           <div>
             <h1 className="text-4xl font-semibold leading-[1.1] sm:text-5xl">
