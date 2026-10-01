@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { hasFeature } from "@/lib/stripe";
+import { FLYER_SCANS_PER_MONTH, hasFeature } from "@/lib/plans";
 import { LIMITS, consumeRateLimits, getClientIp } from "@/lib/spam-guard";
 
 export async function POST(req: NextRequest) {
@@ -21,12 +21,12 @@ export async function POST(req: NextRequest) {
   const tenant = session?.user?.tenantId
     ? await prisma.tenant.findUnique({
         where: { id: session.user.tenantId },
-        select: { plan: true },
+        select: { id: true, plan: true },
       })
     : tenantSlug
       ? await prisma.tenant.findUnique({
           where: { slug: tenantSlug },
-          select: { plan: true },
+          select: { id: true, plan: true },
         })
       : null;
 
@@ -37,14 +37,19 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Each scan costs an API call, so cap anonymous use per connection.
+  // Each scan costs an API call: cap anonymous use per connection, and every
+  // calendar's total per month.
+  const checks = [{ rule: LIMITS.flyerScansPerTenant, value: tenant.id }];
   if (!session?.user?.tenantId) {
-    const allowed = await consumeRateLimits([
-      { rule: LIMITS.flyerScanPerIp, value: await getClientIp() },
-    ]);
-    if (!allowed) {
-      return NextResponse.json({ error: "Too many scans. Please try again later." }, { status: 429 });
-    }
+    checks.push({ rule: LIMITS.flyerScanPerIp, value: await getClientIp() });
+  }
+  if (!(await consumeRateLimits(checks))) {
+    return NextResponse.json(
+      {
+        error: `This calendar has used its ${FLYER_SCANS_PER_MONTH} flyer scans for the month. You can still fill in the details by hand.`,
+      },
+      { status: 429 }
+    );
   }
 
   if (!process.env.ANTHROPIC_API_KEY) {

@@ -32,15 +32,51 @@ export const PLANS = {
 
 export type PlanKey = keyof typeof PLANS;
 
-export function getPlanConfig(plan: string) {
+/**
+ * Eventful is currently free: every calendar gets everything, whatever plan
+ * is stored on it. The paid plans above, Stripe checkout and the billing
+ * webhook are kept so this can be switched off later.
+ */
+export const EVERYTHING_FREE = true;
+
+/** Applied to every calendar while EVERYTHING_FREE is on. */
+export const FREE_FOR_ALL = {
+  name: "Free",
+  priceId: null,
+  monthlyEvents: Infinity,
+  adminUsers: 25,
+  aiFlyer: true,
+  removeBadge: true,
+} as const;
+
+/** Each scan calls the Claude API, so cap them per calendar per month. */
+export const FLYER_SCANS_PER_MONTH = 50;
+
+export type PlanConfig = {
+  name: string;
+  priceId: string | null;
+  monthlyEvents: number;
+  adminUsers: number;
+  aiFlyer: boolean;
+  removeBadge: boolean;
+};
+
+export function getPlanConfig(plan: string, everythingFree = EVERYTHING_FREE): PlanConfig {
+  if (everythingFree) return FREE_FOR_ALL;
+  return getStoredPlanConfig(plan);
+}
+
+/** The plan's own limits, ignoring EVERYTHING_FREE. */
+export function getStoredPlanConfig(plan: string): PlanConfig {
   return PLANS[plan as PlanKey] ?? PLANS.FREE;
 }
 
 export function hasFeature(
   plan: string,
-  feature: keyof (typeof PLANS)["PRO"]
+  feature: "aiFlyer" | "removeBadge",
+  everythingFree = EVERYTHING_FREE,
 ): boolean {
-  const config = getPlanConfig(plan);
+  const config = getPlanConfig(plan, everythingFree);
   return Boolean(config[feature]);
 }
 
