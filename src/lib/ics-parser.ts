@@ -209,6 +209,10 @@ export function expandEvents(
     }
 
     const { freq, interval, count, until, byday } = ev.rrule;
+    // For monthly BYDAY rules the cursor only marks which month we're in (it
+    // steps from the 1st so short months aren't skipped); the occurrences
+    // inside each month are filtered against the window individually.
+    const monthlyByDay = freq === "MONTHLY" && !!byday && byday.length > 0;
     const duration = ev.end ? ev.end.getTime() - ev.start.getTime() : 0;
     const cursor = new Date(ev.start);
     let n = 0;
@@ -217,7 +221,7 @@ export function expandEvents(
       if (until && cursor > until) break;
       if (count !== null && n >= count) break;
 
-      if (cursor >= windowStart && !ev.exdates.has(cursor.toDateString())) {
+      if (monthlyByDay || (cursor >= windowStart && !ev.exdates.has(cursor.toDateString()))) {
         if (freq === "WEEKLY" && byday && byday.length > 0) {
           // Emit one occurrence per matching weekday in this week
           const sunday = new Date(cursor);
@@ -250,7 +254,14 @@ export function expandEvents(
             const occ = nthWeekdayInMonth(
               cursor.getUTCFullYear(), cursor.getUTCMonth(), dayNum, ordinal, timeMs,
             );
-            if (occ && occ >= windowStart && occ <= windowEnd && !ev.exdates.has(occ.toDateString())) {
+            if (
+              occ &&
+              occ >= ev.start &&
+              occ >= windowStart &&
+              occ <= windowEnd &&
+              (!until || occ <= until) &&
+              !ev.exdates.has(occ.toDateString())
+            ) {
               out.push({
                 ...ev,
                 start: occ,
@@ -270,7 +281,12 @@ export function expandEvents(
       switch (freq) {
         case "DAILY":   cursor.setUTCDate(cursor.getUTCDate() + interval); break;
         case "WEEKLY":  cursor.setUTCDate(cursor.getUTCDate() + interval * 7); break;
-        case "MONTHLY": cursor.setUTCMonth(cursor.getUTCMonth() + interval); break;
+        case "MONTHLY":
+          // Jan 30 + 1 month would roll over to early March; step from the
+          // 1st so the BYDAY lookup sees February.
+          if (monthlyByDay) cursor.setUTCDate(1);
+          cursor.setUTCMonth(cursor.getUTCMonth() + interval);
+          break;
         case "YEARLY":  cursor.setUTCFullYear(cursor.getUTCFullYear() + interval); break;
       }
       n++;

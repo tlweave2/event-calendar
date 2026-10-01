@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const SALES_EMAIL = "mailto:support@useventful.com?subject=Eventful%20Enterprise";
+import { FLYER_SCANS_PER_MONTH } from "@/lib/plans";
 
 const sampleListing = [
   { day: "Fri", date: "12", month: "Jun", time: "6:00 pm", title: "Downtown Farmers Market", venue: "Library Park", tag: "Market" },
@@ -18,36 +18,24 @@ const features = [
   ["Recurring events", "Weekly, every other week, or monthly. Edit or cancel one date or the whole series."],
   ["Google Calendar", "Already keep a Google Calendar? Paste its link and those events show up alongside the submitted ones."],
   ["Subscribe and export", "Every calendar has a feed people can add to their phone. Download everything as a spreadsheet whenever you need it."],
+  ["Fill in from a flyer", "Upload a photo of a flyer and the title, date, time and place are filled in for you to check."],
+  ["Your team", "Invite up to 25 people as admins or editors to share the reviewing."],
   ["Webhooks", "Send new and approved events to your newsletter tool, Zapier, or anything else that accepts a webhook."],
-];
-
-type Cell = string | boolean;
-const pricingRows: { label: string; free: Cell; pro: Cell; enterprise: Cell }[] = [
-  { label: "Events per month", free: "5", pro: "Unlimited", enterprise: "Unlimited" },
-  { label: "People who can manage the calendar", free: "1", pro: "1", enterprise: "Up to 25" },
-  { label: "Submission form, review queue, embed", free: true, pro: true, enterprise: true },
-  { label: "Recurring events, views, Google Calendar", free: true, pro: true, enterprise: true },
-  { label: "Fill in events from a flyer photo", free: false, pro: true, enterprise: true },
-  { label: "Remove the “Powered by Eventful” line", free: false, pro: true, enterprise: true },
-  { label: "Setup help and import of existing events", free: false, pro: false, enterprise: true },
-  { label: "Billing", free: "None", pro: "Card, yearly", enterprise: "Invoice, yearly" },
-  { label: "Support", free: "Email", pro: "Email", enterprise: "Priority email" },
 ];
 
 const faqs = [
   ["Do people need an account to submit an event?", "No. They fill out the form and give an email address so you can reach them. Only the people who manage the calendar sign in."],
   ["Will it work with my website?", "If your site lets you paste HTML (WordPress, Squarespace, Wix, and most others do), yes. You can also just link to your calendar's own page."],
-  ["What happens after 5 events on the free plan?", "The form stops taking new submissions until the next month starts. Everything already on the calendar stays up."],
-  ["Who is Enterprise for?", "Cities, chambers of commerce, school districts, and venues where several staff share the work, or where the purchase has to go through an invoice."],
+  ["Is it really free?", `Yes. Every calendar gets everything: unlimited events, your whole team, no Eventful branding. The only limit is ${FLYER_SCANS_PER_MONTH} flyer scans per calendar a month, because each one costs us to run.`],
 ];
 
-function Mark({ value }: { value: Cell }) {
-  if (value === true) return <span aria-label="Included">Yes</span>;
-  if (value === false) return <span aria-label="Not included" className="text-gray-400">—</span>;
-  return <>{value}</>;
-}
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ demo?: string }>;
+}) {
+  const { demo } = await searchParams;
 
-export default function HomePage() {
   return (
     <div className="app-ui min-h-screen">
       <header className="border-b border-gray-200">
@@ -56,7 +44,7 @@ export default function HomePage() {
             Eventful
           </Link>
           <nav className="flex items-center gap-5 text-sm">
-            <a href="#pricing" className="hidden text-gray-600 hover:text-gray-900 sm:inline">Pricing</a>
+            <a href="#price" className="hidden text-gray-600 hover:text-gray-900 sm:inline">Price</a>
             <Link href="/api/demo" className="hidden text-gray-600 hover:text-gray-900 sm:inline">Demo</Link>
             <Link href="/admin/login" className="text-gray-600 hover:text-gray-900">Sign in</Link>
             <Link href="/signup" className="rounded bg-gray-900 px-3.5 py-2 font-medium text-white hover:bg-gray-700">
@@ -67,6 +55,14 @@ export default function HomePage() {
       </header>
 
       <main>
+        {demo === "busy" && (
+          <div role="status" className="border-b border-gray-200 bg-white">
+            <p className="mx-auto max-w-6xl px-5 py-3 text-sm text-gray-700 sm:px-8">
+              Too many demos have been started from your connection recently. Try again in an hour, or{" "}
+              <Link href="/signup" className="font-medium text-gray-900 underline">start a free calendar</Link>.
+            </p>
+          </div>
+        )}
         <section className="mx-auto grid max-w-6xl gap-12 px-5 pb-16 pt-14 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:pt-20">
           <div>
             <h1 className="text-4xl font-semibold leading-[1.1] sm:text-5xl">
@@ -85,7 +81,7 @@ export default function HomePage() {
                 Open the demo
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-500">Free for up to 5 events a month.</p>
+            <p className="mt-4 text-sm text-gray-500">Free, with everything included.</p>
           </div>
 
           <figure aria-label="Example calendar listing" className="border border-gray-900 bg-white">
@@ -148,68 +144,28 @@ export default function HomePage() {
           </dl>
         </section>
 
-        <section id="pricing" className="border-t border-gray-200 bg-white">
-          <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8">
-            <h2 className="text-3xl font-semibold">Pricing</h2>
-            <p className="mt-3 max-w-xl text-gray-700">
-              Every plan includes the submission form, review queue and embeddable calendar.
-              You pay for volume, a few extras, and more people on the account.
-            </p>
-
-            <div className="mt-10 overflow-x-auto">
-              <table className="w-full min-w-[640px] border-collapse text-left text-sm">
-                <thead>
-                  <tr className="border-b border-gray-900 align-bottom">
-                    <th className="w-2/5 py-3 pr-4 font-normal text-gray-500">
-                      <span className="sr-only">Feature</span>
-                    </th>
-                    <th className="px-4 py-3">
-                      <div className="text-base font-semibold">Free</div>
-                      <div className="mt-1 text-2xl font-semibold" style={{ fontFamily: "var(--app-serif)" }}>$0</div>
-                    </th>
-                    <th className="bg-gray-50 px-4 py-3">
-                      <div className="text-base font-semibold">Pro</div>
-                      <div className="mt-1 text-2xl font-semibold" style={{ fontFamily: "var(--app-serif)" }}>
-                        $99<span className="text-sm font-normal text-gray-500"> / year</span>
-                      </div>
-                    </th>
-                    <th className="px-4 py-3">
-                      <div className="text-base font-semibold">Enterprise</div>
-                      <div className="mt-1 text-2xl font-semibold" style={{ fontFamily: "var(--app-serif)" }}>
-                        Custom<span className="text-sm font-normal text-gray-500"> / year</span>
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pricingRows.map((row) => (
-                    <tr key={row.label} className="border-b border-gray-200">
-                      <th scope="row" className="py-3 pr-4 font-normal text-gray-700">{row.label}</th>
-                      <td className="px-4 py-3"><Mark value={row.free} /></td>
-                      <td className="bg-gray-50 px-4 py-3"><Mark value={row.pro} /></td>
-                      <td className="px-4 py-3"><Mark value={row.enterprise} /></td>
-                    </tr>
-                  ))}
-                  <tr>
-                    <td className="py-4 pr-4" />
-                    <td className="px-4 py-4">
-                      <Link href="/signup" className="inline-block rounded border border-gray-300 bg-white px-4 py-2 font-medium hover:border-gray-900">
-                        Start free
-                      </Link>
-                    </td>
-                    <td className="bg-gray-50 px-4 py-4">
-                      <Link href="/signup" className="inline-block rounded bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700">
-                        Start, then upgrade
-                      </Link>
-                    </td>
-                    <td className="px-4 py-4">
-                      <a href={SALES_EMAIL} className="inline-block rounded border border-gray-300 bg-white px-4 py-2 font-medium hover:border-gray-900">
-                        Email us
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+        <section id="price" className="border-t border-gray-200 bg-white">
+          <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_2fr]">
+            <div>
+              <h2 className="text-3xl font-semibold">Price</h2>
+              <p className="mt-3 text-5xl font-semibold" style={{ fontFamily: "var(--app-serif)" }}>
+                $0
+              </p>
+            </div>
+            <div className="text-gray-700">
+              <p className="max-w-xl text-lg leading-relaxed">
+                Eventful is free. Every calendar gets every feature, with no event limit and no
+                “Powered by Eventful” line on your calendar.
+              </p>
+              <ul className="mt-6 space-y-2 border-t border-gray-200 pt-6">
+                <li>Unlimited events and submissions</li>
+                <li>Up to 25 people on the account</li>
+                <li>{FLYER_SCANS_PER_MONTH} flyer scans per calendar each month</li>
+                <li>Embeds, filtered views, Google Calendar, subscribe feeds, webhooks and export</li>
+              </ul>
+              <Link href="/signup" className="mt-8 inline-block rounded bg-gray-900 px-5 py-3 font-medium text-white hover:bg-gray-700">
+                Start a calendar
+              </Link>
             </div>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { FLYER_SCANS_PER_MONTH } from "@/lib/plans";
 
 // Anti-abuse helpers for the public, unauthenticated endpoints (event
 // submission, image upload, flyer scanning). Everything is stored in our own
@@ -71,7 +72,13 @@ export const LIMITS = {
   submitPerEmail: { kind: "submit:email", limit: 10, windowMs: 24 * 60 * 60 * 1000 },
   uploadPerIp: { kind: "upload:ip", limit: 20, windowMs: 60 * 60 * 1000 },
   flyerScanPerIp: { kind: "flyer:ip", limit: 20, windowMs: 60 * 60 * 1000 },
+  demoPerIp: { kind: "demo:ip", limit: 10, windowMs: 60 * 60 * 1000 },
+  // Per calendar, counting admin and public scans alike (each costs an API call).
+  flyerScansPerTenant: { kind: "flyer:tenant", limit: FLYER_SCANS_PER_MONTH, windowMs: 30 * 24 * 60 * 60 * 1000 },
 } satisfies Record<string, RateLimitRule>;
+
+/** Rows are kept as long as the longest window needs them. */
+const RETENTION_MS = Math.max(...Object.values(LIMITS).map((rule) => rule.windowMs));
 
 /**
  * Checks every rule first, and records a hit against each only if all pass,
@@ -100,7 +107,7 @@ export async function consumeRateLimits(
   // Keep the table small without needing a cron job.
   if (Math.random() < 0.02) {
     prisma.rateLimitHit
-      .deleteMany({ where: { createdAt: { lt: new Date(now - 24 * 60 * 60 * 1000) } } })
+      .deleteMany({ where: { createdAt: { lt: new Date(now - RETENTION_MS) } } })
       .catch((err) => console.error("[spam-guard] prune failed:", err));
   }
 
