@@ -149,7 +149,7 @@ export default function PrivacyPage() {
 
           <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginTop: "2rem", marginBottom: "1rem", fontFamily: "var(--app-serif)" }}>5. AI Features and Image Processing</h2>
           <p>
-            When a Pro plan user uploads an event flyer, the image may be sent to an AI service (Anthropic's Claude) to extract event details such as title, date, time, and location. The image is processed in real-time and is not retained by the AI provider for model training or any other purpose beyond fulfilling the request.
+            When someone uploads an event flyer, the image may be sent to an AI service (Anthropic's Claude) to extract event details such as title, date, time, and location. The image is processed in real-time and is not retained by the AI provider for model training or any other purpose beyond fulfilling the request.
           </p>
           <p>
             The extracted information is presented to the user for review before being saved. We do not use AI to make automated decisions about event approval or moderation.

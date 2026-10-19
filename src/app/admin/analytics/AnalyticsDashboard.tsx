@@ -24,7 +24,8 @@ export default function AnalyticsDashboard({
   } = analytics;
 
   const maxBar = Math.max(...submissionsByMonth.map((month) => month.count), 1);
-  const isFreePlan = plan === "FREE";
+  // Only shown when the calendar actually has a monthly cap.
+  const isFreePlan = Number.isFinite(monthlyLimit);
   const freeLimit = monthlyLimit;
 
   return (

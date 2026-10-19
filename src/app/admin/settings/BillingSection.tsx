@@ -2,7 +2,7 @@
 
 import { createCheckoutSession, createPortalSession } from "@/lib/actions/billing";
 import { Button } from "@/components/ui/button";
-import { getPlanConfig } from "@/lib/plans";
+import { EVERYTHING_FREE, FLYER_SCANS_PER_MONTH, getPlanConfig } from "@/lib/plans";
 
 const PLAN_SUMMARY: Record<string, string> = {
   FREE: "5 events a month, one person on the account, “Powered by Eventful” shown on your calendar.",
@@ -17,6 +17,35 @@ export default function BillingSection({
   plan: string;
   hasStripeCustomer: boolean;
 }) {
+  if (EVERYTHING_FREE) {
+    return (
+      <section className="space-y-3">
+        <h2 className="font-medium text-gray-900">Plan</h2>
+        <div className="rounded border border-gray-200 bg-white p-5">
+          <p className="text-xl font-semibold" style={{ fontFamily: "var(--app-serif)" }}>
+            Free, with everything included
+          </p>
+          <p className="mt-1 text-sm text-gray-600">
+            Unlimited events, up to 25 people on the account, no Eventful branding, and{" "}
+            {FLYER_SCANS_PER_MONTH} flyer scans a month.
+          </p>
+          {hasStripeCustomer && (
+            <div className="mt-4 border-t border-gray-200 pt-4">
+              <p className="text-sm text-gray-600">
+                You have a billing account from an earlier paid plan. You can view invoices or cancel a subscription there.
+              </p>
+              <form action={createPortalSession}>
+                <Button type="submit" variant="outline" size="sm" className="mt-2">
+                  Manage billing
+                </Button>
+              </form>
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  }
+
   const config = getPlanConfig(plan);
   const planKey = plan in PLAN_SUMMARY ? plan : "FREE";
 

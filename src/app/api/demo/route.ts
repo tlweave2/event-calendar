@@ -1,7 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { encode } from "next-auth/jwt";
 import { cookies } from "next/headers";
+import { deleteExpiredDemos } from "@/lib/demo-cleanup";
+import { LIMITS, consumeRateLimits, getClientIp } from "@/lib/spam-guard";
 
 async function createSandboxTenant() {
   const id = Math.random().toString(36).slice(2, 8);
@@ -64,6 +66,18 @@ export async function GET(request: Request) {
   if (!secret) {
     return NextResponse.json({ error: "AUTH_SECRET not configured" }, { status: 500 });
   }
+
+  // Every visit creates a whole calendar, so cap it per connection.
+  const allowed = await consumeRateLimits([
+    { rule: LIMITS.demoPerIp, value: await getClientIp() },
+  ]);
+  if (!allowed) {
+    return NextResponse.redirect(new URL("/?demo=busy", origin));
+  }
+
+  // Clear out expired sandboxes as new ones are made, in case the daily cron
+  // isn't running.
+  after(() => deleteExpiredDemos().catch((err) => console.error("[demo] cleanup failed:", err)));
 
   const { user, tenant } = await createSandboxTenant();
 

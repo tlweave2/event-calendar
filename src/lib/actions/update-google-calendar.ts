@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 import { DEMO_LOCK_MESSAGE, isDemoTenant } from "@/lib/demo-guard";
+import { UNSAFE_URL_MESSAGE, isPublicUrl } from "@/lib/safe-fetch";
 
 const schema = z.object({
   icsUrl: z.union([z.string().url().max(500), z.literal("")]),
@@ -31,6 +32,9 @@ export async function updateGoogleCalendar(input: { icsUrl: string }) {
   }
 
   const icsUrl = parsed.data.icsUrl || null;
+  if (icsUrl && !(await isPublicUrl(icsUrl))) {
+    return { success: false, error: UNSAFE_URL_MESSAGE };
+  }
 
   await prisma.tenant.update({
     where: { id: tenantId },

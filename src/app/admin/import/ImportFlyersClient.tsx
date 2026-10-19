@@ -129,7 +129,11 @@ export default function ImportFlyersClient({
           }),
         });
 
-        if (!extractRes.ok) throw new Error("extract-failed");
+        if (!extractRes.ok) {
+          const body = (await extractRes.json().catch(() => ({}))) as { error?: string };
+          updateCard(card.id, { status: "error", error: body.error ?? "AI extraction failed" });
+          return;
+        }
 
         const extracted = (await extractRes.json()) as Partial<ExtractedEvent>;
         updateCard(card.id, { status: "done", extracted });

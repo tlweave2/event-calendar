@@ -59,7 +59,7 @@ export default function SignupPage() {
   return (
     <AuthShell
       title="Start a calendar"
-      subtitle="Free for up to 5 events a month. You can upgrade later."
+      subtitle="Free, with everything included. No card needed."
       footer={
         <>
           Already have an account?{" "}
