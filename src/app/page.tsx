@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import { FLYER_SCANS_PER_MONTH } from "@/lib/plans";
 
+const SALES_EMAIL = "mailto:support@useventful.com?subject=Eventful%20custom%20setup";
+
 const sampleListing = [
   { day: "Fri", date: "12", month: "Jun", time: "6:00 pm", title: "Downtown Farmers Market", venue: "Library Park", tag: "Market" },
   { day: "Sat", date: "13", month: "Jun", time: "8:00 am", title: "Riverside 5K Fun Run", venue: "Woodward Park trailhead", tag: "Sports" },
@@ -26,7 +28,8 @@ const features = [
 const faqs = [
   ["Do people need an account to submit an event?", "No. They fill out the form and give an email address so you can reach them. Only the people who manage the calendar sign in."],
   ["Will it work with my website?", "If your site lets you paste HTML (WordPress, Squarespace, Wix, and most others do), yes. You can also just link to your calendar's own page."],
-  ["Is it really free?", `Yes. Every calendar gets everything: unlimited events, your whole team, no Eventful branding. The only limit is ${FLYER_SCANS_PER_MONTH} flyer scans per calendar a month, because each one costs us to run.`],
+  ["Is it really free?", `Yes. Setting it up yourself is free, with everything included: unlimited events, your whole team, no Eventful branding. The only limit is ${FLYER_SCANS_PER_MONTH} flyer scans per calendar a month, because each one costs us to run.`],
+  ["What does custom setup include?", "We match the calendar to your site’s look, import your existing events, embed it on your website, and configure your submission form and review process. Contact us for pricing."],
 ];
 
 export default async function HomePage({
@@ -47,9 +50,9 @@ export default async function HomePage({
             <a href="#price" className="hidden text-gray-600 hover:text-gray-900 sm:inline">Price</a>
             <Link href="/api/demo" className="hidden text-gray-600 hover:text-gray-900 sm:inline">Demo</Link>
             <Link href="/admin/login" className="text-gray-600 hover:text-gray-900">Sign in</Link>
-            <Link href="/signup" className="rounded bg-gray-900 px-3.5 py-2 font-medium text-white hover:bg-gray-700">
-              Start a calendar
-            </Link>
+            <a href={SALES_EMAIL} className="rounded bg-gray-900 px-3.5 py-2 font-medium text-white hover:bg-gray-700">
+              Get a custom setup
+            </a>
           </nav>
         </div>
       </header>
@@ -66,22 +69,25 @@ export default async function HomePage({
         <section className="mx-auto grid max-w-6xl gap-12 px-5 pb-16 pt-14 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:pt-20">
           <div>
             <h1 className="text-4xl font-semibold leading-[1.1] sm:text-5xl">
-              One calendar for everything happening in town.
+              AI-powered events for your community, set up for you.
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-gray-700">
-              People send you their events. You approve the ones that belong.
-              Eventful puts them on your website, in a feed people can add to
-              their phones, and on a page you can link from anywhere.
+              We build your event calendar and put it on your website. People
+              send in a flyer, AI reads it and writes the listing, and you
+              approve the ones that belong. You just add events.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link href="/signup" className="rounded bg-gray-900 px-5 py-3 font-medium text-white hover:bg-gray-700">
-                Start a calendar
-              </Link>
+              <a href={SALES_EMAIL} className="rounded bg-gray-900 px-5 py-3 font-medium text-white hover:bg-gray-700">
+                Contact us for pricing
+              </a>
               <Link href="/api/demo" className="rounded border border-gray-300 bg-white px-5 py-3 font-medium hover:border-gray-900">
                 Open the demo
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-500">Free, with everything included.</p>
+            <p className="mt-4 text-sm text-gray-500">
+              Prefer to do it yourself?{" "}
+              <Link href="/signup" className="underline hover:text-gray-900">Start a calendar</Link>. It’s free, with everything included.
+            </p>
           </div>
 
           <figure aria-label="Example calendar listing" className="border border-gray-900 bg-white">
@@ -133,6 +139,29 @@ export default async function HomePage({
         </section>
 
         <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+          <div className="grid gap-10 lg:grid-cols-2">
+            <div>
+              <h2 className="text-3xl font-semibold">AI that does the data entry</h2>
+              <p className="mt-4 leading-relaxed text-gray-700">
+                Most events arrive as a flyer photo. Eventful reads it and fills
+                in the title, date, time, venue, cost and ticket link, then writes
+                a short description of what’s actually on the flyer. Submitters
+                skip the typing, and you review and approve.
+              </p>
+            </div>
+            <div>
+              <h2 className="text-3xl font-semibold">Custom setup, done for you</h2>
+              <p className="mt-4 leading-relaxed text-gray-700">
+                We match the calendar to your website’s colors and font, import
+                the events you already have, add it to your site, and set up
+                your submission form and review process. Pricing depends on the
+                size of your organization, so contact us for a quote.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-5 pb-16 sm:px-8">
           <h2 className="text-3xl font-semibold">What’s included</h2>
           <dl className="mt-10 grid gap-x-12 gap-y-8 sm:grid-cols-2">
             {features.map(([term, desc]) => (
@@ -146,26 +175,37 @@ export default async function HomePage({
 
         <section id="price" className="border-t border-gray-200 bg-white">
           <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_2fr]">
-            <div>
-              <h2 className="text-3xl font-semibold">Price</h2>
-              <p className="mt-3 text-5xl font-semibold" style={{ fontFamily: "var(--app-serif)" }}>
-                $0
-              </p>
-            </div>
-            <div className="text-gray-700">
-              <p className="max-w-xl text-lg leading-relaxed">
-                Eventful is free. Every calendar gets every feature, with no event limit and no
-                “Powered by Eventful” line on your calendar.
-              </p>
-              <ul className="mt-6 space-y-2 border-t border-gray-200 pt-6">
-                <li>Unlimited events and submissions</li>
-                <li>Up to 25 people on the account</li>
-                <li>{FLYER_SCANS_PER_MONTH} flyer scans per calendar each month</li>
-                <li>Embeds, filtered views, Google Calendar, subscribe feeds, webhooks and export</li>
-              </ul>
-              <Link href="/signup" className="mt-8 inline-block rounded bg-gray-900 px-5 py-3 font-medium text-white hover:bg-gray-700">
-                Start a calendar
-              </Link>
+            <h2 className="text-3xl font-semibold">Price</h2>
+            <div className="grid gap-10 text-gray-700 sm:grid-cols-2">
+              <div>
+                <h3 className="font-semibold text-gray-900">Do it yourself</h3>
+                <p className="mt-2 text-4xl font-semibold text-gray-900" style={{ fontFamily: "var(--app-serif)" }}>
+                  $0
+                </p>
+                <ul className="mt-4 space-y-2 border-t border-gray-200 pt-4">
+                  <li>Every feature, no event limit</li>
+                  <li>Up to 25 people on the account</li>
+                  <li>No “Powered by Eventful” line</li>
+                  <li>{FLYER_SCANS_PER_MONTH} flyer scans per calendar each month</li>
+                </ul>
+                <Link href="/signup" className="mt-6 inline-block rounded border border-gray-300 bg-white px-4 py-2 font-medium text-gray-900 hover:border-gray-900">
+                  Start a calendar
+                </Link>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Custom setup</h3>
+                <p className="mt-2 text-4xl font-semibold text-gray-900" style={{ fontFamily: "var(--app-serif)" }}>
+                  Quoted
+                </p>
+                <p className="mt-4 border-t border-gray-200 pt-4 leading-relaxed">
+                  We match the calendar to your website, import the events you already
+                  have, add it to your site, and set up your submission form and review
+                  process. Pricing depends on the size of your organization.
+                </p>
+                <a href={SALES_EMAIL} className="mt-6 inline-block rounded bg-gray-900 px-4 py-2 font-medium text-white hover:bg-gray-700">
+                  Contact us for pricing
+                </a>
+              </div>
             </div>
           </div>
         </section>
