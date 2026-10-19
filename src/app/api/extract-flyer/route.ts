@@ -59,8 +59,11 @@ export async function POST(req: NextRequest) {
       "anthropic-version": "2023-06-01",
     },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
+      model: "claude-sonnet-5-5",
+      // Sonnet 5.5 thinks adaptively by default; low effort keeps this simple
+      // extraction fast, and the headroom covers any thinking tokens.
+      max_tokens: 4000,
+      output_config: { effort: "low" },
       messages: [
         {
           role: "user",
@@ -105,10 +108,11 @@ Use ${new Date().getFullYear()} if no year is shown. Return only valid JSON.`,
   }
 
   const data = (await response.json()) as {
-    content?: Array<{ text?: string }>;
+    content?: Array<{ type?: string; text?: string }>;
   };
 
-  const text = data.content?.[0]?.text ?? "{}";
+  // The response may lead with a thinking block, so find the text block.
+  const text = data.content?.find((b) => b.type === "text")?.text ?? "{}";
 
   try {
     const clean = text.replace(/```json|```/g, "").trim();
